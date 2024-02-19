@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/analyze_families.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/families_distribution.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/families_distribution.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/merge.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/merge.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +18,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -89,7 +86,20 @@
       <workItem from="1708072624678" duration="905000" />
       <workItem from="1708073548685" duration="71000" />
       <workItem from="1708073797993" duration="129000" />
-      <workItem from="1708073945025" duration="16364000" />
+      <workItem from="1708073945025" duration="20627000" />
+      <workItem from="1708195412885" duration="5503000" />
+      <workItem from="1708241240393" duration="543000" />
+      <workItem from="1708242407332" duration="10849000" />
+      <workItem from="1708276415039" duration="555000" />
+      <workItem from="1708277409122" duration="1476000" />
+      <workItem from="1708279024486" duration="395000" />
+      <workItem from="1708279636296" duration="1030000" />
+      <workItem from="1708280859290" duration="1790000" />
+      <workItem from="1708286821503" duration="311000" />
+      <workItem from="1708287816657" duration="321000" />
+      <workItem from="1708324640692" duration="628000" />
+      <workItem from="1708325520021" duration="956000" />
+      <workItem from="1708330615447" duration="2034000" />
     </task>
     <servers />
   </component>
