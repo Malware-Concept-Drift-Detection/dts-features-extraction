@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/families_distribution.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/families_distribution.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/families_kl_divergence.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/families_kl_divergence.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analyze_variances.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/best_split.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/families_distribution.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/families_distribution.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/submissions_distribution.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/merge.ipynb" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,25 +41,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/luca/Desktop/uni/master/internship/concept_drift/img/best_split.png",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/luca/Desktop/uni/master/internship/concept_drift&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/doc" />
       <recent name="$PROJECT_DIR$/junk" />
       <recent name="$PROJECT_DIR$/vt_reports" />
       <recent name="$PROJECT_DIR$/img" />
@@ -109,7 +119,17 @@
       <workItem from="1708355479199" duration="18180000" />
       <workItem from="1708416438074" duration="21878000" />
       <workItem from="1708510728814" duration="9898000" />
-      <workItem from="1708590755140" duration="8092000" />
+      <workItem from="1708590755140" duration="41744000" />
+      <workItem from="1708700678629" duration="5568000" />
+      <workItem from="1708932988772" duration="57539000" />
+      <workItem from="1709195199490" duration="1888000" />
+      <workItem from="1709218393713" duration="2052000" />
+      <workItem from="1709282716179" duration="26608000" />
+      <workItem from="1709477339482" duration="11000" />
+      <workItem from="1709540828638" duration="1157000" />
+      <workItem from="1709545223104" duration="46845000" />
+      <workItem from="1709714103801" duration="41691000" />
+      <workItem from="1709887795207" duration="48000" />
     </task>
     <servers />
   </component>
