@@ -1,0 +1,2500 @@
+add
+inc
+pop
+outsd
+insb
+popal
+outsb
+adc
+jb
+lea
+sub
+push
+insd
+add inc
+inc add
+add pop
+pop inc
+insb popal
+popal outsb
+add add
+add adc
+adc add
+jb lea
+lea sub
+add push
+push add
+add inc add
+add add add
+add adc add
+inc add add
+mov
+cmp
+je
+jne
+or
+call
+jmp
+and
+movzx
+imul
+cdq
+idiv
+shl
+jl
+test
+xor
+leave
+ret
+jae
+dec
+jbe
+jns
+sar
+jge
+neg
+sbb
+not
+int3
+rep movsd
+ja
+jg
+sete
+setne
+js
+jle
+xchg
+shr
+div
+rep stosd
+shrd
+movsx
+stosd
+jp
+push mov
+mov sub
+sub cmp
+cmp je
+je cmp
+cmp mov
+mov jne
+jne or
+or mov
+mov mov
+mov push
+push push
+push call
+call jmp
+jmp push
+push lea
+lea push
+call and
+and mov
+mov lea
+call mov
+mov and
+mov jmp
+jmp movzx
+movzx movzx
+imul mov
+sub imul
+imul add
+cdq idiv
+mov movzx
+movzx shl
+shl mov
+movzx or
+or movzx
+shl movzx
+or lea
+mov call
+call add
+call push
+add cmp
+cmp jl
+jl cmp
+je push
+mov test
+test je
+je mov
+call lea
+call pop
+pop pop
+pop xor
+xor pop
+pop leave
+leave ret
+ret mov
+mov imul
+lea xor
+xor cmp
+cmp jae
+jae mov
+imul lea
+je inc
+inc jmp
+jmp test
+mov dec
+dec test
+je jmp
+test jne
+jne mov
+mov xor
+xor and
+and xor
+xor mov
+mov inc
+cmp jb
+jb pop
+pop ret
+ret push
+add mov
+xor push
+je and
+inc cmp
+lea mov
+lea test
+jne test
+inc test
+jmp inc
+inc mov
+mov cmp
+jb xor
+ret cmp
+je or
+or jmp
+jmp mov
+and or
+push xor
+jae cmp
+cmp jbe
+jbe lea
+jne xor
+xor inc
+shl test
+jmp and
+sub mov
+and push
+mov add
+and and
+mov shl
+shl cmp
+cmp jne
+jne inc
+jb cmp
+jb mov
+mov pop
+test jns
+sub push
+call ret
+call cmp
+call test
+inc inc
+jmp dec
+dec mov
+je add
+jns xor
+mov cdq
+xor sub
+mov sar
+sar imul
+push and
+mov jge
+jge push
+mov or
+or push
+jmp cmp
+jne push
+call xor
+inc pop
+jne jmp
+push test
+add lea
+neg sbb
+sbb not
+not and
+and pop
+ret int3
+int3 push
+push pop
+pop lea
+rep movsd mov
+imul imul
+xor add
+cmp ja
+ja jmp
+pop jmp
+pop push
+jmp xor
+xor call
+pop cmp
+cmp jg
+inc push
+inc call
+cmp sete
+sete and
+push jmp
+movzx push
+jne call
+je call
+call inc
+pop mov
+push cmp
+jbe cmp
+sar push
+jl push
+je lea
+add or
+or and
+cmp setne
+jne cmp
+call sub
+sub jne
+dec je
+add jmp
+call dec
+cmp jge
+jge cmp
+pop call
+jge add
+js cmp
+cmp jle
+jle mov
+jns mov
+jmp call
+jbe jmp
+jmp add
+jmp sub
+sub jmp
+jmp or
+and jmp
+xor jmp
+sete mov
+je xor
+shl jmp
+je dec
+dec cmp
+jmp lea
+test mov
+mov je
+sar cmp
+call movzx
+sbb and
+and movzx
+push inc
+push movzx
+add test
+call call
+sar mov
+jl mov
+sar and
+and je
+cmp push
+cmp jmp
+movzx mov
+movzx jmp
+jne add
+or sub
+call or
+add xor
+ret lea
+lea add
+sbb add
+add and
+and jne
+and shl
+shl add
+and add
+add sub
+sub test
+sub and
+and inc
+sub add
+xor xor
+je test
+add call
+jle push
+jg mov
+push sub
+test js
+js mov
+sub je
+test jg
+ret or
+jl add
+jge mov
+mov neg
+jg test
+inc lea
+lea cmp
+jbe mov
+add dec
+jne pop
+movzx add
+ja jb
+jb test
+jbe test
+test setne
+setne lea
+lea pop
+or call
+ret sub
+jne movzx
+movzx cmp
+add movzx
+je sub
+inc dec
+dec jne
+pop test
+ret xor
+or pop
+ja push
+test pop
+pop je
+neg add
+mov jle
+jle test
+mov shr
+lea movzx
+shr not
+and call
+shr test
+jae lea
+jae push
+jae xor
+shl push
+xor div
+div mov
+xor test
+shr mov
+xor lea
+rep stosd mov
+jne and
+mov shrd
+shrd shr
+call movsx
+pop jne
+xor shr
+imul cmp
+cmp lea
+lea jne
+and cmp
+shr cmp
+jle lea
+and test
+shl and
+sar add
+test push
+pop add
+or or
+stosd stosd
+sub lea
+jne lea
+sete jmp
+add shl
+add ret
+jbe push
+mov leave
+ret jmp
+movzx test
+jne ret
+ja cmp
+xor ret
+or cmp
+jmp jmp
+sub sar
+mov ret
+cmp pop
+call leave
+ja xor
+test jle
+jl xor
+and shr
+jb push
+je movzx
+sar jmp
+setne mov
+jbe movzx
+shr and
+or add
+and lea
+lea lea
+jbe sub
+ja sub
+movzx shr
+shr movzx
+shl or
+shr xor
+mov not
+or xor
+mov rep movsd
+ja movzx
+movzx xor
+shl lea
+shl shl
+sub shr
+add imul
+jb add
+sub sub
+shr sub
+mov jae
+jae jmp
+dec and
+lea jmp
+pop shl
+and sar
+or shl
+shr add
+jb sub
+sub or
+sub xor
+ja add
+dec dec
+mov jg
+shl sub
+add jne
+jbe add
+jns add
+js add
+push mov sub
+mov sub cmp
+sub cmp je
+cmp je cmp
+je cmp mov
+cmp mov jne
+jne or mov
+or mov mov
+mov mov push
+mov push push
+push push push
+push push call
+push call jmp
+call jmp push
+jmp push push
+push push mov
+push mov push
+mov push lea
+push lea push
+lea push push
+push call and
+call and mov
+and mov lea
+mov lea push
+push call mov
+call mov and
+mov and mov
+and mov jmp
+mov jmp movzx
+jmp movzx movzx
+mov movzx shl
+lea push mov
+push mov call
+mov call add
+call add push
+add push mov
+push mov lea
+push call push
+call push call
+push call add
+call add cmp
+add cmp jl
+cmp jl cmp
+cmp je push
+je push call
+call mov test
+mov test je
+test je mov
+je mov push
+push mov mov
+mov mov call
+mov call push
+call push push
+call push mov
+mov push call
+push call lea
+call lea push
+push call pop
+call pop pop
+pop pop xor
+pop xor pop
+pop leave ret
+leave ret mov
+ret mov mov
+mov mov mov
+mov mov imul
+mov imul mov
+test je push
+je push push
+push push lea
+lea xor cmp
+cmp jae mov
+push mov test
+test je inc
+jmp test je
+test je jmp
+jmp test jne
+test jne mov
+jne mov xor
+mov xor and
+and xor mov
+mov inc add
+inc add cmp
+add cmp jb
+cmp jb pop
+pop pop pop
+pop pop ret
+pop ret push
+ret push mov
+mov push mov
+mov imul add
+imul add mov
+add mov xor
+mov xor push
+xor push mov
+mov mov test
+test je cmp
+je cmp je
+cmp je and
+je and mov
+mov inc cmp
+lea mov lea
+mov lea test
+lea test je
+mov test jne
+test jne test
+jne test je
+jmp inc mov
+inc mov cmp
+mov cmp jb
+cmp jb xor
+xor pop pop
+pop pop leave
+ret cmp je
+cmp je or
+je or jmp
+or jmp mov
+jmp mov and
+mov and or
+and or mov
+or mov jmp
+mov jmp mov
+jmp mov mov
+mov push xor
+cmp jae cmp
+cmp jbe lea
+test jne xor
+shl test je
+test je or
+mov sub mov
+sub mov and
+mov and push
+and push push
+push push add
+push add push
+mov mov xor
+mov xor cmp
+xor cmp je
+je cmp jae
+mov add mov
+add mov test
+jne mov test
+cmp je mov
+je mov xor
+mov xor inc
+mov and and
+and and mov
+and mov mov
+mov mov shl
+mov shl cmp
+cmp jne inc
+cmp jb cmp
+jb cmp je
+cmp je inc
+cmp jb mov
+mov pop pop
+ret mov test
+mov test jns
+mov sub push
+push call ret
+call ret push
+add cmp je
+push call cmp
+call cmp je
+push call test
+call test jne
+test jne inc
+dec mov mov
+mov mov sub
+cmp je add
+add push push
+call test jns
+test jns xor
+xor pop ret
+pop ret mov
+ret mov jmp
+ret push push
+call ret mov
+ret mov push
+xor sub mov
+sub mov mov
+mov mov sar
+add push call
+call cmp mov
+cmp mov jge
+call mov pop
+mov pop ret
+sub push push
+push xor push
+xor push push
+call cmp jne
+cmp jne mov
+jne mov mov
+mov mov jmp
+mov jmp cmp
+jmp cmp jne
+cmp jne push
+jne push lea
+test jne push
+call test je
+jmp push call
+push call xor
+ret cmp jne
+jne push push
+test jne jmp
+jmp push mov
+je mov jmp
+jmp mov add
+mov add lea
+add lea push
+or push push
+sbb not and
+pop ret int3
+ret int3 push
+int3 push mov
+sub mov push
+push push pop
+imul mov mov
+mov mov add
+mov add add
+add add lea
+add lea mov
+lea mov mov
+mov xor add
+xor add mov
+add mov cmp
+mov cmp ja
+cmp ja jmp
+pop pop jmp
+pop jmp push
+pop pop push
+pop push push
+call mov jmp
+mov jmp inc
+inc cmp je
+call jmp xor
+xor call mov
+call mov push
+pop pop cmp
+call pop push
+call jmp mov
+jmp mov cmp
+mov cmp jne
+call mov mov
+jmp mov lea
+mov lea mov
+lea mov xor
+xor cmp sete
+mov jmp push
+jmp push jmp
+push jmp mov
+mov mov cmp
+mov cmp je
+jne mov push
+call pop jmp
+call mov cmp
+call mov movzx
+movzx push push
+push push xor
+push xor mov
+xor mov call
+mov call test
+test jne call
+jne call cmp
+cmp je call
+pop pop mov
+mov add cmp
+add cmp jne
+push cmp je
+push jmp push
+call add mov
+add mov jmp
+mov call mov
+push push jmp
+push jmp cmp
+jmp cmp je
+mov call pop
+call mov lea
+je mov cmp
+mov cmp jbe
+cmp jbe cmp
+jbe cmp je
+jmp xor mov
+xor mov mov
+jne xor mov
+jne mov jmp
+mov cmp jl
+cmp jl push
+call xor cmp
+cmp je lea
+je lea push
+mov add or
+jne push call
+xor cmp setne
+inc push push
+cmp jne cmp
+jne cmp jne
+sar push push
+call add jmp
+add jmp push
+jne cmp je
+cmp jge cmp
+je cmp jne
+call push pop
+push pop mov
+pop mov call
+mov call xor
+call xor mov
+cmp jge add
+cmp jle mov
+jle mov mov
+mov mov lea
+mov cmp jge
+xor mov jmp
+cmp jne call
+jne call test
+jmp call jmp
+mov xor mov
+mov jmp xor
+xor call xor
+xor inc mov
+inc mov call
+mov call cmp
+jmp cmp jb
+mov jmp or
+jmp or jmp
+jmp xor jmp
+xor jmp xor
+jmp xor cmp
+cmp sete mov
+sete mov jmp
+cmp je xor
+je xor inc
+xor inc jmp
+cmp jne xor
+jne xor jmp
+xor jmp cmp
+call push jmp
+call mov add
+mov add push
+mov push add
+pop jmp lea
+jmp lea push
+lea push call
+call test mov
+test mov je
+mov je push
+mov sar cmp
+inc mov jmp
+mov call movzx
+neg sbb and
+mov mov and
+jne call jmp
+call jmp call
+mov push cmp
+pop cmp je
+call cmp jl
+call jmp cmp
+test je lea
+lea push lea
+call add test
+add test jne
+push call call
+mov sar mov
+call add lea
+cmp jl mov
+jl mov mov
+and je mov
+je mov mov
+jmp mov push
+mov call lea
+jne inc jmp
+call pop mov
+pop mov cmp
+jne mov add
+add mov and
+cmp je jmp
+add mov mov
+push pop cmp
+jne push pop
+xor mov cmp
+inc test jne
+test jne cmp
+mov call jmp
+je push lea
+pop call mov
+jl mov cmp
+mov cmp jle
+jle mov cmp
+je push mov
+mov mov inc
+mov inc mov
+mov inc jmp
+jmp mov xor
+call mov xor
+je mov movzx
+mov movzx mov
+jmp movzx jmp
+movzx jmp mov
+call push lea
+je call jmp
+mov cmp jae
+jae mov mov
+mov jne add
+mov je xor
+jmp push lea
+push call or
+call or mov
+jae cmp je
+mov add xor
+add xor pop
+leave ret lea
+ret lea add
+push inc add
+inc add inc
+add sub add
+add or mov
+or mov cmp
+sub cmp jne
+mov jne mov
+leave ret push
+jmp call cmp
+call cmp jbe
+cmp je test
+je test je
+test je call
+call add xor
+add xor mov
+sub mov cmp
+mov cmp jg
+cmp jg mov
+test je add
+je add mov
+jne mov sub
+sub add mov
+add mov call
+pop mov mov
+call test js
+test js mov
+js mov sub
+mov sub je
+cmp jne add
+jne add cmp
+cmp jne jmp
+jne jmp cmp
+mov sub add
+cmp jl add
+add call mov
+jne cmp jle
+cmp jge mov
+mov add sub
+sub add cmp
+add cmp jg
+je mov add
+mov mov neg
+sbb and add
+and add mov
+cmp jne or
+jne test jne
+lea cmp jbe
+cmp jbe mov
+jbe mov jmp
+mov jmp test
+pop mov jmp
+not and mov
+cmp jne test
+jne test mov
+test mov mov
+mov mov je
+call xor pop
+test jne pop
+ret push call
+call pop ret
+push xor sub
+cmp ja jb
+test je test
+cmp jbe test
+lea pop pop
+push mov cmp
+xor pop mov
+cmp mov mov
+mov mov jne
+mov jne push
+pop mov push
+cmp jne movzx
+jne movzx cmp
+movzx cmp je
+test jne movzx
+add test je
+add movzx cmp
+movzx cmp jne
+call add add
+test je sub
+sub cmp jae
+jae mov cmp
+xor mov add
+call mov or
+mov call call
+call call call
+call call cmp
+mov pop test
+pop test jne
+je mov test
+ret xor jmp
+xor jmp push
+mov xor jmp
+pop ret cmp
+push mov add
+cmp ja push
+je test mov
+push mov je
+call movzx mov
+movzx mov test
+add add mov
+je test jne
+jne jmp mov
+lea test jne
+jne mov cmp
+xor jmp mov
+jmp mov movzx
+jne pop pop
+mov cmp push
+cmp push mov
+jmp xor push
+pop mov pop
+jne push mov
+add cmp mov
+cmp mov jle
+mov and xor
+mov mov shr
+mov xor pop
+jge mov lea
+mov lea sub
+lea sub mov
+mov lea movzx
+movzx add mov
+jmp cmp mov
+jne mov shr
+mov shr test
+shr test jne
+and and or
+cmp jae lea
+jae lea push
+jne inc mov
+inc mov mov
+mov push pop
+jae xor mov
+mov shl push
+push mov and
+xor div mov
+mov xor test
+xor test je
+add add test
+mov shr mov
+rep stosd mov mov
+cmp jne and
+je xor cmp
+xor mov sub
+je xor mov
+xor mov lea
+shr mov xor
+jne call mov
+sub push mov
+test jne or
+jne or jmp
+call xor jmp
+pop jmp mov
+add xor cmp
+push mov pop
+mov call or
+call inc cmp
+inc cmp jl
+jle mov add
+mov lea cmp
+lea cmp je
+mov pop mov
+jmp mov test
+mov jmp lea
+mov add inc
+add inc cmp
+xor cmp jne
+mov cmp mov
+cmp mov je
+mov je cmp
+jne xor cmp
+lea mov test
+test je xor
+je xor test
+cmp lea jne
+and cmp jne
+mov shr cmp
+xor xor cmp
+xor cmp jle
+inc inc cmp
+cmp jle lea
+jle lea mov
+je lea mov
+mov and test
+and test je
+mov sar add
+inc mov add
+add cmp jae
+mov call sub
+call sub mov
+sub mov lea
+xor mov pop
+or push call
+call call mov
+pop pop add
+push mov xor
+or or mov
+mov xor lea
+stosd stosd stosd
+mov sub lea
+cmp jne lea
+jne lea push
+inc cmp jne
+mov mov dec
+call lea cmp
+lea cmp jne
+call call jmp
+jne push jmp
+mov shl add
+cmp sete jmp
+mov add shl
+add shl add
+shl add mov
+or mov and
+and push call
+je push jmp
+push movzx push
+pop add ret
+and mov push
+xor mov push
+cmp jbe push
+mov je mov
+call mov sub
+add ret push
+call mov leave
+mov leave ret
+mov and cmp
+and cmp je
+mov call ret
+call movzx test
+movzx test jne
+movzx mov or
+je add cmp
+add cmp ja
+cmp ja cmp
+ja cmp jne
+movzx test je
+jne jmp xor
+mov jle mov
+mov dec mov
+add call test
+jne mov pop
+test jne lea
+call add ret
+or cmp jne
+movzx cmp jb
+jb cmp ja
+movzx add cmp
+jne mov and
+ret jmp jmp
+je add movzx
+add movzx mov
+movzx mov mov
+sub sar push
+mov movzx test
+mov movzx cmp
+ret mov cmp
+je mov ret
+mov ret push
+push lea mov
+lea mov sub
+push mov movzx
+inc cmp jb
+call leave ret
+lea cmp ja
+cmp ja xor
+test jle lea
+lea sub lea
+shr test je
+cmp jb push
+call jmp lea
+jmp mov pop
+call cmp ja
+mov add pop
+add pop ret
+test je movzx
+je movzx test
+cmp je sub
+call cmp jg
+cmp setne mov
+pop ret xor
+mov sub test
+test jns mov
+lea mov push
+jb mov sub
+mov sub sar
+sub sar cmp
+mov sub and
+movzx mov add
+je cmp jbe
+cmp jbe movzx
+mov shr and
+shr and mov
+mov or mov
+mov mov or
+and jmp mov
+and lea push
+xor mov test
+lea mov jmp
+add add jmp
+add jmp mov
+mov add movzx
+add movzx test
+mov pop cmp
+je lea lea
+lea lea cmp
+cmp jbe sub
+mov dec cmp
+cmp ja sub
+lea xor jmp
+mov je test
+call lea mov
+je lea cmp
+je mov and
+xor mov xor
+jmp call test
+mov movzx movzx
+movzx movzx shl
+movzx shl or
+shl or mov
+movzx or mov
+mov shr movzx
+jmp movzx mov
+or movzx shl
+shr mov mov
+mov mov movzx
+shl or movzx
+or movzx mov
+cmp je movzx
+call cmp jle
+jle mov lea
+lea movzx movzx
+mov pop leave
+jne mov inc
+jbe mov movzx
+mov mov ret
+push lea sub
+inc jmp mov
+cmp ja movzx
+shl mov mov
+shl lea mov
+lea mov shl
+add lea cmp
+shl shl or
+add mov lea
+jne movzx mov
+movzx mov and
+shr mov shl
+cmp lea mov
+jge mov jmp
+sub jmp sub
+je mov sub
+cmp jb add
+shl mov shr
+shl add lea
+lea movzx mov
+movzx mov shr
+sub sar add
+sar add mov
+add mov add
+mov add jmp
+sub sub mov
+sub mov shr
+mov shr sub
+shr sub mov
+lea cmp mov
+cmp mov jae
+jge mov mov
+mov lea lea
+lea lea movzx
+mov inc inc
+mov lea xor
+jne mov lea
+xor cmp mov
+mov lea jmp
+lea jmp lea
+jmp lea mov
+lea mov cmp
+sub lea mov
+jmp mov jmp
+mov shr add
+shr add mov
+jb sub or
+mov jmp sub
+mov shl mov
+add inc mov
+inc mov test
+je cmp ja
+cmp ja add
+ja add mov
+and mov add
+lea jmp mov
+mov jmp add
+jmp add mov
+shl sub mov
+or pop pop
+ret lea mov
+mov ret int3
+jmp jmp jmp
+mul
+lock xadd
+movsd
+call int3
+int3 mov
+mov mul
+jae dec
+movzx lea
+lea or
+or lock xadd
+lock xadd dec
+cmp sbb
+lea call
+sub call
+sub pop
+and sub
+jne sub
+test jbe
+test jl
+lea inc
+sbb mov
+jl lea
+jle xor
+mov jb
+lea movsd
+movsd movsd
+neg or
+ja lea
+lea je
+jns push
+ret call
+jmp ret
+movzx call
+inc sub
+ret test
+ja mov
+jle add
+ret add
+lea and
+movzx sub
+test movzx
+lea jbe
+mov jbe
+mov rep stosd
+ja test
+neg mov
+test lea
+int3 int3
+mov div
+test sete
+setne jmp
+add je
+mov jl
+movzx pop
+jb jmp
+lea ret
+ja jne
+je imul
+int3 sub
+jl jg
+jmp int3
+jmp pop
+sbb or
+mul mov
+je inc mov
+jmp cmp ja
+test jne and
+mov jae mov
+jae mov test
+mov test mov
+je mov lea
+push call int3
+mov xor ret
+ja cmp jbe
+mov ret mov
+ret xor cmp
+call int3 push
+int3 push push
+jne cmp jb
+pop ret lea
+or lock xadd dec
+lock xadd dec test
+dec test jg
+test jg mov
+jg mov mov
+sub mov xor
+mov xor call
+xor call add
+ret lea push
+jne xor pop
+or lea mov
+jne lea call
+lea call mov
+push lea call
+call mov call
+mov pop jmp
+je call mov
+mov sub call
+sub call mov
+call lea call
+mov and sub
+lea call jmp
+lea mov call
+lea call test
+mov je lea
+je lea call
+jne mov call
+mov inc test
+test jne sub
+add push lea
+mov lea call
+jbe mov mov
+lea call add
+add lea call
+lea call push
+jmp lea call
+mov pop add
+call or lea
+or lea call
+mov add call
+lea call pop
+lea call lea
+add mov push
+mov jmp call
+xor pop call
+jne add mov
+call test pop
+pop mov xor
+je sub mov
+sub test mov
+sub cmp jl
+cmp jl lea
+lea cmp jle
+sub cmp jle
+xor test jne
+mov mov jb
+mov sub sub
+add mov shl
+mov shl lea
+lea xor push
+sub mov add
+call cmp lea
+cmp lea je
+mov je call
+lea call cmp
+add test mov
+jmp mov call
+call mov ret
+mov call inc
+jne xor test
+ret mov lea
+mov mov pop
+pop ret call
+ret call mov
+add mov pop
+cmp jb lea
+jb lea cmp
+lea cmp jae
+jmp lea test
+add mov inc
+je mov call
+jmp xor test
+ret mov xor
+mov xor sub
+sub mov sub
+mov jne call
+ja mov lea
+lea cmp jl
+push lea lea
+lea lea call
+jmp add cmp
+add cmp jge
+ret mov sub
+sub cmp mov
+ret add mov
+xor ret mov
+ret sub mov
+and mov test
+and mov cmp
+ret test jne
+je lea jmp
+lea jmp xor
+je lea test
+je cmp lea
+lea jne mov
+jne movzx movzx
+mov jne xor
+add add cmp
+je xor jmp
+mov lea pop
+sub jne mov
+call lea lea
+mov jne lea
+lea call xor
+ret lea call
+and add add
+jbe mov cmp
+je sub jne
+mov cmp lea
+mov push sub
+push sub call
+xor push lea
+call test setne
+jbe lea cmp
+xor xor mov
+xor mov movzx
+pop jmp cmp
+mov movzx lea
+movzx lea cmp
+add jmp cmp
+cmp ja lea
+ja lea cmp
+jne cmp jbe
+or jmp lea
+lea mov inc
+xor jmp test
+jmp test mov
+test mov jne
+mov jne test
+mov and je
+cmp ja test
+ja test jne
+jbe test je
+jb mov add
+ret int3 int3
+int3 int3 int3
+int3 int3 push
+push sub push
+mov xor xor
+je mov shr
+sete mov ret
+mov mov div
+movzx mov xor
+mov and lea
+and lea mov
+mov test sete
+test sete mov
+sete mov mov
+and mov and
+and cmp mov
+mov lea inc
+cmp setne jmp
+add je mov
+sub sub sub
+sub cmp jge
+xor test mov
+mov jbe mov
+mov jne cmp
+mov and shl
+movzx mov movzx
+add mov movzx
+movzx mov shl
+movzx movzx mov
+mov jne jmp
+mov lea je
+lea mov add
+jmp sub mov
+sub jmp mov
+jmp mov sub
+mov shl or
+jne and mov
+sub mov jmp
+shl mov lea
+sub mov sar
+jmp mov inc
+cmp ja mov
+ja mov mov
+sub cmp jbe
+jbe mov add
+je cmp jb
+cmp jb jmp
+and lea call
+call lea pop
+cmp ja jne
+jbe mov lea
+mov test lea
+test lea je
+jne cmp mov
+jmp xor lea
+ret mov ret
+lea mov ret
+int3 int3 sub
+lea je mov
+cmp mov lea
+test lea mov
+add ret mov
+jmp int3 int3
+jbe lea lea
+lea lea mov
+add pop pop
+call add pop
+add pop mov
+xor xor xor
+xor xor jmp
+jbe lea mov
+ret xor mov
+sub mov test
+xor call jmp
+int3 int3 mov
+int3 mov mov
+mul mov mov
+mov mov mul
+ret mov call
+repe cmpsb
+nop
+shld
+rol
+rep movsb
+ror
+cpuid
+movq
+movups
+cmovne
+or jne
+mov repe cmpsb
+jae call
+or je
+ret nop
+nop push
+nop nop
+adc mov
+sub sbb
+lea neg
+shld shl
+jb inc
+shr lea
+dec push
+jg lea
+jae add
+sub movzx
+lea shl
+jge lea
+jg cmp
+jg jl
+jle cmp
+add shr
+repe cmpsb jne
+jae movzx
+movsx lea
+sar lea
+jle movzx
+imul sub
+shr or
+add sar
+repe cmpsb je
+mov movsx
+movsx test
+shr rep movsd
+mov movsd
+movsd mov
+sete ret
+pushfd pop
+and ret
+xor or
+or test
+lea nop
+nop mov
+mov nop
+dec add
+je nop
+nop cmp
+mov cmovne
+push push sub
+push sub mov
+sub mov call
+call sub call
+pop ret jmp
+inc add mov
+mov rep movsd mov
+or jne mov
+mov mov rep stosd
+jne lea mov
+je call cmp
+je mov shl
+cmp jbe call
+mov lea add
+lea add mov
+ret mov add
+and mov shr
+jb mov mov
+jmp cmp jae
+mov ret lea
+pop mov lea
+mov or cmp
+mov or je
+or je mov
+add ret nop
+ret nop push
+nop push mov
+je mov or
+ret nop nop
+nop nop nop
+nop nop push
+ret call lea
+add cmp jbe
+push add mov
+mov add adc
+add adc mov
+cmp jne sub
+jne sub mov
+ret lea lea
+ja lea mov
+jb mov cmp
+call lea add
+lea add cmp
+jb lea mov
+jmp lea cmp
+jae lea cmp
+jne lea cmp
+lea je lea
+jae lea mov
+jae lea lea
+jne lea lea
+mov div mov
+add mov sub
+jmp lea lea
+lea lea lea
+je lea add
+lea sub cmp
+jne jmp lea
+jne add add
+lea add lea
+jb mov lea
+add jmp lea
+call sub cmp
+test mov lea
+cmp jbe jmp
+jbe jmp mov
+add sub mov
+shl or or
+sub mov shl
+shl mov call
+mov mov repe cmpsb
+jmp call mov
+mov sub sbb
+sub sbb mov
+adc mov mov
+call jmp add
+je cmp jle
+add cmp jle
+add call cmp
+add call jmp
+cmp jb inc
+mov call and
+jne mov movzx
+sub mov movzx
+cmp jae call
+ja mov cmp
+call lea sub
+ja cmp ja
+mov and add
+jmp cmp jbe
+jmp lea sub
+jge mov cmp
+jne cmp jae
+ret lea cmp
+jbe cmp jne
+add ret int3
+call movzx lea
+shr lea mov
+jne mov or
+jmp mov or
+or or or
+jmp call lea
+call xor lea
+xor lea mov
+cmp jae add
+lea lea sub
+call sub lea
+div mov mov
+test jle mov
+je add jmp
+jmp lea add
+jae add mov
+ja mov add
+mov sub movzx
+jb cmp jbe
+lea shl mov
+lea lea add
+sbb mov mov
+lea call call
+cmp jbe add
+mov or jne
+mov shl sub
+sub lea lea
+mov ret nop
+test jle cmp
+jle cmp je
+sub lea cmp
+jae mov lea
+je add sub
+add add sub
+sub mov imul
+cmp jg cmp
+jg cmp jne
+jb cmp jne
+call cmp jb
+jg mov lea
+and mov call
+je jmp mov
+je jmp lea
+jae mov jmp
+mov lea shl
+lea mov shr
+jg cmp je
+mov shr lea
+lea add sub
+cmp jle cmp
+ja mov sub
+mov repe cmpsb jne
+repe cmpsb jne mov
+call lea movzx
+cmp jae movzx
+je lea sub
+shl mov add
+mov lea and
+cmp jge lea
+imul mov add
+sar mov mov
+add sar mov
+mov repe cmpsb je
+shr mov movzx
+ja cmp je
+call call ret
+je call call
+repe cmpsb je mov
+jmp cmp jg
+int3 mov ret
+pop test je
+pop pop test
+call pop test
+xor mov and
+and call mov
+add movzx lea
+lea add movzx
+ret mov pop
+movsd movsd movsd
+movsd movsd mov
+call xor call
+lea xor xor
+or shl or
+or mov call
+cmp sete ret
+pushfd pop mov
+je xor pop
+test je and
+je or mov
+or mov test
+or test jne
+mov lea nop
+lea nop mov
+mov nop mov
+nop mov cmp
+xor xor test
+test je nop
+sub je sub
+je sub je
+sub jne lea
+jne lea jmp
+mov add test
+nop mov lea
+lea cmp jb
+nop cmp je
+je mov nop
+nop mov mov
+or test je
+ja movzx jmp
+push sub lea
+pop ret nop
+jle mov test
+sub test je
+cmp mov cmovne
+xor shl
+jmp shr
+div cmp
+movsx cmp
+xor movzx
+cmp movzx
+mov jns
+mov ja
+lea shr
+movzx and
+movzx je
+mov add ret
+je mov pop
+or jmp or
+or and mov
+cmp mov jb
+sar mov xor
+cmp jmp mov
+mov sub jmp
+je dec je
+dec je dec
+mov add and
+add and cmp
+push jmp lea
+call pop lea
+xor jmp call
+and and and
+push sub cmp
+call test lea
+jbe movzx cmp
+inc cmp jle
+cmp mov jbe
+movzx mov cmp
+je call test
+call movzx jmp
+jne inc cmp
+movzx cmp mov
+movzx sub mov
+xor add add
+xor movzx mov
+je movzx mov
+movzx mov lea
+mov mov ja
+mov ja mov
+jb mov jmp
+cmp jle test
+call sub add
+cmp jne pop
+movzx and mov
+jmp mov shr
+movzx sub cmp
+ja movzx mov
+mov mov not
+movzx push mov
+shr cmp ja
+mov mov jbe
+shl mov or
+lea mov movzx
+movzx mov sub
+add movzx movzx
+call jmp test
+mov shr xor
+lea lea push
+nop nop mov
+add jmp xor
+lea mov and
+ret nop mov
+nop push push
+mov test jg
+and sub mov
+sub sar lea
+sub sar mov
+or cmp je
+test mov jle
+cmp sbb and
+sub and mov
+pop ret add
+mov jmp and
+and add cmp
+nop mov test
+arpl
+fmul
+jb outsb
+adc xor
+add outsb
+arpl add
+outsb jae
+jae popal
+outsb arpl
+popal jae
+dec popal
+push jae
+jo je
+adc cmp
+je outsd
+je popal
+je ret
+nop test
+je pop
+jns call
+inc add outsb
+add dec je
+test jne add
+ja cmp jae
+jne add pop
+lea and mov
+jmp jmp mov
+jne shr mov
+mov jmp shr
+nop mov jmp
+or mov add
+ret lea xor
+xor shr cmp
+jg mov test
+test jns add
+mov jmp dec
+and sub cmp
+ret nop test
+nop test je
+ret lea and
+test je pop
+jns call mov
+add add pop
+add and add
+cmove
+movd
+cmovb
+setg
+fld
+fstp
+cmova
+setle
+cmovae
+cmove mov
+test cmovne
+sete cmp
+mov cmove
+setne cmp
+test cmove
+mov sete
+mov js
+movsd call
+cmove lea
+cmovne mov
+jns cmp
+movsx mov
+mov sbb
+mov adc
+jns jmp
+js lea
+nop add
+test setg
+js xor
+mov setne
+setne xor
+sar sub
+shr shr
+mov fld
+fstp call
+ret movzx
+setne test
+jae test
+jb ja
+cmp setg
+je jle
+movzx ret
+lea sar
+shl xor
+fld fstp
+sete test
+sete xor
+je not
+jbe xor
+not add
+not mov
+sub shl
+mov shld
+jne movsx
+sar test
+movzx jne
+lea push xor
+jb mov push
+cmp sete cmp
+je or test
+lea xor mov
+mov cmove mov
+mov test setne
+test setne cmp
+test mov cmove
+mov test cmove
+test cmove mov
+call lea jmp
+test js cmp
+xor lea cmp
+mov test jle
+je lea xor
+sub mov jne
+mov shl shl
+test jle xor
+js mov lea
+call xor add
+xor jmp lea
+call lea xor
+mov cmp setne
+cmp setne cmp
+call xor test
+xor test sete
+je and lea
+sar mov shr
+and mov je
+add ret lea
+call and lea
+lea add xor
+jns mov mov
+sub je mov
+add xor jmp
+xor test setne
+test setne jmp
+mov js mov
+movzx mov jmp
+mov test js
+js mov mov
+add sub jne
+mov sub xor
+mov neg mov
+cmp jb test
+sub add add
+sub test jne
+mov cmp sete
+test mov cmovne
+mov cmovne mov
+movzx mov call
+jmp lea xor
+shr mov and
+movsx mov mov
+mov movzx shr
+js cmp je
+cmovne mov mov
+js mov test
+jns mov jmp
+jb mov test
+call test jle
+jb jmp mov
+je xor xor
+lea mov pop
+cmove mov mov
+xor call lea
+pop ret test
+ret test je
+jne jmp test
+or mov lea
+lea and call
+and test jne
+js mov call
+sub xor mov
+add mov adc
+ja jmp lea
+mov mov cmovne
+lea test mov
+jle mov xor
+mov mov adc
+ja mov test
+mov adc mov
+lea cmp jge
+jne lea xor
+jmp cmp lea
+xor lea lea
+test js lea
+js mov cmp
+nop add add
+shr and movzx
+lea lea xor
+xor cmp jbe
+mov sar sub
+xor mov or
+mov or xor
+call sub test
+cmp mov sete
+jmp lea jmp
+add jmp test
+mov xor or
+and mov movzx
+mov xor movzx
+je movzx cmp
+mov or lea
+ja jmp mov
+nop push sub
+mov or test
+test setne mov
+lea xor add
+jmp xor xor
+mov movzx add
+sub test jle
+jne cmp sete
+cmp setne test
+setne test je
+cmp jae test
+movzx lea mov
+test cmovne mov
+mov movzx and
+ja cmp jb
+jne xor xor
+sub cmp ja
+lea not and
+cmp jb ja
+lea movzx cmp
+movzx cmp ja
+call movzx cmp
+lea lea jmp
+pop ret movzx
+je add add
+mov movzx sub
+ja jb cmp
+jb cmp jae
+shr or mov
+movzx movzx cmp
+jne movzx test
+movzx xor mov
+sar sub mov
+je add lea
+add pop jmp
+setne mov mov
+lea push sub
+ja mov jmp
+js mov add
+lea call and
+lea jmp cmp
+jmp cmp jle
+jae test je
+movzx lea lea
+mov or jmp
+jne add xor
+xor or mov
+cmp mov sbb
+xor push sub
+je test js
+test setne test
+test sete test
+test sete cmp
+and shl mov
+mov not and
+cmp jbe xor
+mov movsx mov
+add mov shr
+xor add adc
+mov jb mov
+jb mov xor
+mov not mov
+xor xor lea
+xor add pop
+movzx pop pop
+lea sar mov
+je movzx movzx
+xor mov shr
+mov mov shld
+test js add
+mov movzx jmp
+jne xor add
+and shl or
+movzx add add
+movzx and cmp
+movzx add test
+mov xor div
+mov mov jle
+mov mov movsx
+mov sub jne
+shr movzx mov
+or mov movzx
+call sub xor
+lea lea test
+movzx cmp jae
+cmp mov ja
+ja test je
+jbe mov test
+fst
+fild
+repne scasb
+fadd
+fnstsw
+fsub
+faddp
+fmulp
+wait
+fnstcw
+fldcw
+nop xor
+nop sub
+jmp fstp
+fild mov
+fmul mov
+fld mov
+lea fstp
+mov fstp
+mov fild
+fstp cmp
+fstp mov
+call fld
+fld fmul
+mov fmul
+je fld
+fstp jmp
+fild fstp
+fstp fld
+mov fst
+fnstsw test
+fld fadd
+jmp nop
+sar sar
+fld fsub
+fmul faddp
+fadd fstp
+fmul fld
+fstp fstp
+imul sar
+repne scasb not
+shr jmp
+nop call
+je movsx
+nop jmp
+nop lea
+sub movsx
+add movsx
+lea movsx
+sete add
+setne add
+je shl
+fldcw mov
+mov fldcw
+sete lea
+fld fld
+nop mov ret
+nop nop sub
+nop sub mov
+mov jg mov
+call ret nop
+mov mov fstp
+test je fld
+fstp mov mov
+mov je add
+mov mov fld
+je pop ret
+mov jmp nop
+jmp nop nop
+nop nop add
+mov sar sar
+ret nop sub
+cmp je jle
+mov fld fstp
+mov fstp mov
+mov imul sar
+imul sar mov
+nop cmp jne
+nop test jne
+and cmp sete
+jle cmp jg
+adc adc adc
+ret jmp nop
+nop call mov
+cmp je movsx
+je add pop
+nop nop jmp
+nop jmp nop
+jbe mov xor
+mov nop lea
+nop lea mov
+ret nop lea
+nop lea lea
+nop lea push
+sete test je
+cmp sete test
+test je movsx
+je movsx mov
+lea mov je
+je jle cmp
+sub movzx mov
+jne jmp nop
+call jmp nop
+jmp nop mov
+and test mov
+fstp fld fstp
+fld mov mov
+shl or cmp
+js lea mov
+je add ret
+nop mov add
+call sub push
+cmp mov setne
+js test
+test js test
+jne test js
+test mov jns
+pop mov leave
+add jmp nop
+js and
+je jb
+add add je
+je and je
+mov lock xadd
+call int3 int3
+jne sub sar
+int3 mov push
+js cmp ja
+mov jmp int3
+je nop lea
+jne lea pop
+movzx jmp lea
+seta
+fistp
+fxch
+fldz
+setb
+fsubp
+setbe
+bsr
+call nop
+je jg
+xor nop
+cmp seta
+sete movzx
+jne nop
+fldcw fistp
+fistp fldcw
+fld fxch
+fnstsw fstp
+fxch mov
+fxch fstp
+nop movzx
+cmp js
+setne movzx
+je ja
+repe cmpsb seta
+seta setb
+setb cmp
+cmp setbe
+seta mov
+cmp setb
+or jmp nop
+mov call leave
+jmp nop push
+nop mov call
+test mov js
+mov call nop
+call nop mov
+xor jmp nop
+jmp nop cmp
+call sub jmp
+sub jmp nop
+call nop push
+cmp je jg
+je xor add
+ret nop cmp
+pop jmp nop
+ret lea test
+je jmp nop
+je nop mov
+mov xor nop
+cmp je jb
+je jb cmp
+call test sete
+test sete movzx
+movzx jmp nop
+jmp nop lea
+call nop nop
+lea jmp nop
+jne nop lea
+nop lea call
+ja jmp nop
+sar sar sub
+mov mov nop
+jmp nop add
+jmp nop xor
+fld fstp mov
+fldcw fistp fldcw
+fistp fldcw mov
+jmp fstp fstp
+fstp fstp fstp
+jmp lea movzx
+test jne nop
+jne nop mov
+je jg cmp
+lea movzx test
+lea add pop
+jmp nop test
+je xor nop
+jmp nop call
+jmp fstp mov
+jmp nop sub
+nop movzx mov
+xor nop lea
+test js and
+cmp jne nop
+test setne movzx
+setne movzx mov
+cmp je nop
+mov nop cmp
+movzx test mov
+nop xor jmp
+sub jmp lea
+xor ret lea
+mov cmp sbb
+and cmp sbb
+fstp jmp fstp
+mov fld mov
+sete movzx mov
+cmp je ja
+je ja cmp
+cmp sete movzx
+cmp setne movzx
+nop lea cmp
+je cmp sete
+mov repe cmpsb seta
+repe cmpsb seta setb
+test sete add
+nop add cmp
+cmp sbb mov
+fstp fstp mov
+nop lea test
+mov movzx or
+mov mul mov
+nop lea add
+je shl mov
+nop lea sub
+nop lea xor
+call call nop
+nop cmp mov
+xor xor or
+call nop lea
+lea lea and
+jmp jmp nop
+sub lea and
+je movzx and
+mov mov leave
+leave ret nop
+sub or sub
+mov je movzx
+mov jbe cmp
+mov jae lea
+xor ret int3
+mov seta
+call lea and
+bt
+nop lea movzx
+jne movzx and
+cmovbe
+lea cmovae
+mov setb
+sete or
+seta cmp
+cmp sete or
+setne test jne
+mov setne movzx
+fnstcw movzx
+sete cmp sete
+push and sub
+leave jmp
+mov leave jmp
+leave jmp nop
