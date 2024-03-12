@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
-from collections import Counter
 import math
-import os
-import config
+from collections import Counter
 
-#It is impossible to get a failure with this function so no dictionary needed with error
+
+# It is impossible to get a failure with this function so no dictionary needed with error
 def extract(filepath):
     with open(filepath, 'rb') as f:
         byteArr = f.read()
@@ -25,5 +23,3 @@ def extract(filepath):
 
     generics = {'generic_fileSize': fileSize, 'generic_fileEntropy': ent}
     return generics
-
-

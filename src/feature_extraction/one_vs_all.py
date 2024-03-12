@@ -1,31 +1,26 @@
-#!/usr/bin/env python3
-from tqdm import tqdm
-import config
 import os
-import pandas as pd
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 import pickle
 from collections import Counter
-import random
+
 import matplotlib.pyplot as plt
-import math
+import numpy as np
+import pandas as pd
+import config
 
 prefix = {
-        'generic_':'generic',
-        'pesection':'sections',
-        'header_':'header',
-        'str_':'strings',
-        'imp_':'imports',
-        'ngram_':'ngrams',
-        'opcode_':'opcodes'
-        }
+    'generic_': 'generic',
+    'pesection': 'sections',
+    'header_': 'header',
+    'str_': 'strings',
+    'imp_': 'imports',
+    'ngram_': 'ngrams',
+    'opcode_': 'opcodes'
+}
 
-suffix = {'dll':'dlls'}
+suffix = {'dll': 'dlls'}
 
-def classify(binary,experiment):
+
+def classify(binary, experiment):
     # #We don't need this in the binary problem
     # if binary:
     #     return
@@ -36,8 +31,8 @@ def classify(binary,experiment):
     # full = full.merge(labels['family'],on='sample_hash',how='left')
     # families = set(full.family)
 
-    # #Plots
-    # cValue = list(prefix.values())+list(suffix.values())
+    # Plots
+    cValue = list(prefix.values()) + list(suffix.values())
     # columns = cValue.copy()
     # columns.append('family')
     # plot = pd.DataFrame(columns=columns)
@@ -76,10 +71,11 @@ def classify(binary,experiment):
     #     plot.at[index,'dlls'] = currentImportance.sum().values[0]
 
     # plot.to_pickle(os.path.join(config.RESULT_DIRECTORY,experiment,'oneVsRestImportance.pickle'))
-    with open(os.path.join(config.RESULT_DIRECTORY,experiment,'oneVsRestImportance.pickle'),'rb') as rFile:
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, 'oneVsRestImportance.pickle'), 'rb') as rFile:
         plot = pickle.load(rFile)
 
-    import IPython; IPython.embed(colors='Linux')
+    import IPython
+    IPython.embed(colors='Linux')
     plotDict = dict()
     for fClass in config.FEAT_ALL.values():
         plotDict[fClass] = list(plot[fClass].values)
@@ -90,23 +86,23 @@ def classify(binary,experiment):
     ax.set_xlabel('Feature class', fontsize=13, labelpad=10)
     ax.set_ylabel('MDI average importance', rotation=90, fontsize=13, labelpad=10)
     fig.tight_layout()
-    fig.savefig(os.path.join(config.PLOTS_DIRECTORY,experiment,'oneVsRest_featureImportanceBoxplot.pdf'))
+    fig.savefig(os.path.join(config.PLOTS_DIRECTORY, experiment, 'oneVsRest_featureImportanceBoxplot.pdf'))
 
     plot[cValue] = plot[cValue].astype(float)
     topFeature = plot[cValue].idxmax(axis=1)
     plot['topFeature'] = topFeature
-    sorter = [x for x,y in Counter(topFeature).most_common()]
-    lines = [x-1 for x in np.cumsum([y for x,y in Counter(topFeature).most_common()])]
+    sorter = [x for x, y in Counter(topFeature).most_common()]
+    lines = [x - 1 for x in np.cumsum([y for x, y in Counter(topFeature).most_common()])]
     plot['topFeature'] = plot['topFeature'].astype("category")
     plot['topFeature'].cat.set_categories(sorter, inplace=True)
     plot = plot.sort_values(by='topFeature')
     sortingPieces = []
     for c in sorter:
-        sortingPieces.append(plot[plot.topFeature==c].sort_values(by=c, ascending = False))
+        sortingPieces.append(plot[plot.topFeature == c].sort_values(by=c, ascending=False))
     plot = pd.concat(sortingPieces)
-    plot['x'] = range(0,len(plot))
+    plot['x'] = range(0, len(plot))
 
-    #PLOT
+    # PLOT
     fig, ax = plt.subplots()
     previous = [0] * len(plot)
     curves = sorter.copy()
@@ -116,25 +112,27 @@ def classify(binary,experiment):
         ax.fill_between(plot['x'], previous, current, label=curve)
         previous = current.copy()
     ax.tick_params(
-        axis='x',          
-        which='both',      
-        bottom=False,      
-        top=False,         
-        labelbottom=False) 
-    #Lines
-    for i,l in enumerate(lines):
-        if l!=max(plot.x):
+        axis='x',
+        which='both',
+        bottom=False,
+        top=False,
+        labelbottom=False)
+    # Lines
+    for i, l in enumerate(lines):
+        if l != max(plot.x):
             ax.vlines(l, 0, 1, colors='k', linestyles='-.')
-        x = l/2 if i==0 else lines[i-1]+(l-lines[i-1])/2
-        ax.text(x, 1.03, sorter[i], horizontalalignment='left',rotation=45)
+        x = l / 2 if i == 0 else lines[i - 1] + (l - lines[i - 1]) / 2
+        ax.text(x, 1.03, sorter[i], horizontalalignment='left', rotation=45)
     ax.set_xlabel('Families')
-    ax.set_ylabel('Feature Importance') 
+    ax.set_ylabel('Feature Importance')
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     lgd = ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.28), ncol=4)
 
-    #Save all
+    # Save all
     fig.subplots_adjust(right=1.1)
-    fig.savefig(os.path.join(config.PLOTS_DIRECTORY,experiment,'featureImportance_{}_OneVsRest.pdf'.format(experiment)), bbox_extra_artists=(lgd,), bbox_inches='tight')
-    with open(os.path.join(config.RESULT_DIRECTORY,experiment,'oneVsRestImportance.pickle'),'wb') as wFile:
-        pickle.dump(plot,wFile)
+    fig.savefig(
+        os.path.join(config.PLOTS_DIRECTORY, experiment, 'featureImportance_{}_OneVsRest.pdf'.format(experiment)),
+        bbox_extra_artists=(lgd,), bbox_inches='tight')
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, 'oneVsRestImportance.pickle'), 'wb') as wFile:
+        pickle.dump(plot, wFile)

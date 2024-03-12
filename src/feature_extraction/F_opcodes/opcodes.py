@@ -1,23 +1,25 @@
-#!/usr/bin/env python3
 import capstone
 from collections import Counter
-import config
+from src.feature_extraction import config
 import math
 import pefile
 import os
 
-def idf(x,N):
+
+def idf(x, N):
     return math.log(N / (1.0 + x))
 
+
 def tf(x):
-    return math.log(1+x)
+    return math.log(1 + x)
+
 
 def extract(sha1_family):
-    sha1,family = sha1_family
+    sha1, family = sha1_family
     if family:
-        filepath = os.path.join(config.MALWARE_DIRECTORY,family,sha1)
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
     else:
-        filepath = os.path.join(config.GOODWARE_DIRECTORY,sha1)
+        filepath = os.path.join(config.GOODWARE_DIRECTORY, sha1)
     try:
         pe = pefile.PE(filepath)
         eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
@@ -29,13 +31,14 @@ def extract(sha1_family):
         ngrams = Counter()
         for i in range(1, config.OPCODES_MAX_SIZE + 1):
             for j in range(len(opcodes) - i):
-                ngram = ' '.join(opcodes[j:j+i])
+                ngram = ' '.join(opcodes[j:j + i])
                 ngrams[ngram] += 1
-        return {sha1:{'ngrams':ngrams,'error':''}}
+        return {sha1: {'ngrams': ngrams, 'error': ''}}
     except Exception as e:
-        return {sha1:{'ngrams':None,'error':e}}
+        return {sha1: {'ngrams': None, 'error': e}}
 
-def extractAndPad(filepath,topOpcodes,N):
+
+def extractAndPad(filepath, topOpcodes, N):
     pe = pefile.PE(filepath)
     eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
     code_section = pe.get_section_by_rva(eop)
@@ -46,7 +49,8 @@ def extractAndPad(filepath,topOpcodes,N):
     ngrams = Counter()
     for i in range(1, config.OPCODES_MAX_SIZE + 1):
         for j in range(len(opcodes) - i):
-            ngram = ' '.join(opcodes[j:j+i])
+            ngram = ' '.join(opcodes[j:j + i])
             ngrams[ngram] += 1
-    tfIdfs = {"opcode_"+k:(tf(ngrams[k])*idf(v,N) if k in list(ngrams.keys()) else 0.00) for k,v in zip(topOpcodes.keys(),topOpcodes.values()) }
+    tfIdfs = {"opcode_" + k: (tf(ngrams[k]) * idf(v, N) if k in list(ngrams.keys()) else 0.00) for k, v in
+              zip(topOpcodes.keys(), topOpcodes.values())}
     return tfIdfs
