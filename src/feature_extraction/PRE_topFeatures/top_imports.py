@@ -48,7 +48,7 @@ def df_IG(sha1s, top_DLLs, top_APIs):
     return df_DLLS_IG, dfAPIsIG
 
 
-def top_imports(plot, binary, experiment):
+def top_imports(binary, experiment):
     sha1s = config.get_list(experiment, validation=True, binary=binary)
     samples_len = len(sha1s)
     print("Extracting imports (DLL and APIs) from all the {} samples in the validation set".format(samples_len))
@@ -71,14 +71,14 @@ def top_imports(plot, binary, experiment):
     print("Total number of unique APIs is: {}".format(len(top_APIs.keys())))
 
     # Saving for plot
-    if plot:
-        print("Saving complete list for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_count.pickle')
-        with open(filepath, 'wb') as w_file:
-            pickle.dump(top_DLLs, w_file)
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_count.pickle')
-        with open(filepath, 'wb') as w_file:
-            pickle.dump(top_APIs, w_file)
+    # if plot:
+    #     print("Saving complete list for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_count.pickle')
+    #     with open(filepath, 'wb') as w_file:
+    #         pickle.dump(top_DLLs, w_file)
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_count.pickle')
+    #     with open(filepath, 'wb') as w_file:
+    #         pickle.dump(top_APIs, w_file)
 
     # Filtering the most and least common
     print("Filtering the most and least common")
@@ -116,13 +116,13 @@ def top_imports(plot, binary, experiment):
     IG_APIs = compute_information_gain(df_APIs_IG)
 
     # Render in matplotlib
-    if plot:
-        print("Saving DLLs IG for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_ig.pickle')
-        IG_DLLs.to_pickle(filepath)
-        print("Saving APIs IG for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_ig.pickle')
-        IG_APIs.to_pickle(filepath)
+    # if plot:
+    #     print("Saving DLLs IG for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_ig.pickle')
+    #     IG_DLLs.to_pickle(filepath)
+    #     print("Saving APIs IG for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_ig.pickle')
+    #     IG_APIs.to_pickle(filepath)
 
     # igThresh = input("Which IG value do you want to cut DLLs?")
     # #Multiclass value

@@ -7,7 +7,7 @@ import os
 import pickle
 
 
-def top_strings(plot, binary, experiment):
+def top_strings(binary, experiment):
     sha1s = config.get_list(experiment, validation=True, binary=binary)
     samples_len = len(sha1s)
     print("Extracting strings from all the samples in the validation set")
@@ -50,8 +50,8 @@ def top_strings(plot, binary, experiment):
         w_file.write("\n".join(['str_' + s for s, _ in top_strings_reduced]))
 
     # Save for matplotlib
-    if plot:
-        print("Saving strings for CCDF ")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'strings_count.pickle')
-        with open(filepath, 'wb') as w_file:
-            pickle.dump(top_strings, w_file)
+    # if plot:
+    #     print("Saving strings for CCDF ")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'strings_count.pickle')
+    #     with open(filepath, 'wb') as w_file:
+    #         pickle.dump(top_strings, w_file)

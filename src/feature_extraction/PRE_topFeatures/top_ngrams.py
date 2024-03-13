@@ -27,7 +27,7 @@ def partial_counter(i_sha1s):
     return
 
 
-def filter_out_very_unlikely(plot, binary, experiment):
+def filter_out_very_unlikely(binary, experiment):
     sha1s = config.get_list(experiment, validation=True, binary=binary, max_size=20)
     samples_len = len(sha1s)
     subsample = 1000
@@ -111,7 +111,7 @@ def compute_information_gain(n_grams):
     return ret_dict
 
 
-def compute_IG_for_likely_ones(plot, binary, experiment):
+def compute_IG_for_likely_ones(binary, experiment):
     with open('./{}/sha1s'.format(config.TEMP_DIRECTORY), 'r') as r_file:
         sha1s = r_file.read().splitlines()
     print("Computing and merging relevant nGrams for sample files")
@@ -139,10 +139,10 @@ def compute_IG_for_likely_ones(plot, binary, experiment):
     IG = pd.concat(results)
 
     # Render in matplotlib
-    if plot:
-        print("Saving nGrams IG for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'nGrams_ig.pickle')
-        IG.to_pickle(filepath)
+    # if plot:
+    #     print("Saving nGrams IG for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'nGrams_ig.pickle')
+    #     IG.to_pickle(filepath)
 
     # igThresh = input("Which IG value do you want to cut Ngrams?")
     # # Multiclass
@@ -164,6 +164,6 @@ def compute_IG_for_likely_ones(plot, binary, experiment):
     return
 
 
-def top_n_grams(plot, binary, experiment):
-    filter_out_very_unlikely(plot, binary, experiment)
-    compute_IG_for_likely_ones(plot, binary, experiment)
+def top_n_grams(binary, experiment):
+    filter_out_very_unlikely(binary, experiment)
+    compute_IG_for_likely_ones(binary, experiment)

@@ -64,7 +64,7 @@ def compute_information_gain(opcodes, labels):
     return ret_df
 
 
-def top_opcodes(plot, binary, experiment):
+def top_opcodes(binary, experiment):
     sha1s = config.get_list(experiment, validation=True, binary=binary)
     print("Extracting opcodes from all the samples in the validation set")
     # Clean temp folder
@@ -94,11 +94,11 @@ def top_opcodes(plot, binary, experiment):
     print("Total number of unique opcodes nGrams is: {}".format(len(ngram_whole_dataset)))
 
     # Saving for plot
-    if plot:
-        print("Saving complete list for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'opcodes_count.pickle')
-        with open(filepath, 'wb') as w_file:
-            pickle.dump(ngram_whole_dataset, w_file)
+    # if plot:
+    #     print("Saving complete list for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'opcodes_count.pickle')
+    #     with open(filepath, 'wb') as w_file:
+    #         pickle.dump(ngram_whole_dataset, w_file)
 
     # Filtering the most and least common  (they carry no useful info)
     upper_bound = int(len(ngram_whole_dataset) - len(ngram_whole_dataset) * .1 / 100)
@@ -128,10 +128,10 @@ def top_opcodes(plot, binary, experiment):
     IG = pd.concat(IG)
 
     # Render in matplotlib
-    if plot:
-        print("Saving opcodes IG for CCDF plot")
-        filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'opcodes_ig.pickle')
-        IG.to_pickle(filepath)
+    # if plot:
+    #     print("Saving opcodes IG for CCDF plot")
+    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'opcodes_ig.pickle')
+    #     IG.to_pickle(filepath)
 
     # igThresh = input("Which IG value do you want to cut Opcodes?")
     # #Multiclass
