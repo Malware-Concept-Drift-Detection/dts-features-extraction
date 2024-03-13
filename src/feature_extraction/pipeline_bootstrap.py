@@ -4,7 +4,7 @@ import extract_features as ef
 from collections import Counter
 from p_tqdm import p_map
 from functools import partial
-import F_sections.sections as sections
+import src.feature_extraction.static.sections as sections
 
 
 def check_broken():

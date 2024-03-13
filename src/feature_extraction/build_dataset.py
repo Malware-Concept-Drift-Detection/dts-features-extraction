@@ -10,6 +10,7 @@ from p_tqdm import p_map
 from src.feature_extraction import config
 import src.feature_extraction.extract_features as ef
 
+
 def BAK_enrich_features(raw):
     STD_SECTIONS = ['.text', '.data', '.rdata', '.idata', '.edata', '.rsrc', '.bss', '.crt', '.tls']
     columns = [c for c in raw.columns if re.match('^pesection_[0-9]{1,2}_name$', c)]

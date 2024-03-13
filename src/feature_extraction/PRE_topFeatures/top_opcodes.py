@@ -1,7 +1,7 @@
 import math
 
 import src.feature_extraction.config as config
-from src.feature_extraction.F_opcodes import opcodes
+from src.feature_extraction.static import opcodes
 from collections import Counter
 from p_tqdm import p_map
 from tqdm import tqdm

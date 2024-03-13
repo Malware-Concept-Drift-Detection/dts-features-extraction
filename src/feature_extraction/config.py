@@ -1,3 +1,4 @@
+import argparse
 import os
 import pandas as pd
 import random
@@ -5161,7 +5162,7 @@ GOODWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/benign-dataset/
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_with_fam_labels/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_without_fams/files/singleton/"
-MALWARE_DIRECTORY = "/mnt/data/pe-mal-class-code/classification/samples/"
+MALWARE_DIRECTORY = "/run/media/luca/WD/NortonDataset670/MALWARE/"
 
 # Motif-like dataset
 MOTIF_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/other/motif_like_dataset.tsv"
@@ -5298,13 +5299,13 @@ def exclude_broken(to_filter):
 def exclude_families(to_filter):
     # Exclude broken samples
     broken_path = os.path.join(DATASET_DIRECTORY, 'exclude')
-    with open(broken_path) as rFile:
-        exclude = rFile.read().splitlines()
+    with open(broken_path) as r_file:
+        exclude = r_file.read().splitlines()
     to_filter = to_filter[~to_filter.family.isin(exclude)]
     return to_filter
 
 
-def build_label_data_frame(experiment, min_samples, exclude_packed, binary):
+def build_label_data_frame(experiment, min_samples=100, binary=False):
     if binary:
         # Goodware (we do not need families here)
         print("Goodware...")
@@ -5329,22 +5330,22 @@ def build_label_data_frame(experiment, min_samples, exclude_packed, binary):
             os.path.join(DATASET_DIRECTORY, experiment.replace('binary', 'multiclass'), 'labels.pickle'))
         malware = malware[malware.benign == False]
         families_grouped = malware.groupby('family')
-        for roundNumber in tqdm(range(5)):
+        for round_number in tqdm(range(5)):
             to_concat = []
             to_concat.append(dataset)
-            for _, familyGrouped in families_grouped:
-                start = roundNumber * 20
+            for _, family_grouped in families_grouped:
+                start = round_number * 20
                 end = start + 20
-                to_concat.append(familyGrouped.iloc[start:end])
+                to_concat.append(family_grouped.iloc[start:end])
             current_dataset = pd.concat(to_concat)
             assert len(current_dataset[current_dataset.index.duplicated(keep='first')]) == 0
 
             # Exlude broken
-            current_dataset = exclude_broken(current_dataset)
+            # current_dataset = exclude_broken(current_dataset)
             current_dataset = split(current_dataset)
 
             # Saving
-            filepath = os.path.join(DATASET_DIRECTORY, experiment, f'{roundNumber}', 'labels.pickle')
+            filepath = os.path.join(DATASET_DIRECTORY, experiment, f'{round_number}', 'labels.pickle')
             current_dataset.to_pickle(filepath)
     else:
         # Malware
@@ -5371,65 +5372,71 @@ def build_label_data_frame(experiment, min_samples, exclude_packed, binary):
         print(f"A total of {considered_families} malware families with {min_samples} samples have been considered")
         dataset = pd.concat(dataset)
 
-        print("Exclude aliases or other families which are not recognized")
-        dataset = exclude_families(dataset)
+        # print("Exclude aliases or other families which are not recognized")
+        # dataset = exclude_families(dataset)
+        #
+        # # Exclude broken samples for which static analysis fails
+        # dataset = exclude_broken(dataset)
 
-        # Exclude broken samples for which static analysis fails
-        dataset = exclude_broken(dataset)
-
-        families = list(set(dataset.family))
-        # Balance families by using av class agreement
-        avclass_agreement = pd.read_csv(AVCLASS_AGREEMENT, sep='\t', index_col='sha2',
-                                        usecols=['sha2', 'all_avc2_families'])
-        chunks = []
-        print("Balancing remaining families")
-        for family in tqdm(families):
-            current = dataset[dataset.family == family]
-            if len(current) < min_samples:
-                continue
-            elif len(current) == min_samples:
-                chunks.append(current)
-            else:
-                # There are more than 100 samples. If they are more need to subsample them
-                current_agreement = avclass_agreement[avclass_agreement.index.isin(current.index)]
-                if len(current_agreement) < min_samples:
-                    chunks.append(current.head(min_samples))
-                else:
-                    current_agreement = current_agreement.apply(evaluate_agreement, axis=1, args=(family,))
-                    current_agreement = current_agreement.sort_values(ascending=False)
-                    current_agreement = current_agreement.head(min_samples)
-                    current = current[current.index.isin(current_agreement.index)]
-                    chunks.append(current)
-        dataset = pd.concat(chunks)
-
-        # #Check for packed samples here
-        # print("Checking for packed samples")
-        # packedInfo = pd.read_csv(os.path.join(PACK_INF_DIRECTORY,'result'),sep="\t",names=['sha1','packed']).set_index('sha1')
-        # packedInfo['packed'] = packedInfo['packed'].apply(lambda x: True if x==x else False)
-        # #Make sure that there are no duplicates
-        # assert len(packedInfo[packedInfo.index.duplicated(keep='first')])==0
-
-        # dataset = dataset.merge(packedInfo,on='sha1',how='left')
-        # assert dataset.packed.isna().sum() == 0
-
-        # if excludePacked:
-        #     dataset = dataset[~dataset.packed]
-
-        # backward compatibility
-        ############
-        dataset['packed'] = False
-        ###########
-
-        # Make sure that there are no duplicates as this means that a single sample has been classified in multiple families or as a goodware
-        assert len(dataset[dataset.index.duplicated(keep='first')]) == 0
-        dataset = split(dataset)
-
-        print('Creating Symbolic links')
-        families_grouped = dataset.groupby('family')
-        p_map(create_symbolic, families_grouped, num_cpus=CORES)
-
-        # Saving
-        print("Saving labels...")
-        filepath = os.path.join(DATASET_DIRECTORY, experiment, 'labels.pickle')
-        dataset.to_pickle(filepath)
+        # families = list(set(dataset.family))
+        # # Balance families by using av class agreement
+        # avclass_agreement = pd.read_csv(AVCLASS_AGREEMENT, sep='\t', index_col='sha2',
+        #                                 usecols=['sha2', 'all_avc2_families'])
+        # chunks = []
+        # print("Balancing remaining families")
+        # for family in tqdm(families):
+        #     current = dataset[dataset.family == family]
+        #     if len(current) < min_samples:
+        #         continue
+        #     elif len(current) == min_samples:
+        #         chunks.append(current)
+        #     else:
+        #         # There are more than 100 samples. If they are more need to subsample them
+        #         current_agreement = avclass_agreement[avclass_agreement.index.isin(current.index)]
+        #         if len(current_agreement) < min_samples:
+        #             chunks.append(current.head(min_samples))
+        #         else:
+        #             current_agreement = current_agreement.apply(evaluate_agreement, axis=1, args=(family,))
+        #             current_agreement = current_agreement.sort_values(ascending=False)
+        #             current_agreement = current_agreement.head(min_samples)
+        #             current = current[current.index.isin(current_agreement.index)]
+        #             chunks.append(current)
+        # dataset = pd.concat(chunks)
+        #
+        # # #Check for packed samples here
+        # # print("Checking for packed samples")
+        # # packedInfo = pd.read_csv(os.path.join(PACK_INF_DIRECTORY,'result'),sep="\t",names=['sha1','packed']).set_index('sha1')
+        # # packedInfo['packed'] = packedInfo['packed'].apply(lambda x: True if x==x else False)
+        # # #Make sure that there are no duplicates
+        # # assert len(packedInfo[packedInfo.index.duplicated(keep='first')])==0
+        #
+        # # dataset = dataset.merge(packedInfo,on='sha1',how='left')
+        # # assert dataset.packed.isna().sum() == 0
+        #
+        # # if excludePacked:
+        # #     dataset = dataset[~dataset.packed]
+        #
+        # # backward compatibility
+        # ############
+        # dataset['packed'] = False
+        # ###########
+        #
+        # # Make sure that there are no duplicates as this means that a single sample has been classified in multiple families or as a goodware
+        # assert len(dataset[dataset.index.duplicated(keep='first')]) == 0
+        # dataset = split(dataset)
+        #
+        # print('Creating Symbolic links')
+        # families_grouped = dataset.groupby('family')
+        # p_map(create_symbolic, families_grouped, num_cpus=CORES)
+        #
+        # # Saving
+        # print("Saving labels...")
+        # filepath = os.path.join(experiment, DATASET_DIRECTORY, 'labels.pickle')
+        # dataset.to_pickle(filepath)
     print("Done!")
+
+
+parser = argparse.ArgumentParser(description='Build SHA file')
+parser.add_argument("--path", required=True)
+args, _ = parser.parse_known_args()
+build_label_data_frame(experiment=args.path)

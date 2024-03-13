@@ -1,5 +1,5 @@
 from src.feature_extraction import config
-from src.feature_extraction.F_N_grams import ngrams
+from src.feature_extraction.static import ngrams
 from collections import Counter
 from p_tqdm import p_map
 from tqdm import tqdm

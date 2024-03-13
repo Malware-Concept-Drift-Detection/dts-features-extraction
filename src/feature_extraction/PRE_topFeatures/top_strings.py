@@ -1,10 +1,9 @@
 from src.feature_extraction import config
-from src.feature_extraction.F_strings import strings
+from src.feature_extraction.static import strings
 from collections import Counter
 from p_tqdm import p_map
 from tqdm import tqdm
 import os
-import pickle
 
 
 def top_strings(binary, experiment):

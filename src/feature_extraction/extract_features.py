@@ -1,12 +1,12 @@
 import os
 import time
-import src.feature_extraction.F_generics.generics as generics
-import src.feature_extraction.F_headers.headers as headers
-import src.feature_extraction.F_sections.sections as sections
-import src.feature_extraction.F_imports.imports as imports
-import src.feature_extraction.F_N_grams.ngrams as ngrams
-import src.feature_extraction.F_opcodes.opcodes as opcodes
-import src.feature_extraction.F_strings.strings as strings
+import src.feature_extraction.static.generics as generics
+import src.feature_extraction.static.headers as headers
+import src.feature_extraction.static.sections as sections
+import src.feature_extraction.static.imports as imports
+import src.feature_extraction.static.ngrams as ngrams
+import src.feature_extraction.static.opcodes as opcodes
+import src.feature_extraction.static.strings as strings
 from src.feature_extraction import config
 import pickle
 

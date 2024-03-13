@@ -2,13 +2,11 @@ import os
 from collections import Counter
 from functools import partial
 from itertools import islice
-
+from p_tqdm import p_map
 import pandas as pd
 from info_gain import info_gain
-from p_tqdm import p_map
-
 from src.feature_extraction import config
-from src.feature_extraction.F_imports import imports
+from src.feature_extraction.static import imports
 
 
 def compute_information_gain(imports):
@@ -69,16 +67,6 @@ def top_imports(binary, experiment):
         top_apis.update(content['imps'])
     print("Total number of unique DLLs is: {}".format(len(top_dlls.keys())))
     print("Total number of unique APIs is: {}".format(len(top_apis.keys())))
-
-    # Saving for plot
-    # if plot:
-    #     print("Saving complete list for CCDF plot")
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_count.pickle')
-    #     with open(filepath, 'wb') as w_file:
-    #         pickle.dump(top_dlls, w_file)
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_count.pickle')
-    #     with open(filepath, 'wb') as w_file:
-    #         pickle.dump(top_apis, w_file)
 
     # Filtering the most and least common
     print("Filtering the most and least common")
