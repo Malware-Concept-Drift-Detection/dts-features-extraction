@@ -38,7 +38,7 @@ def extract(sha1_family):
         return {sha1: {'ngrams': None, 'error': e}}
 
 
-def extractAndPad(filepath, topOpcodes, N):
+def extract_and_pad(filepath, top_opcodes, N):
     pe = pefile.PE(filepath)
     eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
     code_section = pe.get_section_by_rva(eop)
@@ -51,6 +51,6 @@ def extractAndPad(filepath, topOpcodes, N):
         for j in range(len(opcodes) - i):
             ngram = ' '.join(opcodes[j:j + i])
             ngrams[ngram] += 1
-    tfIdfs = {"opcode_" + k: (tf(ngrams[k]) * idf(v, N) if k in list(ngrams.keys()) else 0.00) for k, v in
-              zip(topOpcodes.keys(), topOpcodes.values())}
-    return tfIdfs
+    tf_idfs = {"opcode_" + k: (tf(ngrams[k]) * idf(v, N) if k in list(ngrams.keys()) else 0.00) for k, v in
+              zip(top_opcodes.keys(), top_opcodes.values())}
+    return tf_idfs

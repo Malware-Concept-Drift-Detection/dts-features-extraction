@@ -12,24 +12,24 @@ from info_gain import info_gain
 import numpy as np
 
 
-def partialCounter(iSha1s):
-    i = iSha1s[0]
-    sha1s = iSha1s[1]
-    topNGrams = Counter()
+def partial_counter(i_sha1s):
+    i = i_sha1s[0]
+    sha1s = i_sha1s[1]
+    top_n_grams = Counter()
     for sha1 in sha1s:
         filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
         current = pd.read_pickle(filepath)
-        topNGrams.update(current)
+        top_n_grams.update(current)
     # Save to pickle
     filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
     with open(filepath, 'wb') as wFile:
-        pickle.dump(topNGrams, wFile)
+        pickle.dump(top_n_grams, wFile)
     return
 
 
-def filterOutVeryUnlikely(plot, binary, experiment):
-    sha1s = config.getList(experiment, validation=True, binary=binary, maxSize=20)
-    samplesLen = len(sha1s)
+def filter_out_very_unlikely(plot, binary, experiment):
+    sha1s = config.get_list(experiment, validation=True, binary=binary, maxSize=20)
+    samples_len = len(sha1s)
     subsample = 1000
     sha1s = random.sample(sha1s, subsample)
 
@@ -40,102 +40,102 @@ def filterOutVeryUnlikely(plot, binary, experiment):
     # for x in sha1s:
     #     ngrams.extractAndSave(x)
     # #REMOVE
-    p_map(ngrams.extractAndSave, sha1s, num_cpus=config.CORES)
+    p_map(ngrams.extract_and_save, sha1s, num_cpus=config.CORES)
 
     # Computing nGrams frequecy
     # (unique nGrams per binary so this means that if a nGram appears more than once
     # in the binary it is counted only once)
     print("Computing nGrams prevalence")
-    sha1sOnly = [s for s, _ in sha1s]
-    chunks = [sha1sOnly[x:x + 100] for x in range(0, len(sha1sOnly), 100)]
+    sha1s_only = [s for s, _ in sha1s]
+    chunks = [sha1s_only[x:x + 100] for x in range(0, len(sha1s_only), 100)]
     chunks = list(zip(range(0, len(chunks)), chunks))
-    p_map(partialCounter, chunks)
+    p_map(partial_counter, chunks)
 
     print("Unifying counters")
-    topNGrams = Counter()
+    top_n_grams = Counter()
     for counter in tqdm(range(0, len(chunks))):
         filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(counter))
         partial = pd.read_pickle(filepath)
-        topNGrams.update(partial)
+        top_n_grams.update(partial)
 
-    print("Total number of unique nGram is: {}".format(len(topNGrams)))
+    print("Total number of unique nGram is: {}".format(len(top_n_grams)))
 
     # Saving for Matplotlib
     # if plot:
     #     print("Saving complete list for CCDF plot")
     #     filepath = os.path.join(config.PLOTS_DIRECTORY,experiment,'nGrams_count.pickle')
-    #     with open(filepath, 'wb') as wFile:
-    #         pickle.dump(topNGrams,wFile)
+    #     with open(filepath, 'wb') as w_file:
+    #         pickle.dump(top_n_grams,w_file)
 
     # Filtering the most and least common  (they carry no useful info)
-    topNGrams = Counter({k: v for k, v in topNGrams.items() if v > 10 and v < 990})
+    top_n_grams = Counter({k: v for k, v in top_n_grams.items() if v > 10 and v < 990})
 
     # Saving the list of nGrams and randomSha1s considered for the next step
-    with open('./{}/topNGrams.pickle'.format(config.TEMP_DIRECTORY), 'wb') as wFile:
-        pickle.dump(topNGrams, wFile)
-    with open('./{}/sha1s'.format(config.TEMP_DIRECTORY), 'w') as wFile:
-        wFile.write("\n".join(sha1sOnly))
+    with open('./{}/top_n_grams.pickle'.format(config.TEMP_DIRECTORY), 'wb') as w_file:
+        pickle.dump(top_n_grams, w_file)
+    with open('./{}/sha1s'.format(config.TEMP_DIRECTORY), 'w') as w_file:
+        w_file.write("\n".join(sha1s_only))
 
     # Rm temp files
     subprocess.call("cd {} && ls | grep partial | xargs rm".format(config.TEMP_DIRECTORY), shell=True)
     return
 
 
-def partialDfIG(sha1s):
-    with open('./{}/topNGrams.pickle'.format(config.TEMP_DIRECTORY), 'rb') as rFile:
-        topNGrams = pickle.load(rFile)
-    topNGrams = set(topNGrams.keys())
-    dfIG = pd.DataFrame(True, index=topNGrams, columns=[])
+def partial_df_IG(sha1s):
+    with open('./{}/top_n_grams.pickle'.format(config.TEMP_DIRECTORY), 'rb') as rFile:
+        top_n_grams = pickle.load(rFile)
+    top_n_grams = set(top_n_grams.keys())
+    df_IG = pd.DataFrame(True, index=top_n_grams, columns=[])
     for sha1 in sha1s:
         with open('./{}/{}'.format(config.TEMP_DIRECTORY, sha1), 'rb') as rFile:
-            ngrams = pickle.load(rFile)
+            n_grams = pickle.load(rFile)
 
-        ngrams = set(ngrams.keys())
+        n_grams = set(n_grams.keys())
         # Take only those that are in the top N_grams
-        consideredNgrams = ngrams & topNGrams
+        considered_n_grams = n_grams & top_n_grams
 
-        # Put all ngrams to false and mark true only those intersected
-        extractedN_grams = pd.Series(False, index=topNGrams)
-        for consideredNgram in consideredNgrams:
-            extractedN_grams[consideredNgram] = True
-        dfIG[sha1] = extractedN_grams
-    return dfIG
-
-
-def computeInformationGain(ngrams):
-    labels = ngrams.loc['benign']
-    ngrams = ngrams.drop('benign')
-    retDict = pd.DataFrame(0.0, index=ngrams.index, columns=['IG'])
-    for ngram, row in ngrams.iterrows():
-        retDict.at[ngram, 'IG'] = info_gain.info_gain(labels, row)
-    return retDict
+        # Put all n_grams to false and mark true only those intersected
+        extracted_n_grams = pd.Series(False, index=top_n_grams)
+        for consideredNgram in considered_n_grams:
+            extracted_n_grams[consideredNgram] = True
+        df_IG[sha1] = extracted_n_grams
+    return df_IG
 
 
-def computeIGForLykelyOnes(plot, binary, experiment):
-    with open('./{}/sha1s'.format(config.TEMP_DIRECTORY), 'r') as rFile:
-        sha1s = rFile.read().splitlines()
+def compute_information_gain(n_grams):
+    labels = n_grams.loc['benign']
+    n_grams = n_grams.drop('benign')
+    ret_dict = pd.DataFrame(0.0, index=n_grams.index, columns=['IG'])
+    for ngram, row in n_grams.iterrows():
+        ret_dict.at[ngram, 'IG'] = info_gain.info_gain(labels, row)
+    return ret_dict
+
+
+def compute_IG_for_likely_ones(plot, binary, experiment):
+    with open('./{}/sha1s'.format(config.TEMP_DIRECTORY), 'r') as r_file:
+        sha1s = r_file.read().splitlines()
     print("Computing and merging relevant nGrams for sample files")
     chunks = [sha1s[i:i + 10] for i in range(0, len(sha1s), 10)]
-    results = p_map(partialDfIG, chunks, num_cpus=config.CORES)
-    dfIG = pd.concat(results, axis=1)
+    results = p_map(partial_df_IG, chunks, num_cpus=config.CORES)
+    df_IG = pd.concat(results, axis=1)
 
     # Read labels and creating last row
     labels = pd.read_pickle(os.path.join(config.DATASET_DIRECTORY, experiment, 'labels.pickle'))
     if binary:
-        dfIG.loc['benign', dfIG.columns] = labels.loc[dfIG.columns, 'benign']
+        df_IG.loc['benign', df_IG.columns] = labels.loc[df_IG.columns, 'benign']
     else:
-        dfIG.loc['benign', dfIG.columns] = labels.loc[dfIG.columns, 'family']
+        df_IG.loc['benign', df_IG.columns] = labels.loc[df_IG.columns, 'family']
 
     print("Chunks for information gain")
-    keys = dfIG.keys()
-    toAdd = dfIG.loc['benign']
-    dfIG = dfIG.drop('benign')
-    chunks = np.array_split(dfIG, config.CORES)
+    keys = df_IG.keys()
+    to_add = df_IG.loc['benign']
+    df_IG = df_IG.drop('benign')
+    chunks = np.array_split(df_IG, config.CORES)
     for chunk in chunks:
-        chunk.loc['benign'] = toAdd
+        chunk.loc['benign'] = to_add
 
     print("Computing information gain")
-    results = p_map(computeInformationGain, chunks, num_cpus=config.CORES)
+    results = p_map(compute_information_gain, chunks, num_cpus=config.CORES)
     IG = pd.concat(results)
 
     # Render in matplotlib
@@ -156,14 +156,14 @@ def computeIGForLykelyOnes(plot, binary, experiment):
     IGs = ['ngram_' + x for x in IG.index]
 
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'nGrams.list')
-    with open(filepath, 'w') as wFile:
-        wFile.write("\n".join(IGs))
+    with open(filepath, 'w') as w_file:
+        w_file.write("\n".join(IGs))
 
     # Cleaning
     subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
     return
 
 
-def top_nGrams(plot, binary, experiment):
-    filterOutVeryUnlikely(plot, binary, experiment)
-    computeIGForLykelyOnes(plot, binary, experiment)
+def top_n_grams(plot, binary, experiment):
+    filter_out_very_unlikely(plot, binary, experiment)
+    compute_IG_for_likely_ones(plot, binary, experiment)

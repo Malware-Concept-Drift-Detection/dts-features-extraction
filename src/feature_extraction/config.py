@@ -5163,6 +5163,7 @@ GOODWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/benign-dataset/
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_without_fams/files/singleton/"
 MALWARE_DIRECTORY = "/mnt/data/pe-mal-class-code/classification/samples/"
 
+
 # Motif-like dataset
 MOTIF_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/other/motif_like_dataset.tsv"
 
@@ -5244,7 +5245,7 @@ def updateLabelDataFrame(experiment, sampleList):
     dataset.to_pickle(filepath)
 
 
-def getList(experiment, trainTest=False, validation=False, binary=False, maxSize=-1):
+def get_list(experiment, trainTest=False, validation=False, binary=False, maxSize=-1):
     dataset = pd.read_pickle(os.path.join(DATASET_DIRECTORY, experiment, 'labels.pickle'))
     if not binary:
         dataset = dataset[~dataset.benign]

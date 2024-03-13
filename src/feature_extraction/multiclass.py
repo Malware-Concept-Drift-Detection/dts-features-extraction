@@ -18,7 +18,7 @@ from scipy.stats import entropy
 from datetime import datetime
 
 
-def padConfusionMatrix(cm):
+def pad_confusion_matrix(cm):
     # Check that all the columns are there
     shape = cm.shape
     if shape[0] != shape[1]:
@@ -31,7 +31,7 @@ def padConfusionMatrix(cm):
     return cm
 
 
-def trainAndSave(experiment, name, X, y):
+def train_and_save(experiment, name, X, y):
     path = os.path.join(config.RESULT_DIRECTORY, experiment, name)
     try:
         os.makedirs(path)
@@ -54,11 +54,11 @@ def trainAndSave(experiment, name, X, y):
         n_estimators=225,
         max_features='sqrt')
 
-    classificationResult = []
-    probabilityResult = []
+    classification_result = []
+    probability_result = []
     confusion_matrix = []
     feature_importance = []
-    classificationReports = []
+    classification_reports = []
     clfs = []
 
     n_splits = 5
@@ -76,59 +76,60 @@ def trainAndSave(experiment, name, X, y):
             clfs.append(clf)
 
         # Prediction Probability
-        currentProbability = pd.DataFrame(y_test)
-        currentProbability.loc[:, clf.classes_] = y_proba
-        currentProbability['Entropy'] = currentProbability[clf.classes_].apply(entropy, axis=1)
-        probabilityResult.append(currentProbability)
+        current_probability = pd.DataFrame(y_test)
+        current_probability.loc[:, clf.classes_] = y_proba
+        current_probability['Entropy'] = current_probability[clf.classes_].apply(entropy, axis=1)
+        probability_result.append(current_probability)
 
         # Prediction result
-        currentResult = pd.DataFrame(y_test)
-        currentResult.index.names = ['sample_hash']
-        currentResult['PredictedLabel'] = y_pred
-        currentResult = currentResult.rename(columns={'family': 'TrueLabel'})
-        classificationResult.append(currentResult)
+        current_result = pd.DataFrame(y_test)
+        current_result.index.names = ['sample_hash']
+        current_result['PredictedLabel'] = y_pred
+        current_result = current_result.rename(columns={'family': 'TrueLabel'})
+        classification_result.append(current_result)
 
         # Confusion Matrix
-        currentCM = pd.crosstab(y_test, y_pred, rownames=['True Value'], colnames=['Predicted Value'],
-                                normalize='index')
-        currentCM = padConfusionMatrix(currentCM)
-        confusion_matrix.append(currentCM)
+        current_cm = pd.crosstab(y_test, y_pred, rownames=['True Value'], colnames=['Predicted Value'],
+                                 normalize='index')
+        current_cm = pad_confusion_matrix(current_cm)
+        confusion_matrix.append(current_cm)
 
         # Feature Importance
-        currentImportance = pd.DataFrame(clf.feature_importances_, index=X_train.columns,
-                                         columns=['feat_importance']).sort_values(by='feat_importance', ascending=False)
-        feature_importance.append(currentImportance)
+        current_importance = pd.DataFrame(clf.feature_importances_, index=X_train.columns,
+                                          columns=['feat_importance']).sort_values(by='feat_importance',
+                                                                                   ascending=False)
+        feature_importance.append(current_importance)
 
         # Classification parameters
-        currentReport = pd.DataFrame(classification_report(y_test, y_pred, output_dict=True))
-        currentReport = currentReport.swapaxes('index', 'columns')
-        currentReport = currentReport.drop(['accuracy', 'macro avg', 'weighted avg'])
-        currentReport = currentReport.drop(['support'], axis=1)
-        currentReport['accuracy'] = 0.00
-        for family in currentReport.index:
-            currentReport.at[family, 'accuracy'] = currentCM.at[family, family]
-        currentReport.index.names = ['name']
-        classificationReports.append(currentReport)
+        current_report = pd.DataFrame(classification_report(y_test, y_pred, output_dict=True))
+        current_report = current_report.swapaxes('index', 'columns')
+        current_report = current_report.drop(['accuracy', 'macro avg', 'weighted avg'])
+        current_report = current_report.drop(['support'], axis=1)
+        current_report['accuracy'] = 0.00
+        for family in current_report.index:
+            current_report.at[family, 'accuracy'] = current_cm.at[family, family]
+        current_report.index.names = ['name']
+        classification_reports.append(current_report)
 
     # Save results
     if name == 'ft_1-ff_0-st_1-sf_0':
-        with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'classifiers.pickle'), 'wb') as wFile:
-            pickle.dump(clfs, wFile)
+        with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'classifiers.pickle'), 'wb') as w_file:
+            pickle.dump(clfs, w_file)
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'trueLabel_probability_list.pickle'),
-              'wb') as wFile:
-        pickle.dump(probabilityResult, wFile)
+              'wb') as w_file:
+        pickle.dump(probability_result, w_file)
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'trueLabel_predictedLabel_list.pickle'),
-              'wb') as wFile:
-        pickle.dump(classificationResult, wFile)
-    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'confusionMatrix_list.pickle'), 'wb') as wFile:
-        pickle.dump(confusion_matrix, wFile)
-    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'featureImportance_list.pickle'), 'wb') as wFile:
-        pickle.dump(feature_importance, wFile)
-    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'classificationReports.pickle'), 'wb') as wFile:
-        pickle.dump(classificationReports, wFile)
+              'wb') as w_file:
+        pickle.dump(classification_result, w_file)
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'confusionMatrix_list.pickle'), 'wb') as w_file:
+        pickle.dump(confusion_matrix, w_file)
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'featureImportance_list.pickle'), 'wb') as w_file:
+        pickle.dump(feature_importance, w_file)
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, name, 'classification_reports.pickle'), 'wb') as w_file:
+        pickle.dump(classification_reports, w_file)
 
 
-def fairSubsample(iterable, n, csize):
+def fair_subsample(iterable, n, csize):
     i_copy = list(iterable)
     for i in range(n):
         comb = []
@@ -151,62 +152,62 @@ def classify(experiment, plot):
     fullX = full.drop(['ms_elapsed', 'set', 'family'], axis=1)
     fully = full['family']
 
-    sampleTicks = [50, 60, 70]
-    familyTicks = [70, 170, 270, 370, 470, 570]
+    sample_ticks = [50, 60, 70]
+    family_ticks = [70, 170, 270, 370, 470, 570]
     n_splits = 10
     families = list(set(fully))
-    maxSamples = 80
-    gridPieces = []
-    gridPieces.append(1)
-    gridPieces.append(n_splits * (len(sampleTicks) + len(familyTicks)))
-    gridPieces.append(len(sampleTicks) * len(familyTicks) * n_splits ** 2)
-    gridSize = sum(gridPieces)
+    max_samples = 80
+    grid_pieces = []
+    grid_pieces.append(1)
+    grid_pieces.append(n_splits * (len(sample_ticks) + len(family_ticks)))
+    grid_pieces.append(len(sample_ticks) * len(family_ticks) * n_splits ** 2)
+    grid_size = sum(grid_pieces)
 
-    trainAndSaveExperiment = partial(trainAndSave, experiment)
+    train_and_save_experiment = partial(train_and_save, experiment)
 
     print("Training and test classifiers")
-    with tqdm(total=gridSize) as pbar:
+    with tqdm(total=grid_size) as pbar:
         # Add 100% dataset
-        trainAndSaveExperiment('ft_1-ff_0-st_1-sf_0', fullX, fully)
+        train_and_save_experiment('ft_1-ff_0-st_1-sf_0', fullX, fully)
         pbar.update(1)
 
     # Decomment
     # #First split according to the number of samples
-    # for sampleTick in sampleTicks:
+    # for sampleTick in sample_ticks:
     #     sampleFold=0
-    #     samplesFold = model_selection.StratifiedShuffleSplit(n_splits=n_splits, train_size=sampleTick/maxSamples)
+    #     samplesFold = model_selection.StratifiedShuffleSplit(n_splits=n_splits, train_size=sampleTick/max_samples)
     #     for train_index, _ in samplesFold.split(fullX,fully):
     #         sampleFiltered_X = fullX.iloc[train_index]
     #         sampleFiltered_y = fully.iloc[train_index]
     #         #Add % dataset with 100% families
-    #         trainAndSaveExperiment(f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}',sampleFiltered_X,sampleFiltered_y)
+    #         train_and_save_experiment(f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}',sampleFiltered_X,sampleFiltered_y)
     #         pbar.update(1)
 
     #         #Second split according to the number of families
-    #         for familyTick in familyTicks:
+    #         for familyTick in family_ticks:
     #             familyFold = 0
     #             for retainedFamilies in fairSubsample(families, n_splits, familyTick):
     #                 familyFiltered_y = sampleFiltered_y[sampleFiltered_y.isin(retainedFamilies)]
     #                 familyFiltered_X = sampleFiltered_X.loc[familyFiltered_y.index]
     #                 #Add % families and % samples
-    #                 trainAndSaveExperiment(f'ft_{familyTick}-ff_{familyFold}-st_{sampleTick}-sf_{sampleFold}',familyFiltered_X,familyFiltered_y)
+    #                 train_and_save_experiment(f'ft_{familyTick}-ff_{familyFold}-st_{sampleTick}-sf_{sampleFold}',familyFiltered_X,familyFiltered_y)
     #                 pbar.update(1)
     #                 familyFold+=1
     #         sampleFold+=1
 
     # #Subsample families when samples are 100%
-    # for familyTick in familyTicks:
+    # for familyTick in family_ticks:
     #     familyFold = 0
     #     for retainedFamilies in fairSubsample(families, n_splits, familyTick):
     #         familyFiltered_y = fully[fully.isin(retainedFamilies)]
     #         familyFiltered_X = fullX.loc[familyFiltered_y.index]
     #         #Add % families with 100% samples
-    #         trainAndSaveExperiment(f'ft_{familyTick}-ff_{familyFold}-st_1-sf_0',familyFiltered_X,familyFiltered_y)
+    #         train_and_save_experiment(f'ft_{familyTick}-ff_{familyFold}-st_1-sf_0',familyFiltered_X,familyFiltered_y)
     #         pbar.update(1)
     #         familyFold+=1
 
 
-def getAccuracy(experiment, path):
+def get_accuracy(experiment, path):
     # with open(os.path.join(config.RESULT_DIRECTORY,experiment,path,'trueLabel_predictedLabel_list.pickle'),'rb') as rFile:
     #     tp= pickle.load(rFile)
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, path, 'classificationReports.pickle'), 'rb') as rFile:
@@ -220,130 +221,130 @@ def getAccuracy(experiment, path):
     return np.mean(acc)
 
 
-def getFeatures(experiment, path):
-    featurePartial = dict.fromkeys(config.FEAT_ALL.values())
+def get_features(experiment, path):
+    feature_partial = dict.fromkeys(config.FEAT_ALL.values())
 
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, path, 'featureImportance_list.pickle'), 'rb') as rFile:
         feature_importance = pickle.load(rFile)
     feature_importance = pd.concat(feature_importance, axis=1).mean(axis=1)
-    currentImportance = pd.DataFrame(0.0, index=config.FEAT_ALL.values(), columns=['feat_importance'])
+    current_importance = pd.DataFrame(0.0, index=config.FEAT_ALL.values(), columns=['feat_importance'])
     # All feature type
     for prefix, name in config.FEAT_PREFIX.items():
         temp = feature_importance.loc[[x for x in feature_importance.index if x.startswith(prefix)]]
         if path == 'ft_1-ff_0-st_1-sf_0':
-            featurePartial[name] = temp
+            feature_partial[name] = temp
         feature_importance = feature_importance.loc[~feature_importance.index.isin(temp.index)]
-        currentImportance.loc[name] = temp.sum()
+        current_importance.loc[name] = temp.sum()
     # Last is DLL
-    currentImportance.loc['dlls'] = feature_importance.sum()
-    featurePartial['dlls'] = feature_importance
+    current_importance.loc['dlls'] = feature_importance.sum()
+    feature_partial['dlls'] = feature_importance
 
-    featurePartial = {k: v for k, v in featurePartial.items() if 'dynamic' not in k}
-    for k, v in featurePartial.items():
-        featurePartial[k] = v.sort_values(ascending=False).head(100)
-        featurePartial[k].name = 'Avg MDI Score'
-        featurePartial[k].index.name = f'{k} feature'
-        featurePartial[k].to_csv(
+    feature_partial = {k: v for k, v in feature_partial.items() if 'dynamic' not in k}
+    for k, v in feature_partial.items():
+        feature_partial[k] = v.sort_values(ascending=False).head(100)
+        feature_partial[k].name = 'Avg MDI Score'
+        feature_partial[k].index.name = f'{k} feature'
+        feature_partial[k].to_csv(
             os.path.join(config.RESULT_DIRECTORY, experiment, path, f'{k}_featureImportance_top100.tsv'), sep='\t')
-    return currentImportance
+    return current_importance
 
 
-def checkFamily(d):
+def check_family(d):
     return pd.Series([len(d), len(d[d.PredictedLabel == d.TrueLabel])])
 
 
-def getReport(tple):
+def get_report(tple):
     experiment, path = tple
-    bestAndWorst = []
+    best_and_worst = []
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, path, 'trueLabel_predictedLabel_list.pickle'),
               'rb') as rFile:
         results = pickle.load(rFile)
         for result in results:
-            grouped = result.groupby('TrueLabel').apply(checkFamily)
+            grouped = result.groupby('TrueLabel').apply(check_family)
             grouped = grouped.rename(columns={0: 'numPredicted', 1: 'correctPredictions'})
-            bestAndWorst.append(grouped)
-    return bestAndWorst, pd.concat(results).reset_index(drop=True)
+            best_and_worst.append(grouped)
+    return best_and_worst, pd.concat(results).reset_index(drop=True)
 
 
-def getPacking(tple):
+def get_packing(tple):
     packed = pd.read_csv(os.path.join(config.DATASET_DIRECTORY, 'packed.csv'))
     packed = packed.set_index('SHA256')
     packed['PACKER/PROTECTOR'] = packed['PACKER/PROTECTOR'].apply(lambda x: True if x == x else False)
     experiment, path = tple
-    packedRes = []
-    notPackedRes = []
+    packed_res = []
+    not_packed_res = []
     with open(os.path.join(config.RESULT_DIRECTORY, experiment, path, 'trueLabel_predictedLabel_list.pickle'),
               'rb') as rFile:
         results = pickle.load(rFile)
         for result in results:
-            currentPacked = result.reset_index().merge(packed['PACKER/PROTECTOR'], left_on='sample_hash',
-                                                       right_on='SHA256')
+            current_packed = result.reset_index().merge(packed['PACKER/PROTECTOR'], left_on='sample_hash',
+                                                        right_on='SHA256')
 
-            pk = currentPacked[currentPacked['PACKER/PROTECTOR'] == True].apply(
+            pk = current_packed[current_packed['PACKER/PROTECTOR'] == True].apply(
                 lambda row: True if row['TrueLabel'] == row['PredictedLabel'] else False, axis=1)
-            pkRatio = len(pk[pk]) / len(pk)
-            packedRes.append(pkRatio)
-            npk = currentPacked[currentPacked['PACKER/PROTECTOR'] == False].apply(
+            pk_ratio = len(pk[pk]) / len(pk)
+            packed_res.append(pk_ratio)
+            npk = current_packed[current_packed['PACKER/PROTECTOR'] == False].apply(
                 lambda row: True if row['TrueLabel'] == row['PredictedLabel'] else False, axis=1)
-            npkRatio = len(npk[npk]) / len(npk)
-            notPackedRes.append(npkRatio)
-    return np.mean(packedRes), np.mean(notPackedRes)
+            npk_ratio = len(npk[npk]) / len(npk)
+            not_packed_res.append(npk_ratio)
+    return np.mean(packed_res), np.mean(not_packed_res)
 
 
-def misclassifiedToCSV(group):
-    totGroup = len(group)
-    accuracy = 100 * len(group[group['TrueLabel'] == group['PredictedLabel']]) / totGroup
+def misclassified_to_csv(group):
+    tot_group = len(group)
+    accuracy = 100 * len(group[group['TrueLabel'] == group['PredictedLabel']]) / tot_group
     family = list(set(group['TrueLabel']))
     assert len(family) == 1
     family = family[0]
     group = group[group['PredictedLabel'] != family]
-    otherPredicted = len(set(group['PredictedLabel']))
-    breakdown = {k: 100 * v / totGroup for k, v in dict(Counter(group.PredictedLabel)).items()}
+    other_predicted = len(set(group['PredictedLabel']))
+    breakdown = {k: 100 * v / tot_group for k, v in dict(Counter(group.PredictedLabel)).items()}
     breakdown = {k: v for k, v in sorted(breakdown.items(), key=lambda item: item[1], reverse=True)}
     breakdown = ",".join([f'{k},{v:.2f}' for k, v in breakdown.items()])
-    return f'{totGroup},{accuracy:.2f},{otherPredicted},{breakdown}\n'
+    return f'{tot_group},{accuracy:.2f},{other_predicted},{breakdown}\n'
 
 
-def aggregateResults(experiment):
+def aggregate_results(experiment):
     # print('Generating the heatmap')
     # buildHeatmap(experiment)
     print('Computing features')
-    buildFeatures(experiment)
+    build_features(experiment)
     # print('Ranking best and worst')
     # buildBestAndWorst(experiment)
 
 
-def buildBestAndWorst(experiment):
-    allPredictions = []
-    sampleTicks = [50, 60, 70, 80]
-    familyTicks = [70, 170, 270, 370, 470, 570, 670]
+def build_best_and_worst(experiment):
+    all_predictions = []
+    sample_ticks = [50, 60, 70, 80]
+    family_ticks = [70, 170, 270, 370, 470, 570, 670]
     n_splits = 10
-    sampleTicks = sampleTicks[:-1]
-    familyTicks = familyTicks[:-1]
+    sample_ticks = sample_ticks[:-1]
+    family_ticks = family_ticks[:-1]
 
     # Add 100% dataset
-    allPredictions.append((experiment, 'ft_1-ff_0-st_1-sf_0'))
+    all_predictions.append((experiment, 'ft_1-ff_0-st_1-sf_0'))
 
     # First split according to the number of samples
-    for sampleTick in sampleTicks:
-        for sampleFold in range(n_splits):
-            allPredictions.append((experiment, f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}'))
+    for sample_tick in sample_ticks:
+        for sample_fold in range(n_splits):
+            all_predictions.append((experiment, f'ft_1-ff_0-st_{sample_tick}-sf_{sample_fold}'))
             # Second split according to the number of families
-            for familyTick in familyTicks:
-                for familyFold in range(n_splits):
-                    allPredictions.append(
-                        (experiment, f'ft_{familyTick}-ff_{familyFold}-st_{sampleTick}-sf_{sampleFold}'))
+            for family_tick in family_ticks:
+                for family_fold in range(n_splits):
+                    all_predictions.append(
+                        (experiment, f'ft_{family_tick}-ff_{family_fold}-st_{sample_tick}-sf_{sample_fold}'))
 
     # Subsample families when samples are 100%
-    for familyTick in familyTicks:
-        for familyFold in range(n_splits):
-            allPredictions.append((experiment, f'ft_{familyTick}-ff_{familyFold}-st_1-sf_0'))
+    for family_tick in family_ticks:
+        for family_fold in range(n_splits):
+            all_predictions.append((experiment, f'ft_{family_tick}-ff_{family_fold}-st_1-sf_0'))
 
-    pairedResults = p_map(getReport, allPredictions, num_cpus=config.CORES)
-    unfiltredResults = [y for _, y in pairedResults]
-    allResults = [x for x, _ in pairedResults]
+    paired_results = p_map(get_report, all_predictions, num_cpus=config.CORES)
+    unfiltred_results = [y for _, y in paired_results]
+    all_results = [x for x, _ in paired_results]
 
-    res = p_map(getPacking, allPredictions, num_cpus=config.CORES)
+    res = p_map(get_packing, all_predictions, num_cpus=config.CORES)
     one = []
     two = []
     for a, b in res:
@@ -351,17 +352,17 @@ def buildBestAndWorst(experiment):
         two.append(b)
 
     # Check worst families
-    allResults = [item for sublist in allResults for item in sublist]
-    allResults = reduce(lambda x, y: x.add(y, fill_value=0), allResults)
-    allResults['correct'] = 100 * allResults['correctPredictions'] / allResults['numPredicted']
-    allResults = allResults.sort_values(by='correct', ascending=True)
+    all_results = [item for sublist in all_results for item in sublist]
+    all_results = reduce(lambda x, y: x.add(y, fill_value=0), all_results)
+    all_results['correct'] = 100 * all_results['correctPredictions'] / all_results['numPredicted']
+    all_results = all_results.sort_values(by='correct', ascending=True)
 
     # Static Vs Dynamic
-    dynamicResults = pd.read_csv('../features_Yufei/f1_acc_per_family.csv', sep='\t', index_col='family')
-    classesFamilies = pd.read_csv('../features_Yufei/classes.sorted', sep='\t', index_col='family')
-    aggregated = allResults.reset_index().merge(dynamicResults, left_on="TrueLabel", right_on="family").set_index(
+    dynamic_results = pd.read_csv('../features_Yufei/f1_acc_per_family.csv', sep='\t', index_col='family')
+    classes_families = pd.read_csv('../features_Yufei/classes.sorted', sep='\t', index_col='family')
+    aggregated = all_results.reset_index().merge(dynamic_results, left_on="TrueLabel", right_on="family").set_index(
         'TrueLabel')
-    aggregated = aggregated.reset_index().merge(classesFamilies, left_on="TrueLabel", right_on="family").set_index(
+    aggregated = aggregated.reset_index().merge(classes_families, left_on="TrueLabel", right_on="family").set_index(
         'TrueLabel')
     aggregated = aggregated.rename(columns={'correct': 'static', 'accuracy': 'dynamic'})
     aggregated = aggregated[['static', 'dynamic', 'class']]
@@ -395,18 +396,18 @@ def buildBestAndWorst(experiment):
         plt.savefig(os.path.join(config.RESULT_DIRECTORY, experiment, f'static_dynamic_correlation_{c}.pdf'))
 
     # Check mispredictions
-    unfiltredResults = pd.concat(unfiltredResults).reset_index(drop=True)
-    unfilteredGrouped = unfiltredResults.groupby('TrueLabel').apply(misclassifiedToCSV)
-    with open(os.path.join(config.RESULT_DIRECTORY, experiment, 'misclassifies.csv'), 'w') as wFile:
-        for index, row in unfilteredGrouped.iteritems():
-            wFile.write(index + "," + row)
+    unfiltred_results = pd.concat(unfiltred_results).reset_index(drop=True)
+    unfiltered_grouped = unfiltred_results.groupby('TrueLabel').apply(misclassified_to_csv)
+    with open(os.path.join(config.RESULT_DIRECTORY, experiment, 'misclassifies.csv'), 'w') as w_file:
+        for index, row in unfiltered_grouped.iteritems():
+            w_file.write(index + "," + row)
 
     # Correlation with packed samples
     packed = pd.read_csv(os.path.join(config.DATASET_DIRECTORY, 'packed.csv'))
     packed = packed.set_index('SHA256')
     packed = packed.groupby('FAMILY').agg(lambda x: len(x[~x.isna()]) / len(x)).sort_values(by='PACKER/PROTECTOR',
                                                                                             ascending=False)
-    packed = packed.reset_index().merge(allResults['correct'], left_on='FAMILY', right_on='TrueLabel').set_index(
+    packed = packed.reset_index().merge(all_results['correct'], left_on='FAMILY', right_on='TrueLabel').set_index(
         'FAMILY')
     fig, ax = plt.subplots()
     ax.scatter(packed['PACKER/PROTECTOR'], packed['correct'], s=1.5)
@@ -416,17 +417,18 @@ def buildBestAndWorst(experiment):
     plt.savefig(os.path.join(config.RESULT_DIRECTORY, experiment, 'packing_correlation.pdf'))
 
     # Correlation with AVclass confidence
-    avclassConfidence = pd.read_csv(config.AVCLASS_AGREEMENT, sep='\t', index_col='sha2')
-    confidenceMetric1 = avclassConfidence[['final_avc2_family', 'av_cnt_ratio_over_labels']].groupby(
+    avclass_confidence = pd.read_csv(config.AVCLASS_AGREEMENT, sep='\t', index_col='sha2')
+    confidence_metric1 = avclass_confidence[['final_avc2_family', 'av_cnt_ratio_over_labels']].groupby(
         'final_avc2_family').mean()
-    confidenceMetric1Result = pd.concat([allResults, confidenceMetric1[confidenceMetric1.index.isin(allResults.index)]],
-                                        axis=1)
-    pearson = round(np.corrcoef(confidenceMetric1Result['av_cnt_ratio_over_labels'].tail(40),
-                                confidenceMetric1Result['correct'].tail(40))[0, 1], 2)
+    confidence_metric1_result = pd.concat(
+        [all_results, confidence_metric1[confidence_metric1.index.isin(all_results.index)]],
+        axis=1)
+    pearson = round(np.corrcoef(confidence_metric1_result['av_cnt_ratio_over_labels'].tail(40),
+                                confidence_metric1_result['correct'].tail(40))[0, 1], 2)
     import IPython
     IPython.embed(colors='Linux')
     fig, ax = plt.subplots()
-    ax.scatter(confidenceMetric1Result['av_cnt_ratio_over_labels'], confidenceMetric1Result['correct'], s=1.5)
+    ax.scatter(confidence_metric1_result['av_cnt_ratio_over_labels'], confidence_metric1_result['correct'], s=1.5)
     ax.set_xlabel('AV count ratio over labels', fontsize=15, labelpad=15)
     ax.set_ylabel('\% accuracy', fontsize=15, labelpad=15)
     fig.tight_layout()
@@ -434,78 +436,79 @@ def buildBestAndWorst(experiment):
 
     # Putting everything together for the table
     # The following two lines are for dynamic results
-    # allResults = dynamicResults.rename(columns={'f1':'correct'})
-    # allResults.index.names = ['TrueLabel']
+    # all_results = dynamic_results.rename(columns={'f1':'correct'})
+    # all_results.index.names = ['TrueLabel']
     # END The following two lines are for dynamic results
 
-    allResults = allResults.reset_index().merge(classesFamilies['class'], left_on='TrueLabel', right_on='family')
-    allResults = allResults[['TrueLabel', 'correct', 'class']]
-    allResults = allResults.merge(packed['PACKER/PROTECTOR'], left_on='TrueLabel', right_on='FAMILY')
+    all_results = all_results.reset_index().merge(classes_families['class'], left_on='TrueLabel', right_on='family')
+    all_results = all_results[['TrueLabel', 'correct', 'class']]
+    all_results = all_results.merge(packed['PACKER/PROTECTOR'], left_on='TrueLabel', right_on='FAMILY')
     print(
-        f"Correlation between correct predictions and packing is {np.corrcoef(allResults['correct'], allResults['PACKER/PROTECTOR'])}")
-    allResults = allResults.set_index('TrueLabel')
-    allResults.index.names = ['Family']
-    allResults = allResults.rename(
+        f"Correlation between correct predictions and packing is {np.corrcoef(all_results['correct'], all_results['PACKER/PROTECTOR'])}")
+    all_results = all_results.set_index('TrueLabel')
+    all_results.index.names = ['Family']
+    all_results = all_results.rename(
         columns={'correct': 'Avg Accuracy', 'class': 'Class', 'PACKER/PROTECTOR': '% packed'})
-    allResults = allResults[['Class', 'Avg Accuracy', '% packed']]
-    allResults['Avg Accuracy'] = round(allResults['Avg Accuracy'], 3)
-    allResults = allResults.sort_values(by='Avg Accuracy')
-    allResults.to_latex(os.path.join(config.RESULT_DIRECTORY, experiment, 'tbl_multiclass_bestAndWorst_dynamic.tex'))
+    all_results = all_results[['Class', 'Avg Accuracy', '% packed']]
+    all_results['Avg Accuracy'] = round(all_results['Avg Accuracy'], 3)
+    all_results = all_results.sort_values(by='Avg Accuracy')
+    all_results.to_latex(os.path.join(config.RESULT_DIRECTORY, experiment, 'tbl_multiclass_bestAndWorst_dynamic.tex'))
     # Group
-    grouped = allResults.groupby('Class').agg('mean')['Avg Accuracy']
+    grouped = all_results.groupby('Class').agg('mean')['Avg Accuracy']
     grouped.to_latex(
         os.path.join(config.RESULT_DIRECTORY, experiment, 'tbl_multiclass_bestAndWorst_grouped_dynamic.tex'))
 
 
-def buildFeatures(experiment):
-    sampleTicks = [50, 60, 70, 80]
-    familyTicks = [70, 170, 270, 370, 470, 570, 670]
+def build_features(experiment):
+    sample_ticks = [50, 60, 70, 80]
+    family_ticks = [70, 170, 270, 370, 470, 570, 670]
     n_splits = 10
-    heatmap = pd.DataFrame(0.0, index=sampleTicks, columns=familyTicks)
+    heatmap = pd.DataFrame(0.0, index=sample_ticks, columns=family_ticks)
     heatmap.index.names = ['samples']
-    feat_tbl = dict.fromkeys(xprod(sampleTicks, familyTicks))
-    sampleTicks = sampleTicks[:-1]
-    familyTicks = familyTicks[:-1]
-    mean = dict.fromkeys(familyTicks)
+    feat_tbl = dict.fromkeys(xprod(sample_ticks, family_ticks))
+    sample_ticks = sample_ticks[:-1]
+    family_ticks = family_ticks[:-1]
+    mean = dict.fromkeys(family_ticks)
     for k in mean.keys():
         mean[k] = []
 
     # Add 100% dataset
-    feat_tbl[(80, 670)] = getFeatures(experiment, 'ft_1-ff_0-st_1-sf_0')
+    feat_tbl[(80, 670)] = get_features(experiment, 'ft_1-ff_0-st_1-sf_0')
     print(feat_tbl[(80, 670)])
     return
 
     # First split according to the number of samples
-    for sampleTick in sampleTicks:
+    for sample_tick in sample_ticks:
         feat_ = []
-        tMean = mean.copy()
-        for sampleFold in range(n_splits):
-            feat_.append(getFeatures(experiment, f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}'))
+        t_mean = mean.copy()
+        for sample_fold in range(n_splits):
+            feat_.append(get_features(experiment, f'ft_1-ff_0-st_{sample_tick}-sf_{sample_fold}'))
             # Second split according to the number of families
-            for familyTick in familyTicks:
-                for familyFold in range(n_splits):
-                    tMean[familyTick].append(
-                        getFeatures(experiment, f'ft_{familyTick}-ff_{familyFold}-st_{sampleTick}-sf_{sampleFold}'))
-        feat_tbl[(sampleTick, 670)] = pd.concat(feat_, axis=1).mean(axis=1)
-        for k, v in tMean.items():
-            feat_tbl[(sampleTick, k)] = pd.concat(v, axis=1).mean(axis=1)
+            for family_tick in family_ticks:
+                for family_fold in range(n_splits):
+                    t_mean[family_tick].append(
+                        get_features(experiment,
+                                     f'ft_{family_tick}-ff_{family_fold}-st_{sample_tick}-sf_{sample_fold}'))
+        feat_tbl[(sample_tick, 670)] = pd.concat(feat_, axis=1).mean(axis=1)
+        for k, v in t_mean.items():
+            feat_tbl[(sample_tick, k)] = pd.concat(v, axis=1).mean(axis=1)
 
     # Subsample families when samples are 100%
-    for familyTick in familyTicks:
+    for family_tick in family_ticks:
         feat = []
-        for familyFold in range(n_splits):
-            feat_.append(getFeatures(experiment, f'ft_{familyTick}-ff_{familyFold}-st_1-sf_0'))
-        feat_tbl[(80, familyTick)] = pd.concat(v, axis=1).mean(axis=1)
+        for family_fold in range(n_splits):
+            feat_.append(get_features(experiment, f'ft_{family_tick}-ff_{family_fold}-st_1-sf_0'))
+        feat_tbl[(80, family_tick)] = pd.concat(v, axis=1).mean(axis=1)
 
     avg_table = []
     for feature in config.FEAT_ALL.values():
-        currentHeatmap = heatmap.copy()
-        for familyTick in heatmap.columns:
-            for sampleTick in heatmap.index:
-                avg_table.append(feat_tbl[(sampleTick, familyTick)])
-                currentHeatmap.at[sampleTick, familyTick] = feat_tbl[(sampleTick, familyTick)].loc[feature]
+        current_heatmap = heatmap.copy()
+        for family_tick in heatmap.columns:
+            for sample_tick in heatmap.index:
+                avg_table.append(feat_tbl[(sample_tick, family_tick)])
+                current_heatmap.at[sample_tick, family_tick] = feat_tbl[(sample_tick, family_tick)].loc[feature]
         fig, ax = plt.subplots()
-        sns.heatmap(currentHeatmap, linewidths=0.7, annot=True, fmt=".3f", square=True, annot_kws={"fontsize": 12},
+        sns.heatmap(current_heatmap, linewidths=0.7, annot=True, fmt=".3f", square=True, annot_kws={"fontsize": 12},
                     cbar_kws={"orientation": "horizontal", "pad": 0.2}, ax=ax)
         ax.set_xlabel('Families', fontsize=15, labelpad=15)
         ax.set_ylabel('Samples', fontsize=15, labelpad=15)
@@ -515,42 +518,42 @@ def buildFeatures(experiment):
     avg_table.to_latex(os.path.join(config.RESULT_DIRECTORY, experiment, 'feat_importance_multiclass.tex'))
 
 
-def buildHeatmap(experiment):
-    sampleTicks = [50, 60, 70, 80]
-    familyTicks = [70, 170, 270, 370, 470, 570, 670]
+def build_heatmap(experiment):
+    sample_ticks = [50, 60, 70, 80]
+    family_ticks = [70, 170, 270, 370, 470, 570, 670]
     n_splits = 10
-    heatmap = pd.DataFrame(0.0, index=sampleTicks, columns=familyTicks)
+    heatmap = pd.DataFrame(0.0, index=sample_ticks, columns=family_ticks)
     heatmap.index.names = ['samples']
-    sampleTicks = sampleTicks[:-1]
-    familyTicks = familyTicks[:-1]
-    mean = dict.fromkeys(familyTicks)
+    sample_ticks = sample_ticks[:-1]
+    family_ticks = family_ticks[:-1]
+    mean = dict.fromkeys(family_ticks)
     for k in mean.keys():
         mean[k] = []
 
     # Add 100% dataset
-    heatmap.loc[80, 670] = getAccuracy(experiment, 'ft_1-ff_0-st_1-sf_0')
+    heatmap.loc[80, 670] = get_accuracy(experiment, 'ft_1-ff_0-st_1-sf_0')
 
     # First split according to the number of samples
-    for sampleTick in sampleTicks:
+    for sampleTick in sample_ticks:
         accuracy_ = []
-        tMean = mean.copy()
+        t_mean = mean.copy()
         for sampleFold in range(n_splits):
-            accuracy_.append(getAccuracy(experiment, f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}'))
+            accuracy_.append(get_accuracy(experiment, f'ft_1-ff_0-st_{sampleTick}-sf_{sampleFold}'))
             # Second split according to the number of families
-            for familyTick in familyTicks:
-                for familyFold in range(n_splits):
-                    tMean[familyTick].append(
-                        getAccuracy(experiment, f'ft_{familyTick}-ff_{familyFold}-st_{sampleTick}-sf_{sampleFold}'))
+            for family_tick in family_ticks:
+                for family_fold in range(n_splits):
+                    t_mean[family_tick].append(
+                        get_accuracy(experiment, f'ft_{family_tick}-ff_{family_fold}-st_{sampleTick}-sf_{sampleFold}'))
         heatmap.loc[sampleTick, 670] = np.mean(accuracy_)
-        for k, v in tMean.items():
+        for k, v in t_mean.items():
             heatmap.loc[sampleTick, k] = np.mean(v)
 
     # Subsample families when samples are 100%
-    for familyTick in familyTicks:
+    for family_tick in family_ticks:
         accuracy_ = []
-        for familyFold in range(n_splits):
-            accuracy_.append(getAccuracy(experiment, f'ft_{familyTick}-ff_{familyFold}-st_1-sf_0'))
-        heatmap.loc[80, familyTick] = np.mean(accuracy_)
+        for family_fold in range(n_splits):
+            accuracy_.append(get_accuracy(experiment, f'ft_{family_tick}-ff_{family_fold}-st_1-sf_0'))
+        heatmap.loc[80, family_tick] = np.mean(accuracy_)
 
     plot = sns.heatmap(heatmap, linewidths=0.7, annot=True, fmt=".3f", square=True, annot_kws={"fontsize": 12},
                        cbar_kws={"orientation": "horizontal", "pad": 0.2})

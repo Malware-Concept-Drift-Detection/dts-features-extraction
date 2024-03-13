@@ -5,7 +5,7 @@ import math
 import os
 
 
-def getMaxSections(sha1_family):
+def get_max_sections(sha1_family):
     sha1, family = sha1_family
     if family:
         filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
@@ -83,24 +83,24 @@ def parse_resources(pe):
     return secs
 
 
-def padSections(sections, allSections):
-    paddedSections = dict.fromkeys(allSections)
-    for sectionFeature in allSections:
-        if sectionFeature in sections.keys():
-            paddedSections[sectionFeature] = sections[sectionFeature]
+def pad_sections(sections, all_sections):
+    padded_sections = dict.fromkeys(all_sections)
+    for section_feature in all_sections:
+        if section_feature in sections.keys():
+            padded_sections[section_feature] = sections[section_feature]
         else:
-            if allSections[sectionFeature] == 'object':
-                paddedSections[sectionFeature] = 'none'
-            elif allSections[sectionFeature] == 'int64':
-                paddedSections[sectionFeature] = int(0)
-            elif allSections[sectionFeature] == 'float64':
-                paddedSections[sectionFeature] = float(0.00)
+            if all_sections[section_feature] == 'object':
+                padded_sections[section_feature] = 'none'
+            elif all_sections[section_feature] == 'int64':
+                padded_sections[section_feature] = int(0)
+            elif all_sections[section_feature] == 'float64':
+                padded_sections[section_feature] = float(0.00)
             else:
-                paddedSections[sectionFeature] = False
-    return paddedSections
+                padded_sections[section_feature] = False
+    return padded_sections
 
 
-def extract(filepath, allSections):
+def extract(filepath, all_sections):
     pe = pefile.PE(filepath)
     if pe.FILE_HEADER.Machine != 332:
         raise ValueError('File header machine != 332')
@@ -189,4 +189,4 @@ def extract(filepath, allSections):
 
     secs.update(parse_resources(pe))
 
-    return padSections(secs, allSections)
+    return pad_sections(secs, all_sections)

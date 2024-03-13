@@ -3,24 +3,24 @@ import os
 import pefile
 
 
-def padDlls(dlls, topDlls):
+def pad_dlls(dlls, top_dlls):
     # Take only those that are in the top DLLs
-    consideredDlls = set(dlls) & topDlls
+    considered_dlls = set(dlls) & top_dlls
     # Put all dlls to false and mark true only those intersected
-    extractedDlls = dict.fromkeys(topDlls, False)
-    for consideredDll in consideredDlls:
-        extractedDlls[consideredDll] = True
-    return extractedDlls
+    extracted_dlls = dict.fromkeys(top_dlls, False)
+    for consideredDll in considered_dlls:
+        extracted_dlls[consideredDll] = True
+    return extracted_dlls
 
 
-def padImports(imps, topImports):
+def pad_imports(imps, top_imports):
     # Take only those that are in the top Imports
-    consideredImports = set(imps) & topImports
+    considered_imports = set(imps) & top_imports
     # Put all imports to false and mark true only those intersected
-    extractedImports = dict.fromkeys(topImports, False)
-    for consideredImport in consideredImports:
-        extractedImports[consideredImport] = True
-    return extractedImports
+    extracted_imports = dict.fromkeys(top_imports, False)
+    for considered_import in considered_imports:
+        extracted_imports[considered_import] = True
+    return extracted_imports
 
 
 def extract(sha1_family):
@@ -58,7 +58,7 @@ def extract(sha1_family):
         return {sha1: {'dlls': [], 'imps': [], 'error': e}}
 
 
-def extractAndPad(filepath, topDlls, topImports):
+def extract_and_pad(filepath, top_dlls, top_imports):
     pe = pefile.PE(filepath)
     if pe.FILE_HEADER.Machine != 332:
         raise ValueError('File header machine != 332')
@@ -79,4 +79,4 @@ def extractAndPad(filepath, topDlls, topImports):
                     imp = imp.decode().lower()
                     imp = 'imp_{}'.format(imp)
                     imps.append(imp)
-    return padDlls(dlls, topDlls), padImports(imps, topImports)
+    return pad_dlls(dlls, top_dlls), pad_imports(imps, top_imports)

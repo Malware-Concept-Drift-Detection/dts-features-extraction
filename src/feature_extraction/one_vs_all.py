@@ -32,8 +32,8 @@ def classify(binary, experiment):
     # families = set(full.family)
 
     # Plots
-    cValue = list(prefix.values()) + list(suffix.values())
-    # columns = cValue.copy()
+    c_value = list(prefix.values()) + list(suffix.values())
+    # columns = c_value.copy()
     # columns.append('family')
     # plot = pd.DataFrame(columns=columns)
 
@@ -76,37 +76,37 @@ def classify(binary, experiment):
 
     import IPython
     IPython.embed(colors='Linux')
-    plotDict = dict()
+    plot_dict = dict()
     for fClass in config.FEAT_ALL.values():
-        plotDict[fClass] = list(plot[fClass].values)
+        plot_dict[fClass] = list(plot[fClass].values)
 
     fig, ax = plt.subplots()
-    ax.boxplot(plotDict.values())
-    ax.set_xticklabels([x.capitalize() for x in plotDict.keys()])
+    ax.boxplot(plot_dict.values())
+    ax.set_xticklabels([x.capitalize() for x in plot_dict.keys()])
     ax.set_xlabel('Feature class', fontsize=13, labelpad=10)
     ax.set_ylabel('MDI average importance', rotation=90, fontsize=13, labelpad=10)
     fig.tight_layout()
     fig.savefig(os.path.join(config.PLOTS_DIRECTORY, experiment, 'oneVsRest_featureImportanceBoxplot.pdf'))
 
-    plot[cValue] = plot[cValue].astype(float)
-    topFeature = plot[cValue].idxmax(axis=1)
-    plot['topFeature'] = topFeature
-    sorter = [x for x, y in Counter(topFeature).most_common()]
-    lines = [x - 1 for x in np.cumsum([y for x, y in Counter(topFeature).most_common()])]
-    plot['topFeature'] = plot['topFeature'].astype("category")
-    plot['topFeature'].cat.set_categories(sorter, inplace=True)
-    plot = plot.sort_values(by='topFeature')
-    sortingPieces = []
+    plot[c_value] = plot[c_value].astype(float)
+    top_feature = plot[c_value].idxmax(axis=1)
+    plot['top_feature'] = top_feature
+    sorter = [x for x, y in Counter(top_feature).most_common()]
+    lines = [x - 1 for x in np.cumsum([y for x, y in Counter(top_feature).most_common()])]
+    plot['top_feature'] = plot['top_feature'].astype("category")
+    plot['top_feature'].cat.set_categories(sorter, inplace=True)
+    plot = plot.sort_values(by='top_feature')
+    sorting_pieces = []
     for c in sorter:
-        sortingPieces.append(plot[plot.topFeature == c].sort_values(by=c, ascending=False))
-    plot = pd.concat(sortingPieces)
+        sorting_pieces.append(plot[plot.topFeature == c].sort_values(by=c, ascending=False))
+    plot = pd.concat(sorting_pieces)
     plot['x'] = range(0, len(plot))
 
     # PLOT
     fig, ax = plt.subplots()
     previous = [0] * len(plot)
     curves = sorter.copy()
-    curves.extend([x for x in cValue if x not in sorter])
+    curves.extend([x for x in c_value if x not in sorter])
     for curve in curves:
         current = [x + y for x, y in zip(previous, plot[curve])]
         ax.fill_between(plot['x'], previous, current, label=curve)

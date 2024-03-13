@@ -7,7 +7,7 @@ from functools import partial
 import F_sections.sections as sections
 
 
-def checkBroken():
+def check_broken():
     # Check those samples that fail the extraction of sections and opcodes
     check = []
 
@@ -18,58 +18,58 @@ def checkBroken():
     # Malware
     families = os.listdir(config.MALWARE_DIRECTORY)
     for family in families:
-        currentSamples = os.listdir(os.path.join(config.MALWARE_DIRECTORY, family))
-        check.extend(zip(currentSamples, [family] * len(currentSamples)))
+        current_samples = os.listdir(os.path.join(config.MALWARE_DIRECTORY, family))
+        check.extend(zip(current_samples, [family] * len(current_samples)))
 
     # Check the maximum number of sections
-    results = p_map(sections.getMaxSections, check, num_cpus=config.CORES)
-    maxSections = max(results)
+    results = p_map(sections.get_max_sections, check, num_cpus=config.CORES)
+    max_sections = max(results)
 
-    # Generate allSections File
+    # Generate all_sections File
     with open(os.path.join('PRE_topFeatures', 'sectionProcessedTemplate'), 'r') as rFile:
-        sectionTemplateProcessed = rFile.read().splitlines()
-    with open(os.path.join('PRE_topFeatures', 'sectionTemplate'), 'r') as rFile:
-        sectionTemplate = rFile.read().splitlines()
+        section_template_processed = rFile.read().splitlines()
+    with open(os.path.join('PRE_topFeatures', 'section_template'), 'r') as rFile:
+        section_template = rFile.read().splitlines()
 
-    toWrite = sectionTemplateProcessed.copy()
-    for section in range(1, maxSections + 1):
-        toWrite.extend([f'pesection_{section}_{x}' for x in sectionTemplate])
+    to_write = section_template_processed.copy()
+    for section in range(1, max_sections + 1):
+        to_write.extend([f'pesection_{section}_{x}' for x in section_template])
 
-    with open(os.path.join('PRE_topFeatures', 'allSections.list'), 'w') as wFile:
-        wFile.write("\n".join(toWrite))
+    with open(os.path.join('PRE_topFeatures', 'all_sections.list'), 'w') as w_file:
+        w_file.write("\n".join(to_write))
 
     # TOP Sections needed
-    with open(os.path.join('PRE_topFeatures', 'allSections.list'), 'r') as sectionFile:
-        allSections = {k: v for k, v in (l.split('\t') for l in sectionFile.read().splitlines())}
+    with open(os.path.join('PRE_topFeatures', 'all_sections.list'), 'r') as sectionFile:
+        all_sections = {k: v for k, v in (l.split('\t') for l in sectionFile.read().splitlines())}
 
     # Fake TOP Opcodes needed
-    topOpcodes = {'add': 1}
-    topOpcodes = Counter(topOpcodes)
+    top_opcodes = {'add': 1}
+    top_opcodes = Counter(top_opcodes)
 
-    currentExtractingFunction = partial(ef.extractFeatures,
+    current_extracting_function = partial(ef.extract_features,
                                         N=10000,
                                         genericsFlag=False,
                                         headersFlag=False,
-                                        allSections=allSections,
+                                        allSections=all_sections,
                                         topStrings=None,
                                         topDlls=None,
                                         topImports=None,
                                         topN_grams=None,
-                                        topOpcodes=topOpcodes
+                                        topOpcodes=top_opcodes
                                         )
 
     print('Looking for broken files...')
     # check = ('f5c009839a21f89a74b7d86e7957856401589d1c02d0f26e4a0d9e4409ee11de','cossta')
-    # currentExtractingFunction(check)
-    results = p_map(currentExtractingFunction, check, num_cpus=config.CORES)
-    problematicSha1s = [y for x, y in results if not x]
-    problematicSha1s = {k: v for d in problematicSha1s for k, v in d.items()}
-    with open(os.path.join(config.DATASET_DIRECTORY, 'staticFails'), 'w') as wFile:
-        for sample, dictionary in problematicSha1s.items():
-            wFile.write(f'{sample}\t{dictionary["error"]}\n')
+    # current_extracting_function(check)
+    results = p_map(current_extracting_function, check, num_cpus=config.CORES)
+    problematic_sha1s = [y for x, y in results if not x]
+    problematic_sha1s = {k: v for d in problematic_sha1s for k, v in d.items()}
+    with open(os.path.join(config.DATASET_DIRECTORY, 'staticFails'), 'w') as w_file:
+        for sample, dictionary in problematic_sha1s.items():
+            w_file.write(f'{sample}\t{dictionary["error"]}\n')
 
-    print(f'{len(problematicSha1s)} broken files found...')
+    print(f'{len(problematic_sha1s)} broken files found...')
 
 
 if __name__ == '__main__':
-    checkBroken()
+    check_broken()

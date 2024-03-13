@@ -11,8 +11,8 @@ import config
 import pickle
 
 
-def extractFeatures(sha1_family, N, genericsFlag=False, headersFlag=False, allSections=None, topDlls=None,
-                    topImports=None, topStrings=None, topN_grams=None, topOpcodes=None):
+def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, all_sections=None, top_DLLs=None,
+                     top_imports=None, top_strings=None, top_n_grams=None, top_opcodes=None):
     # Singleton
     filepath = os.path.join(config.MALWARE_DIRECTORY, sha1_family)
     sha1 = sha1_family
@@ -32,40 +32,40 @@ def extractFeatures(sha1_family, N, genericsFlag=False, headersFlag=False, allSe
 
     try:
         # Generic features
-        if genericsFlag:
-            extractedGenerics = generics.extract(filepath)
-            row.update(extractedGenerics)
+        if generics_flag:
+            extracted_generics = generics.extract(filepath)
+            row.update(extracted_generics)
 
         # Headers features
-        if headersFlag:
-            extractedHeaders = headers.extract(filepath)
-            row.update(extractedHeaders)
+        if headers_flag:
+            extracted_headers = headers.extract(filepath)
+            row.update(extracted_headers)
 
         # Section features
-        if allSections:
-            extractedSections = sections.extract(filepath, allSections)
-            row.update(extractedSections)
+        if all_sections:
+            extracted_sections = sections.extract(filepath, all_sections)
+            row.update(extracted_sections)
 
         # DLLs and Imports features
-        if topDlls and topImports:
-            extractedDlls, extractedImports = imports.extractAndPad(filepath, topDlls, topImports)
-            row.update(extractedDlls)
-            row.update(extractedImports)
+        if top_DLLs and top_imports:
+            extracted_dlls, extracted_imports = imports.extract_and_pad(filepath, top_DLLs, top_imports)
+            row.update(extracted_dlls)
+            row.update(extracted_imports)
 
         # Strings features
-        if topStrings:
-            extractedStrings = strings.extractAndPad(filepath, topStrings)
-            row.update(extractedStrings)
+        if top_strings:
+            extracted_strings = strings.extract_and_pad(filepath, top_strings)
+            row.update(extracted_strings)
 
         # N_grams features
-        if topN_grams:
-            extractedN_grams = ngrams.extractAndPad(filepath, topN_grams)
-            row.update(extractedN_grams)
+        if top_n_grams:
+            extracted_n_grams = ngrams.extract_and_pad(filepath, top_n_grams)
+            row.update(extracted_n_grams)
 
         # Opcodes features
-        if topOpcodes:
-            extractedOpcodes = opcodes.extractAndPad(filepath, topOpcodes, N)
-            row.update(extractedOpcodes)
+        if top_opcodes:
+            extracted_opcodes = opcodes.extract_and_pad(filepath, top_opcodes, N)
+            row.update(extracted_opcodes)
 
         # Get end time
         end = time.time() * 1000
@@ -80,28 +80,28 @@ def extractFeatures(sha1_family, N, genericsFlag=False, headersFlag=False, allSe
 
 if __name__ == '__main__':
     # Read all Section Features for padding
-    with open('./PRE_topFeatures/allSections.list', 'r') as sectionFile:
-        allSections = {k: v for k, v in (l.split('\t') for l in sectionFile.read().splitlines())}
+    with open('./PRE_topFeatures/allSections.list', 'r') as section_file:
+        all_sections = {k: v for k, v in (l.split('\t') for l in section_file.read().splitlines())}
     # Read most common DLLs
-    with open('./PRE_topFeatures/dlls.list', 'r') as dllFile:
-        topDlls = set(dllFile.read().splitlines())
+    with open('./PRE_topFeatures/dlls.list', 'r') as dll_file:
+        top_dlls = set(dll_file.read().splitlines())
     # Read most common Imports
-    with open('./PRE_topFeatures/apis.list', 'r') as importsFile:
-        topImports = set(importsFile.read().splitlines())
+    with open('./PRE_topFeatures/apis.list', 'r') as imports_file:
+        top_imports = set(imports_file.read().splitlines())
     # Read most common Strings
-    with open('./PRE_topFeatures/strings.list', 'r') as stringsFile:
-        topStrings = set(stringsFile.read().splitlines())
+    with open('./PRE_topFeatures/strings.list', 'r') as strings_file:
+        top_strings = set(strings_file.read().splitlines())
     # Read most common N_grams
-    with open('./PRE_topFeatures/nGrams.list', 'r') as N_gramFile:
-        topN_grams = set(N_gramFile.read().splitlines())
+    with open('./PRE_topFeatures/nGrams.list', 'r') as n_gram_file:
+        top_n_grams = set(n_gram_file.read().splitlines())
     # Read most common Opcodes
-    with open('./PRE_topFeatures/opcodes.pickle', 'rb') as opcodesFile:
-        topOpcodes = pickle.load(opcodesFile)
+    with open('./PRE_topFeatures/opcodes.pickle', 'rb') as opcodes_file:
+        top_opcodes = pickle.load(opcodes_file)
 
     # This number represents the number of document for which the extraction of opcodes was successful
     N = 57048
-    sha1s = config.getList(training=True, test=True, binary=False)
-    extractFeatures(
+    sha1s = config.get_list(training=True, test=True, binary=False)
+    extract_features(
         sha1s[0],
         N,
         # genericsFlag=True,
@@ -110,6 +110,6 @@ if __name__ == '__main__':
         # topStrings=topStrings,
         # topDlls=topDlls,
         # topImports=topImports,
-        topN_grams=topN_grams,
+        top_n_grams=top_n_grams,
         # topOpcodes=topOpcodes
     )

@@ -1,6 +1,6 @@
 import math
 
-from src.feature_extraction import config
+import src.feature_extraction.config as config
 from src.feature_extraction.F_opcodes import opcodes
 from collections import Counter
 from p_tqdm import p_map
@@ -15,80 +15,80 @@ import numpy as np
 from itertools import islice
 
 
-def partialCounter(iSha1s):
-    i = iSha1s[0]
-    sha1s = iSha1s[1]
-    topNGrams = Counter()
+def partial_counter(i_sha1s):
+    i = i_sha1s[0]
+    sha1s = i_sha1s[1]
+    top_n_grams = Counter()
     for sha1 in sha1s:
         filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
         current = pd.read_pickle(filepath)
-        topNGrams.update(current)
+        top_n_grams.update(current)
     # Save to pickle
     filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
     with open(filepath, 'wb') as wFile:
-        pickle.dump(topNGrams, wFile)
+        pickle.dump(top_n_grams, wFile)
     return
 
 
-def partialTfIdf(frequences, experiment, topOpcodes, N, binary):
+def partial_tf_idf(frequences, experiment, top_opcodes, N, binary):
     sha1s = list(frequences.keys())
-    consideredOpcodes = set(topOpcodes.keys())
-    docFreq = pd.DataFrame(topOpcodes.values(), index=topOpcodes.keys(), columns=['idf'])
+    considered_opcodes = set(top_opcodes.keys())
+    doc_freq = pd.DataFrame(top_opcodes.values(), index=top_opcodes.keys(), columns=['idf'])
     idf = partial(opcodes.idf, N=N)
-    docFreq['idf'] = docFreq['idf'].apply(idf)
+    doc_freq['idf'] = doc_freq['idf'].apply(idf)
     for sha1 in sha1s:
-        opcodesCounter = frequences[sha1]
+        opcodes_counter = frequences[sha1]
 
         # Take only those that are in the top opcodes N_grams
-        consideredNgrams = Counter({k: v for k, v in opcodesCounter.items() if k in consideredOpcodes})
-        consideredNgrams = pd.DataFrame(consideredNgrams.values(), index=consideredNgrams.keys(), columns=[sha1])
-        consideredNgrams[sha1] = consideredNgrams[sha1].apply(opcodes.tf)
-        docFreq = pd.concat([docFreq, consideredNgrams], axis=1)
-    docFreq = docFreq.fillna(0.0)
-    docFreq[sha1s] = docFreq[sha1s].multiply(docFreq['idf'], axis=0)
-    docFreq = docFreq.drop('idf', axis=1)
+        considered_ngrams = Counter({k: v for k, v in opcodes_counter.items() if k in considered_opcodes})
+        considered_ngrams = pd.DataFrame(considered_ngrams.values(), index=considered_ngrams.keys(), columns=[sha1])
+        considered_ngrams[sha1] = considered_ngrams[sha1].apply(opcodes.tf)
+        doc_freq = pd.concat([doc_freq, considered_ngrams], axis=1)
+    doc_freq = doc_freq.fillna(0.0)
+    doc_freq[sha1s] = doc_freq[sha1s].multiply(doc_freq['idf'], axis=0)
+    doc_freq = doc_freq.drop('idf', axis=1)
 
     # Read labels and creating last row
     labels = pd.read_pickle(os.path.join(config.DATASET_DIRECTORY, experiment, 'labels.pickle'))
     if binary:
-        docFreq.loc['benign', docFreq.columns] = labels.loc[docFreq.columns, 'benign']
+        doc_freq.loc['benign', doc_freq.columns] = labels.loc[doc_freq.columns, 'benign']
     else:
-        docFreq.loc['benign', docFreq.columns] = labels.loc[docFreq.columns, 'family']
-    return docFreq
+        doc_freq.loc['benign', doc_freq.columns] = labels.loc[doc_freq.columns, 'family']
+    return doc_freq
 
 
-def computeInformationGain(opcodes, labels):
-    retDf = pd.DataFrame(0.0, index=opcodes.index, columns=['IG'])
+def compute_information_gain(opcodes, labels):
+    ret_df = pd.DataFrame(0.0, index=opcodes.index, columns=['IG'])
     for opcode, row in opcodes.iterrows():
-        retDf.at[opcode, 'IG'] = info_gain.info_gain(labels, row)
-    return retDf
+        ret_df.at[opcode, 'IG'] = info_gain.info_gain(labels, row)
+    return ret_df
 
 
-def top_opCodes(plot, binary, experiment):
-    sha1s = config.getList(experiment, validation=True, binary=binary)
+def top_opcodes(plot, binary, experiment):
+    sha1s = config.get_list(experiment, validation=True, binary=binary)
     print("Extracting opcodes from all the samples in the validation set")
     # Clean temp folder
     subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
-    ngrams_frequences = p_map(opcodes.extract, sha1s, num_cpus=config.CORES)
-    ngrams_frequences = {k: v for d in ngrams_frequences for k, v in d.items()}
+    n_grams_frequences = p_map(opcodes.extract, sha1s, num_cpus=config.CORES)
+    n_grams_frequences = {k: v for d in n_grams_frequences for k, v in d.items()}
 
     # Checking problems with extraction
-    problematicSha1s = {k: v for k, v in ngrams_frequences.items() if v['error']}
-    config.updateLabelDataFrame(experiment, problematicSha1s)
-    # ngrams_frequences = {k:v for k,v in ngrams_frequences.items() if not v['error']}
-    ngrams_frequences = {k: v['ngrams'] for k, v in ngrams_frequences.items() if not v['error']}
+    problematic_sha1s = {k: v for k, v in n_grams_frequences.items() if v['error']}
+    config.updateLabelDataFrame(experiment, problematic_sha1s)
+    # n_grams_frequences = {k:v for k,v in n_grams_frequences.items() if not v['error']}
+    n_grams_frequences = {k: v['ngrams'] for k, v in n_grams_frequences.items() if not v['error']}
 
     # #Add here could not disassemble
-    # problematicSha1s = {k:{'error':'Disassembled is empty'} for k,v in ngrams_frequences.items() if not v['ngrams']}
-    # config.updateLabelDataFrame(experiment,problematicSha1s)
-    # ngrams_frequences = {k:v['ngrams'] for k,v in ngrams_frequences.items() if v['ngrams']}
+    # problematic_sha1s = {k:{'error':'Disassembled is empty'} for k,v in n_grams_frequences.items() if not v['ngrams']}
+    # config.updateLabelDataFrame(experiment,problematic_sha1s)
+    # n_grams_frequences = {k:v['ngrams'] for k,v in n_grams_frequences.items() if v['ngrams']}
 
-    sha1s = ngrams_frequences.keys()
-    samplesLen = len(sha1s)
+    sha1s = n_grams_frequences.keys()
+    samples_len = len(sha1s)
 
     print("Computing document frequency")
     ngram_whole_dataset = Counter()
-    for sha1Counter in tqdm(ngrams_frequences.values()):
+    for sha1Counter in tqdm(n_grams_frequences.values()):
         ngram_whole_dataset.update(Counter({k: 1 for k in sha1Counter.keys()}))
 
     print("Total number of unique opcodes nGrams is: {}".format(len(ngram_whole_dataset)))
@@ -97,33 +97,34 @@ def top_opCodes(plot, binary, experiment):
     if plot:
         print("Saving complete list for CCDF plot")
         filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'opcodes_count.pickle')
-        with open(filepath, 'wb') as wFile:
-            pickle.dump(ngram_whole_dataset, wFile)
+        with open(filepath, 'wb') as w_file:
+            pickle.dump(ngram_whole_dataset, w_file)
 
     # Filtering the most and least common  (they carry no useful info)
-    upperBound = int(len(ngram_whole_dataset) - len(ngram_whole_dataset) * .1 / 100)
-    lowerBound = int(len(ngram_whole_dataset) * .1 / 100)
-    topOpcodes = Counter({k: v for k, v in ngram_whole_dataset.items() if v > lowerBound and v < upperBound})
+    upper_bound = int(len(ngram_whole_dataset) - len(ngram_whole_dataset) * .1 / 100)
+    lower_bound = int(len(ngram_whole_dataset) * .1 / 100)
+    top_opcodes = Counter({k: v for k, v in ngram_whole_dataset.items() if v > lower_bound and v < upper_bound})
 
     # TF IDF
     print("Computing Tf-Idf")
-    it = iter(ngrams_frequences)
+    it = iter(n_grams_frequences)
     chunks = []
-    perChunk = math.ceil(len(ngrams_frequences) / (4 * config.CORES))
-    for i in range(0, len(ngrams_frequences), perChunk):
-        chunks.append({k: ngrams_frequences[k] for k in islice(it, perChunk)})
+    per_chunk = math.ceil(len(n_grams_frequences) / (4 * config.CORES))
+    for i in range(0, len(n_grams_frequences), per_chunk):
+        chunks.append({k: n_grams_frequences[k] for k in islice(it, per_chunk)})
 
-    fun_partialTfIdf = partial(partialTfIdf, experiment=experiment, topOpcodes=topOpcodes, N=samplesLen, binary=binary)
-    results = p_map(fun_partialTfIdf, chunks)
-    tfIdf = pd.concat(results, axis=1)
+    fun_partial_tf_idf = partial(partial_tf_idf, experiment=experiment, topOpcodes=top_opcodes, N=samples_len,
+                                 binary=binary)
+    results = p_map(fun_partial_tf_idf, chunks)
+    tf_idf = pd.concat(results, axis=1)
 
     # Compute Information Gain
     print("Computing information gain")
-    toReadd = tfIdf.loc['benign']
-    tfIdf = tfIdf.drop('benign')
-    chunks = np.array_split(tfIdf, config.CORES)
-    fun_partialIG = partial(computeInformationGain, labels=toReadd)
-    IG = p_map(fun_partialIG, chunks)
+    to_readd = tf_idf.loc['benign']
+    tf_idf = tf_idf.drop('benign')
+    chunks = np.array_split(tf_idf, config.CORES)
+    fun_partial_IG = partial(compute_information_gain, labels=to_readd)
+    IG = p_map(fun_partial_IG, chunks)
     IG = pd.concat(IG)
 
     # Render in matplotlib
@@ -143,23 +144,23 @@ def top_opCodes(plot, binary, experiment):
     IG = IG.head(2500)
 
     # Save opcodes and docFreq
-    topOpcodes = Counter({k: v for k, v in topOpcodes.items() if k in IG.index})
+    top_opcodes = Counter({k: v for k, v in top_opcodes.items() if k in IG.index})
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'opcodes.list')
-    with open(filepath, 'w') as wFile:
-        wFile.write("\n".join(topOpcodes))
+    with open(filepath, 'w') as w_file:
+        w_file.write("\n".join(top_opcodes))
 
     # Cleaning
     subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
     return
 
 
-def postSelection_opCodes(binary, experiment):
+def post_selection_op_codes(binary, experiment):
     # loading top opcodes
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'opcodes.list')
     with open(filepath, 'r') as rFile:
-        topOpcodes = rFile.read().splitlines()
+        top_opcodes = rFile.read().splitlines()
 
-    sha1s = config.getList(experiment, trainTest=True, binary=binary)
+    sha1s = config.get_list(experiment, trainTest=True, binary=binary)
 
     # extracting opcodes from the training test set
     print("Extracting opcodes from the training/test set for computing the tf idf...")
@@ -167,20 +168,20 @@ def postSelection_opCodes(binary, experiment):
     ngrams_frequences = {k: v for d in ngrams_frequences for k, v in d.items()}
 
     # Checking problems with extraction
-    problematicSha1s = {k: v for k, v in ngrams_frequences.items() if v['error']}
-    config.updateLabelDataFrame(experiment, problematicSha1s)
+    problematic_sha1s = {k: v for k, v in ngrams_frequences.items() if v['error']}
+    config.updateLabelDataFrame(experiment, problematic_sha1s)
     # ngrams_frequences = {k:v for k,v in ngrams_frequences.items() if not v['error']}
     ngrams_frequences = {k: v['ngrams'] for k, v in ngrams_frequences.items() if not v['error']}
 
     # #Add here could not disassemble
-    # problematicSha1s = {k:{'error':'Disassembled is empty'} for k,v in ngrams_frequences.items() if not v['ngrams']}
-    # config.updateLabelDataFrame(experiment,problematicSha1s)
+    # problematic_sha1s = {k:{'error':'Disassembled is empty'} for k,v in ngrams_frequences.items() if not v['ngrams']}
+    # config.updateLabelDataFrame(experiment,problematic_sha1s)
     # ngrams_frequences = {k:v['ngrams'] for k,v in ngrams_frequences.items() if v['ngrams']}
 
     sha1s = ngrams_frequences.keys()
-    samplesLen = len(sha1s)
+    samples_len = len(sha1s)
 
-    print("Opcode extraction was successful for {} samples in training dataset. This is your N".format(samplesLen))
+    print("Opcode extraction was successful for {} samples in training dataset. This is your N".format(samples_len))
 
     print("Computing document frequency")
     ngram_whole_dataset = Counter()
@@ -188,8 +189,8 @@ def postSelection_opCodes(binary, experiment):
         ngram_whole_dataset.update(Counter({k: 1 for k in sha1Counter.keys()}))
 
     print("Only considering opcodes...")
-    ngram_whole_dataset = Counter({k: v for k, v in ngram_whole_dataset.items() if k in topOpcodes})
+    ngram_whole_dataset = Counter({k: v for k, v in ngram_whole_dataset.items() if k in top_opcodes})
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'trainTopOpcodesCounter.pickle')
     with open(filepath, 'wb') as wFile:
         pickle.dump(ngram_whole_dataset, wFile)
-    return samplesLen
+    return samples_len

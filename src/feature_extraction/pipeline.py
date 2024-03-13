@@ -1,3 +1,4 @@
+import build_dataset as bd
 import argparse
 import os
 import shutil
@@ -12,7 +13,7 @@ if __name__ == '__main__':
     # Get arguments
     parser = argparse.ArgumentParser(description='Pipeline for binary or family classification')
     parser.add_argument("--experiment", required=True)
-    parser.add_argument("--minSamples", required=True)
+    #parser.add_argument("--minSamples", required=True)
     parser.add_argument("--plot", action="store_true")
     parser.add_argument("--binary", action="store_true")
 
@@ -52,10 +53,9 @@ if __name__ == '__main__':
 
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
-        N = select_topfeat.computeTopFeatures(args.plot, args.binary, args.experiment + suffix)
-
+        N = select_topfeat.compute_top_features(args.plot, args.binary, args.experiment + suffix)
         # Third step: Build dataset
-        # bd.buildDataset(args.binary,N,args.experiment+suffix)
+        bd.build_dataset(args.binary, N, args.experiment + suffix)
 
     # Fourth step: Classifier
     # classifier.tuneTrees(args.binary,args.experiment)
@@ -65,11 +65,11 @@ if __name__ == '__main__':
     if args.binary:
         # binaryclass.classify(args.experiment,args.plot)
         # XGBoostBinaryclass.classify(args.experiment,args.plot)
-        binary_class.aggregateResults(args.experiment)
+        binary_class.aggregate_results(args.experiment)
     else:
         multiclass.classify(args.experiment, args.plot)
         # XGBoostMulticlass.classify(args.experiment,args.plot)
-        multiclass.aggregateResults(args.experiment)
+        multiclass.aggregate_results(args.experiment)
 
     # Sixt step: One vs Rest classifier
     # oneVsRest.classify(args.binary,args.experiment)
