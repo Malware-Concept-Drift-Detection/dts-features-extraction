@@ -1,13 +1,13 @@
 import os
 import time
-import F_generics.generics as generics
-import F_headers.headers as headers
-import F_sections.sections as sections
-import F_imports.imports as imports
-import F_N_grams.ngrams as ngrams
-import F_opcodes.opcodes as opcodes
-import F_strings.strings as strings
-import config
+import src.feature_extraction.F_generics.generics as generics
+import src.feature_extraction.F_headers.headers as headers
+import src.feature_extraction.F_sections.sections as sections
+import src.feature_extraction.F_imports.imports as imports
+import src.feature_extraction.F_N_grams.ngrams as ngrams
+import src.feature_extraction.F_opcodes.opcodes as opcodes
+import src.feature_extraction.F_strings.strings as strings
+from src.feature_extraction import config
 import pickle
 
 
@@ -104,12 +104,12 @@ if __name__ == '__main__':
     extract_features(
         sha1s[0],
         N,
-        # genericsFlag=True,
-        # headersFlag=True,
-        # allSections=allSections,
-        # topStrings=topStrings,
-        # topDlls=topDlls,
-        # topImports=topImports,
+        generics_flag=True,
+        headers_flag=True,
+        all_sections=all_sections,
+        top_strings=top_strings,
+        top_DLLs=top_dlls,
+        top_imports=top_imports,
         top_n_grams=top_n_grams,
-        # topOpcodes=topOpcodes
+        top_opcodes=top_opcodes
     )

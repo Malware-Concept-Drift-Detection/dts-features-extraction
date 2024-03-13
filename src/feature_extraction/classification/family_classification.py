@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from p_tqdm import p_map
-import config
+from src.feature_extraction import config
 import os
 import pandas as pd
 import numpy as np

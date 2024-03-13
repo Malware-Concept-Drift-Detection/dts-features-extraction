@@ -7,9 +7,8 @@ from functools import partial
 import pandas as pd
 import tqdm
 from p_tqdm import p_map
-import config
-import extract_features as ef
-
+from src.feature_extraction import config
+import src.feature_extraction.extract_features as ef
 
 def BAK_enrich_features(raw):
     STD_SECTIONS = ['.text', '.data', '.rdata', '.idata', '.edata', '.rsrc', '.bss', '.crt', '.tls']
@@ -113,8 +112,8 @@ def build_dataset(binary, N, experiment, sha_list=None):
 
     start = time.time()  # those are seconds
     # Split into chunks
-    cLen = 15 * config.CORES
-    chunks = [sha1s[i:i + cLen] for i in range(0, len(sha1s), cLen)]
+    c_len = 15 * config.CORES
+    chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
 
     # Start computation
     for index, chunk in enumerate(chunks):

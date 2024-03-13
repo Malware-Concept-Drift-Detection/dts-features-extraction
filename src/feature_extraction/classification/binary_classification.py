@@ -1,5 +1,5 @@
 from tqdm import tqdm
-import config
+from src.feature_extraction import config
 import os
 import pandas as pd
 import numpy as np

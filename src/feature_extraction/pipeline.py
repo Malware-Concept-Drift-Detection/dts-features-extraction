@@ -1,19 +1,18 @@
-import build_dataset as bd
 import argparse
 import os
 import shutil
 import time
 
-import config
-import multiclass
-import binary_class
-import select_topfeat
+from src.feature_extraction import config
+from src.feature_extraction.build_dataset import build_dataset
+from src.feature_extraction.classification import family_classification, binary_classification
+from src.feature_extraction import select_top_features
 
 if __name__ == '__main__':
     # Get arguments
     parser = argparse.ArgumentParser(description='Pipeline for binary or family classification')
     parser.add_argument("--experiment", required=True)
-    #parser.add_argument("--minSamples", required=True)
+    # parser.add_argument("--minSamples", required=True)
     parser.add_argument("--plot", action="store_true")
     parser.add_argument("--binary", action="store_true")
 
@@ -53,9 +52,9 @@ if __name__ == '__main__':
 
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
-        N = select_topfeat.compute_top_features(args.plot, args.binary, args.experiment + suffix)
+        N = select_top_features.compute_top_features(args.plot, args.binary, args.experiment + suffix)
         # Third step: Build dataset
-        bd.build_dataset(args.binary, N, args.experiment + suffix)
+        build_dataset(args.binary, N, args.experiment + suffix)
 
     # Fourth step: Classifier
     # classifier.tuneTrees(args.binary,args.experiment)
@@ -65,11 +64,11 @@ if __name__ == '__main__':
     if args.binary:
         # binaryclass.classify(args.experiment,args.plot)
         # XGBoostBinaryclass.classify(args.experiment,args.plot)
-        binary_class.aggregate_results(args.experiment)
+        binary_classification.aggregate_results(args.experiment)
     else:
-        multiclass.classify(args.experiment, args.plot)
+        family_classification.classify(args.experiment, args.plot)
         # XGBoostMulticlass.classify(args.experiment,args.plot)
-        multiclass.aggregate_results(args.experiment)
+        family_classification.aggregate_results(args.experiment)
 
     # Sixt step: One vs Rest classifier
     # oneVsRest.classify(args.binary,args.experiment)
