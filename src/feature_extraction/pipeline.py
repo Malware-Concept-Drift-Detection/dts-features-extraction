@@ -4,7 +4,7 @@ import shutil
 import time
 
 from src.feature_extraction import config
-from src.feature_extraction import select_top_features
+from src.feature_extraction.compute_top_features import compute_top_features
 from src.feature_extraction.build_dataset import build_dataset
 
 if __name__ == '__main__':
@@ -40,9 +40,9 @@ if __name__ == '__main__':
 
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
-        N = select_top_features.compute_top_features(args.binary, args.experiment + suffix)
+        n = compute_top_features(False, args.experiment + suffix)
         # Third step: Build dataset
-        build_dataset(args.binary, N, args.experiment + suffix)
+        build_dataset(False, n, args.experiment + suffix)
 
     # Fourth step: Classifier
     # classifier.tuneTrees(args.binary,args.experiment)

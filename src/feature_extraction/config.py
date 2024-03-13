@@ -5232,7 +5232,8 @@ def create_symbolic(df):
     _, df = df
     for sample, row in df.iterrows():
         subprocess.call(
-            f"mkdir -p dataset/toSync/{row['family']} && ln -s {MALWARE_DIRECTORY}{row['family']}/{sample} dataset/toSync/{row['family']}/{sample}",
+            f"mkdir -p dataset/toSync/{row['family']} && ln -s {MALWARE_DIRECTORY}{row['family']}/{sample} dataset"
+            f"/toSync/{row['family']}/{sample}",
             shell=True)
 
 

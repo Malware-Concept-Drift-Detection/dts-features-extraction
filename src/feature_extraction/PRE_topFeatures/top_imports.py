@@ -1,14 +1,14 @@
 import os
-import pickle
 from collections import Counter
 from functools import partial
 from itertools import islice
 
-from src.feature_extraction import config
-from src.feature_extraction.F_imports import imports
 import pandas as pd
 from info_gain import info_gain
 from p_tqdm import p_map
+
+from src.feature_extraction import config
+from src.feature_extraction.F_imports import imports
 
 
 def compute_information_gain(imports):
@@ -26,26 +26,26 @@ def create_chunks(data, size=500):
         yield {k: data[k] for k in islice(it, size)}
 
 
-def df_IG(sha1s, top_DLLs, top_APIs):
-    df_DLLS_IG = pd.DataFrame(True, index=top_DLLs, columns=sha1s)
-    dfAPIsIG = pd.DataFrame(True, index=top_APIs, columns=sha1s)
+def df_ig(sha1s, top_dlls, top_apis):
+    df_dlls_ig = pd.DataFrame(True, index=top_dlls, columns=sha1s)
+    df_api_ig = pd.DataFrame(True, index=top_apis, columns=sha1s)
     for sha1, dictionary in sha1s.items():
         # Merge top dlls and apis
-        considered_DLLs = set(sha1s[sha1]['dlls']) & top_DLLs
-        considered_APIs = set(sha1s[sha1]['imps']) & top_APIs
+        considered_dlls = set(sha1s[sha1]['dlls']) & top_dlls
+        considered_apis = set(sha1s[sha1]['imps']) & top_apis
 
         # Mark top dlls and apis
-        extracted_DLLs = pd.Series(False, index=top_DLLs)
-        extracted_APIs = pd.Series(False, index=top_APIs)
+        extracted_dlls = pd.Series(False, index=top_dlls)
+        extracted_apis = pd.Series(False, index=top_apis)
 
-        for considered_DLL in considered_DLLs:
-            extracted_DLLs[considered_DLL] = True
-        df_DLLS_IG[sha1] = extracted_DLLs
+        for considered_DLL in considered_dlls:
+            extracted_dlls[considered_DLL] = True
+        df_dlls_ig[sha1] = extracted_dlls
 
-        for consideredAPI in considered_APIs:
-            extracted_APIs[consideredAPI] = True
-        dfAPIsIG[sha1] = extracted_APIs
-    return df_DLLS_IG, dfAPIsIG
+        for considered_api in considered_apis:
+            extracted_apis[considered_api] = True
+        df_api_ig[sha1] = extracted_apis
+    return df_dlls_ig, df_api_ig
 
 
 def top_imports(binary, experiment):
@@ -62,91 +62,91 @@ def top_imports(binary, experiment):
 
     # Computing frequency
     print("Computing DLLs and APIs prevalence")
-    top_DLLs = Counter()
-    top_APIs = Counter()
+    top_dlls = Counter()
+    top_apis = Counter()
     for sha1, content in all_samples_imports.items():
-        top_DLLs.update(content['dlls'])
-        top_APIs.update(content['imps'])
-    print("Total number of unique DLLs is: {}".format(len(top_DLLs.keys())))
-    print("Total number of unique APIs is: {}".format(len(top_APIs.keys())))
+        top_dlls.update(content['dlls'])
+        top_apis.update(content['imps'])
+    print("Total number of unique DLLs is: {}".format(len(top_dlls.keys())))
+    print("Total number of unique APIs is: {}".format(len(top_apis.keys())))
 
     # Saving for plot
     # if plot:
     #     print("Saving complete list for CCDF plot")
     #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_count.pickle')
     #     with open(filepath, 'wb') as w_file:
-    #         pickle.dump(top_DLLs, w_file)
+    #         pickle.dump(top_dlls, w_file)
     #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_count.pickle')
     #     with open(filepath, 'wb') as w_file:
-    #         pickle.dump(top_APIs, w_file)
+    #         pickle.dump(top_apis, w_file)
 
     # Filtering the most and least common
     print("Filtering the most and least common")
     upper_bound = int(len(all_samples_imports) - len(all_samples_imports) * .1 / 100)
     lower_bound = int(len(all_samples_imports) * .1 / 100)
-    top_DLLs = set([k for k, v in top_DLLs.items() if v > lower_bound and v < upper_bound])
-    top_APIs = set([k for k, v in top_APIs.items() if v > lower_bound and v < upper_bound])
+    top_dlls = set([k for k, v in top_dlls.items() if lower_bound < v < upper_bound])
+    top_apis = set([k for k, v in top_apis.items() if lower_bound < v < upper_bound])
 
     print("Computing Information Gain")
-    partial_df_IG = partial(df_IG, topDLLs=top_DLLs, topAPIs=top_APIs)
+    partial_df_ig = partial(df_ig, topDLLs=top_dlls, topAPIs=top_apis)
     chunks = []
     for chunk in create_chunks(all_samples_imports, 500):
         chunks.append(chunk)
 
-    results = p_map(partial_df_IG, chunks)
+    results = p_map(partial_df_ig, chunks)
 
-    df_DLLs_IG = []
-    df_APIs_IG = []
+    df_dlls_ig = []
+    df_apis_ig = []
     for partial_dfDLLsIG, partial_dfAPIsIG in results:
-        df_DLLs_IG.append(partial_dfDLLsIG)
-        df_APIs_IG.append(partial_dfAPIsIG)
+        df_dlls_ig.append(partial_dfDLLsIG)
+        df_apis_ig.append(partial_dfAPIsIG)
 
-    df_DLLs_IG = pd.concat(df_DLLs_IG, axis=1)
-    df_APIs_IG = pd.concat(df_APIs_IG, axis=1)
+    df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
+    df_apis_ig = pd.concat(df_apis_ig, axis=1)
 
     labels = pd.read_pickle(os.path.join(config.DATASET_DIRECTORY, experiment, 'labels.pickle'))
     if binary:
-        df_DLLs_IG.loc['benign', df_DLLs_IG.columns] = labels.loc[df_DLLs_IG.columns, 'benign']
-        df_APIs_IG.loc['benign', df_APIs_IG.columns] = labels.loc[df_APIs_IG.columns, 'benign']
+        df_dlls_ig.loc['benign', df_dlls_ig.columns] = labels.loc[df_dlls_ig.columns, 'benign']
+        df_apis_ig.loc['benign', df_apis_ig.columns] = labels.loc[df_apis_ig.columns, 'benign']
     else:
-        df_DLLs_IG.loc['benign', df_DLLs_IG.columns] = labels.loc[df_DLLs_IG.columns, 'family']
-        df_APIs_IG.loc['benign', df_APIs_IG.columns] = labels.loc[df_APIs_IG.columns, 'family']
+        df_dlls_ig.loc['benign', df_dlls_ig.columns] = labels.loc[df_dlls_ig.columns, 'family']
+        df_apis_ig.loc['benign', df_apis_ig.columns] = labels.loc[df_apis_ig.columns, 'family']
 
-    IG_DLLs = compute_information_gain(df_DLLs_IG)
-    IG_APIs = compute_information_gain(df_APIs_IG)
+    ig_dlls = compute_information_gain(df_dlls_ig)
+    ig_apis = compute_information_gain(df_apis_ig)
 
     # Render in matplotlib
     # if plot:
     #     print("Saving DLLs IG for CCDF plot")
     #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_ig.pickle')
-    #     IG_DLLs.to_pickle(filepath)
+    #     ig_dlls.to_pickle(filepath)
     #     print("Saving APIs IG for CCDF plot")
     #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_ig.pickle')
-    #     IG_APIs.to_pickle(filepath)
+    #     ig_apis.to_pickle(filepath)
 
     # igThresh = input("Which IG value do you want to cut DLLs?")
     # #Multiclass value
     # igThresh = 0.0152
     # #Binary value
     # igThresh = 0.0008
-    # IG_DLLs  = IG_DLLs[IG_DLLs.IG>=float(igThresh)].index
-    IG_DLLs = IG_DLLs.index
+    # ig_dlls  = ig_dlls[ig_dlls.IG>=float(igThresh)].index
+    ig_dlls = ig_dlls.index
 
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'dlls.list')
     with open(filepath, 'w') as w_file:
-        w_file.write("\n".join(IG_DLLs))
+        w_file.write("\n".join(ig_dlls))
 
     # igThresh = input("Which IG value do you want to cut APIs?")
     # #Multiclass value
     # igThresh = 0.015
     # #Binary value
     # igThresh = 0.0006
-    # IG_APIs  = IG_APIs[IG_APIs.IG>=float(igThresh)].index
+    # ig_apis  = ig_apis[ig_apis.IG>=float(igThresh)].index
 
-    IG_APIs = IG_APIs.sort_values(by='IG', ascending=False)
-    IG_APIs = IG_APIs.head(4500)
-    IG_APIs = IG_APIs.index
+    ig_apis = ig_apis.sort_values(by='IG', ascending=False)
+    ig_apis = ig_apis.head(4500)
+    ig_apis = ig_apis.index
 
     filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'apis.list')
     with open(filepath, 'w') as w_file:
-        w_file.write("\n".join(IG_APIs))
+        w_file.write("\n".join(ig_apis))
