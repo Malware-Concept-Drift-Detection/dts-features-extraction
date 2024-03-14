@@ -1,11 +1,9 @@
-import argparse
-import os
-import pandas as pd
-import random
 import math
-from tqdm import tqdm
-from p_tqdm import p_map
+import os
+import random
 import subprocess
+
+import pandas as pd
 
 malware_exclude = {'0e74a9dff7391842e83017af7845f400c845a8d2545d5f53ad4087b9242d07f3',
                    '3d7aa40ef89cdb6ca9f02011c8421ece5415288ddf107c6009a3ffdb359c0c93',
@@ -5233,7 +5231,8 @@ def create_symbolic(df):
     _, df = df
     for sample, row in df.iterrows():
         subprocess.call(
-            f"mkdir -p dataset/toSync/{row['family']} && ln -s {MALWARE_DIRECTORY}{row['family']}/{sample} dataset"
+            f"mkdir -p dataset/toSync/{row['family']} && "
+            f"ln -s {MALWARE_DIRECTORY}{row['family']}/{sample} dataset"
             f"/toSync/{row['family']}/{sample}",
             shell=True)
 
@@ -5247,7 +5246,7 @@ def update_label_data_frame(experiment, sample_list):
 
 
 def get_list(experiment, train_test=False, validation=False, binary=False, max_size=-1):
-    dataset = pd.read_pickle(os.path.join(DATASET_DIRECTORY, experiment, 'labels.pickle'))
+    dataset = pd.read_csv(os.path.join(experiment, DATASET_DIRECTORY, 'sha256_family.csv'))
     if not binary:
         dataset = dataset[~dataset.benign]
     sha1s = []
@@ -5279,111 +5278,3 @@ def split(to_split):
             to_split.loc[current, 'set'] = spl_set
             l = [x for x in l if x not in current]
     return to_split
-
-
-def exclude_broken(to_filter):
-    # Exclude broken samples
-    broken_path = os.path.join(DATASET_DIRECTORY, 'staticFails')
-    with open(broken_path) as r_file:
-        broken = [x.split("\t")[0] for x in r_file.read().splitlines()]
-    to_filter = to_filter[~to_filter.index.isin(broken)]
-
-    # Exclude those for which we don't have dynamic analysis
-    # dynamicPath = os.path.join(DATASET_DIRECTORY,'pickles')
-    # with open(dynamicPath) as r_file:
-    #     dynamicPath = r_file.read().splitlines()
-    # toFilter = toFilter[toFilter.index.isin(dynamicPath)]
-    return to_filter
-
-
-def exclude_families(to_filter):
-    # Exclude broken samples
-    broken_path = os.path.join(DATASET_DIRECTORY, 'exclude')
-    with open(broken_path) as r_file:
-        exclude = r_file.read().splitlines()
-    to_filter = to_filter[~to_filter.family.isin(exclude)]
-    return to_filter
-
-
-def build_sha_family_data_frame(experiment, min_samples=100):
-    print("Building SHA256-Family dataset")
-    families = os.listdir(MALWARE_DIRECTORY)
-    datasets = []
-    tot_families = 0
-    for family in tqdm(families):
-        current_samples = os.listdir(os.path.join(MALWARE_DIRECTORY, family))
-        if len(current_samples) >= min_samples:
-            family_dataset = pd.DataFrame({"sha256": current_samples, "family": family})
-            datasets.append(family_dataset)
-            tot_families += 1
-    print(f"A total of {tot_families} malware families with {min_samples} samples have been considered")
-    dataset = pd.concat(datasets, ignore_index=True)
-
-    # print("Exclude aliases or other families which are not recognized")
-    # dataset = exclude_families(dataset)
-    #
-    # # Exclude broken samples for which static analysis fails
-    # dataset = exclude_broken(dataset)
-
-    # families = list(set(dataset.family))
-    # # Balance families by using av class agreement
-    # avclass_agreement = pd.read_csv(AVCLASS_AGREEMENT, sep='\t', index_col='sha2',
-    #                                 usecols=['sha2', 'all_avc2_families'])
-    # chunks = []
-    # print("Balancing remaining families")
-    # for family in tqdm(families):
-    #     current = dataset[dataset.family == family]
-    #     if len(current) < min_samples:
-    #         continue
-    #     elif len(current) == min_samples:
-    #         chunks.append(current)
-    #     else:
-    #         # There are more than 100 samples. If they are more need to subsample them
-    #         current_agreement = avclass_agreement[avclass_agreement.index.isin(current.index)]
-    #         if len(current_agreement) < min_samples:
-    #             chunks.append(current.head(min_samples))
-    #         else:
-    #             current_agreement = current_agreement.apply(evaluate_agreement, axis=1, args=(family,))
-    #             current_agreement = current_agreement.sort_values(ascending=False)
-    #             current_agreement = current_agreement.head(min_samples)
-    #             current = current[current.index.isin(current_agreement.index)]
-    #             chunks.append(current)
-    # dataset = pd.concat(chunks)
-    #
-    # # #Check for packed samples here
-    # # print("Checking for packed samples")
-    # # packedInfo = pd.read_csv(os.path.join(PACK_INF_DIRECTORY,'result'),sep="\t",names=['sha1','packed']).set_index('sha1')
-    # # packedInfo['packed'] = packedInfo['packed'].apply(lambda x: True if x==x else False)
-    # # #Make sure that there are no duplicates
-    # # assert len(packedInfo[packedInfo.index.duplicated(keep='first')])==0
-    #
-    # # dataset = dataset.merge(packedInfo,on='sha1',how='left')
-    # # assert dataset.packed.isna().sum() == 0
-    #
-    # # if excludePacked:
-    # #     dataset = dataset[~dataset.packed]
-    #
-    # # backward compatibility
-    # ############
-    # dataset['packed'] = False
-    # ###########
-    #
-    # # Make sure that there are no duplicates as this means that a single sample has been classified in multiple families or as a goodware
-    # assert len(dataset[dataset.index.duplicated(keep='first')]) == 0
-    # dataset = split(dataset)
-    #
-    # print('Creating Symbolic links')
-    # families_grouped = dataset.groupby('family')
-    # p_map(create_symbolic, families_grouped, num_cpus=CORES)
-    #
-    # Saving
-    filepath = os.path.join(experiment, DATASET_DIRECTORY, 'sha256_family.csv')
-    dataset.to_csv(filepath)
-    print(dataset.head())
-    print(f"Done! Dataset saved at: {filepath}")
-
-
-parser = argparse.ArgumentParser(description='Build SHA file')
-parser.add_argument("--path", required=True)
-args, _ = parser.parse_known_args()
-build_sha_family_data_frame(experiment=args.path)

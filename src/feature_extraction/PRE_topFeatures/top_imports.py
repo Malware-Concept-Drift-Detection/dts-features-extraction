@@ -49,7 +49,7 @@ def df_ig(sha1s, top_dlls, top_apis):
 def top_imports(binary, experiment):
     sha1s = config.get_list(experiment, validation=True, binary=binary)
     samples_len = len(sha1s)
-    print("Extracting imports (DLL and APIs) from all the {} samples in the validation set".format(samples_len))
+    print("Extracting imports (DLL and APIs) from all the {} samples in the training set".format(samples_len))
     all_samples_imports = p_map(imports.extract, sha1s, num_cpus=config.CORES)
     all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
