@@ -5,6 +5,8 @@ from itertools import islice
 from p_tqdm import p_map
 import pandas as pd
 from info_gain import info_gain
+
+from src.dataset.setup_dataset import malware_dataset
 from src.feature_extraction import config
 from src.feature_extraction.static import imports
 
@@ -47,7 +49,8 @@ def df_ig(sha1s, top_dlls, top_apis):
 
 
 def top_imports(binary, experiment):
-    sha1s = config.get_list(experiment, validation=True, binary=binary)
+    #sha1s = config.get_list(experiment, validation=True, binary=binary)
+    sha1s = malware_dataset.training_dataset["sha256"].to_numpy()
     samples_len = len(sha1s)
     print("Extracting imports (DLL and APIs) from all the {} samples in the training set".format(samples_len))
     all_samples_imports = p_map(imports.extract, sha1s, num_cpus=config.CORES)
@@ -120,7 +123,7 @@ def top_imports(binary, experiment):
     # ig_dlls  = ig_dlls[ig_dlls.IG>=float(igThresh)].index
     ig_dlls = ig_dlls.index
 
-    filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'dlls.list')
+    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'dlls.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(ig_dlls))
 
@@ -135,6 +138,6 @@ def top_imports(binary, experiment):
     ig_apis = ig_apis.head(4500)
     ig_apis = ig_apis.index
 
-    filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'apis.list')
+    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'apis.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(ig_apis))

@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/dataset/setup_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/best_splits.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/best_splits.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/day_split_focus.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/day_split_focus.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/month_splits.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/month_splits.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/setup_dataset/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/setup_dataset/merge_vt_family.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/setup_dataset/merge_vt_siggregator.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/setup_dataset/merge_vt_siggregator.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/utils/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data_splits/utils/best_split_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/notebooks/utils/best_split_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/top_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/top_imports.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,11 +71,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/feature_extraction/static" />
-      <recent name="$PROJECT_DIR$/src/feature_extraction/classification" />
-      <recent name="$PROJECT_DIR$/doc" />
+      <recent name="$PROJECT_DIR$/src/dataset" />
+      <recent name="$PROJECT_DIR$/src/notebooks/setup_dataset" />
+      <recent name="$PROJECT_DIR$/src/notebooks" />
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/junk" />
+      <recent name="$PROJECT_DIR$/src/feature_extraction/static" />
     </key>
   </component>
   <component name="RunManager" selected="Python.merge_vt_family">
@@ -233,7 +244,7 @@
       <workItem from="1710249054891" duration="10200000" />
       <workItem from="1710319510719" duration="22417000" />
       <workItem from="1710366707835" duration="64000" />
-      <workItem from="1710405680809" duration="11925000" />
+      <workItem from="1710405680809" duration="19671000" />
     </task>
     <servers />
   </component>

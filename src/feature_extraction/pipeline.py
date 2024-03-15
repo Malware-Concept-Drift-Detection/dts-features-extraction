@@ -43,7 +43,7 @@ if __name__ == '__main__':
         # Second step: select top features for imports, ngrams, opcodes and strings
         n = compute_top_features(False, args.experiment + suffix)
         # Third step: Build dataset
-        build_dataset(False, n, args.experiment + suffix)
+        # build_dataset(False, n, args.experiment + suffix)
     #
     # # Fourth step: Classifier
     # # classifier.tuneTrees(args.binary,args.experiment)
