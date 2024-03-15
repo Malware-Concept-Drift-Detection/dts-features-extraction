@@ -1,25 +1,29 @@
 import math
 from collections import Counter
 
+from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
 
-# It is impossible to get a failure with this function so no dictionary needed with error
-def extract(filepath):
-    with open(filepath, 'rb') as f:
-        byte_arr = f.read()
-        file_size = len(byte_arr)
 
-    # calculate the frequency of each byte value in the file
-    freqs = Counter()
-    for byte in byte_arr:
-        freqs[byte] += 1
-    freq_list = [float(freqs[byte]) / float(file_size) for byte in range(256)]
+class GenericExtractor(StaticFeatureExtractor):
 
-    # Shannon entropy
-    ent = 0.0
-    for freq in freq_list:
-        if freq > 0:
-            ent = ent + freq * math.log(freq, 2)
-    ent = -ent
+    # It is impossible to get a failure with this function so no dictionary needed with error
+    def extract(self, filepath):
+        with open(filepath, 'rb') as f:
+            byte_arr = f.read()
+            file_size = len(byte_arr)
 
-    generics = {'generic_fileSize': file_size, 'generic_fileEntropy': ent}
-    return generics
+        # calculate the frequency of each byte value in the file
+        freqs = Counter()
+        for byte in byte_arr:
+            freqs[byte] += 1
+        freq_list = [float(freqs[byte]) / float(file_size) for byte in range(256)]
+
+        # Shannon entropy
+        ent = 0.0
+        for freq in freq_list:
+            if freq > 0:
+                ent = ent + freq * math.log(freq, 2)
+        ent = -ent
+
+        generics = {'generic_fileSize': file_size, 'generic_fileEntropy': ent}
+        return generics

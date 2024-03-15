@@ -1,12 +1,3 @@
-import math
-import os
-import random
-import subprocess
-
-import pandas as pd
-
-from data_splits.setup_dataset.merge_vt_family import build_malware_family_fsd_df
-
 malware_exclude = {'0e74a9dff7391842e83017af7845f400c845a8d2545d5f53ad4087b9242d07f3',
                    '3d7aa40ef89cdb6ca9f02011c8421ece5415288ddf107c6009a3ffdb359c0c93',
                    'aa8bc6135cb5ae92750728314fb9f462fbc4aaa73f5bc31166844a0836459b85',
@@ -5162,7 +5153,7 @@ GOODWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/benign-dataset/
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_with_fam_labels/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_without_fams/files/singleton/"
-MALWARE_DIRECTORY = "/run/media/luca/WD/NortonDataset670/MALWARE/"
+MALWARE_DIRECTORY = "/home/luca/Desktop/WD/NortonDataset670/MALWARE/"
 
 # Motif-like dataset
 MOTIF_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/other/motif_like_dataset.tsv"

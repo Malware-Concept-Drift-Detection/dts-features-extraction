@@ -50,7 +50,7 @@ def df_ig(sha1s, top_dlls, top_apis):
 
 def top_imports(binary, experiment):
     #sha1s = config.get_list(experiment, validation=True, binary=binary)
-    sha1s = malware_dataset.training_dataset["sha256"].to_numpy()
+    sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
     samples_len = len(sha1s)
     print("Extracting imports (DLL and APIs) from all the {} samples in the training set".format(samples_len))
     all_samples_imports = p_map(imports.extract, sha1s, num_cpus=config.CORES)

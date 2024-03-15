@@ -1,12 +1,12 @@
 import os
 import time
-import src.feature_extraction.static.generics as generics
-import src.feature_extraction.static.headers as headers
-import src.feature_extraction.static.sections as sections
-import src.feature_extraction.static.imports as imports
-import src.feature_extraction.static.ngrams as ngrams
-import src.feature_extraction.static.opcodes as opcodes
-import src.feature_extraction.static.strings as strings
+from src.feature_extraction.static.generics import GenericExtractor
+from src.feature_extraction.static.headers import HeadersExtractor
+from src.feature_extraction.static.sections import SectionsExtractor
+from src.feature_extraction.static.imports import ImportsExtractor
+from src.feature_extraction.static.ngrams import NGramsExtractor
+from src.feature_extraction.static.opcodes import OpCodesExtractor
+from src.feature_extraction.static.strings import StringsExtractor
 from src.feature_extraction import config
 import pickle
 
@@ -33,22 +33,22 @@ def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, al
     try:
         # Generic features
         if generics_flag:
-            extracted_generics = generics.extract(filepath)
+            extracted_generics = GenericExtractor().extract(filepath)
             row.update(extracted_generics)
 
         # Headers features
         if headers_flag:
-            extracted_headers = headers.extract(filepath)
+            extracted_headers = HeadersExtractor().extract(filepath)
             row.update(extracted_headers)
 
         # Section features
         if all_sections:
-            extracted_sections = sections.extract(filepath, all_sections)
+            extracted_sections = SectionsExtractor().extract(filepath, all_sections)
             row.update(extracted_sections)
 
         # DLLs and Imports features
         if top_DLLs and top_imports:
-            extracted_dlls, extracted_imports = imports.extract_and_pad(filepath, top_DLLs, top_imports)
+            extracted_dlls, extracted_imports = imports.extract_and_pad((filepath, top_DLLs, top_imports))
             row.update(extracted_dlls)
             row.update(extracted_imports)
 
