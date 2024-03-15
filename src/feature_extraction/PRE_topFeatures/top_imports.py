@@ -6,6 +6,8 @@ from p_tqdm import p_map
 import pandas as pd
 from info_gain import info_gain
 
+from src.feature_extraction.utils import utils
+from src.feature_extraction.static.imports import ImportsExtractor
 from src.dataset.setup_dataset import malware_dataset
 from src.feature_extraction import config
 from src.feature_extraction.static import imports
@@ -27,17 +29,17 @@ def create_chunks(data, size=500):
 
 
 def df_ig(sha1s, top_dlls, top_apis):
-    df_dlls_ig = pd.DataFrame(True, index=top_dlls, columns=sha1s)
-    df_api_ig = pd.DataFrame(True, index=top_apis, columns=sha1s)
+
+    df_dlls_ig = pd.DataFrame(True, index=list(top_dlls), columns=sha1s)
+    df_api_ig = pd.DataFrame(True, index=list(top_apis), columns=sha1s)
+
     for sha1, dictionary in sha1s.items():
         # Merge top dlls and apis
         considered_dlls = set(sha1s[sha1]['dlls']) & top_dlls
         considered_apis = set(sha1s[sha1]['imps']) & top_apis
-
         # Mark top dlls and apis
         extracted_dlls = pd.Series(False, index=top_dlls)
         extracted_apis = pd.Series(False, index=top_apis)
-
         for considered_DLL in considered_dlls:
             extracted_dlls[considered_DLL] = True
         df_dlls_ig[sha1] = extracted_dlls
@@ -49,17 +51,20 @@ def df_ig(sha1s, top_dlls, top_apis):
 
 
 def top_imports(binary, experiment):
+    df = malware_dataset.training_dataset[['sha256', 'family']]
     #sha1s = config.get_list(experiment, validation=True, binary=binary)
-    sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
+    sha1s = malware_dataset.training_dataset[['sha256', 'family']]
+    sha1s = sha1s[sha1s["family"] == "mocrt"].to_numpy()
     samples_len = len(sha1s)
+    imports_extractor = ImportsExtractor()
     print("Extracting imports (DLL and APIs) from all the {} samples in the training set".format(samples_len))
-    all_samples_imports = p_map(imports.extract, sha1s, num_cpus=config.CORES)
+    all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.CORES)
     all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
     # Checking problems with extraction
-    problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
-    config.update_label_data_frame(experiment, problematic_sha1s)
-    all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
+    # problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
+    # utils.update_label_data_frame(experiment, problematic_sha1s)
+    # all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
 
     # Computing frequency
     print("Computing DLLs and APIs prevalence")
@@ -79,29 +84,23 @@ def top_imports(binary, experiment):
     top_apis = set([k for k, v in top_apis.items() if lower_bound < v < upper_bound])
 
     print("Computing Information Gain")
-    partial_df_ig = partial(df_ig, topDLLs=top_dlls, topAPIs=top_apis)
-    chunks = []
-    for chunk in create_chunks(all_samples_imports, 500):
-        chunks.append(chunk)
-
+    partial_df_ig = partial(df_ig, top_dlls=top_dlls, top_apis=top_apis)
+    chunks = [chunk for chunk in create_chunks(all_samples_imports, 500)]
     results = p_map(partial_df_ig, chunks)
 
     df_dlls_ig = []
     df_apis_ig = []
-    for partial_dfDLLsIG, partial_dfAPIsIG in results:
-        df_dlls_ig.append(partial_dfDLLsIG)
-        df_apis_ig.append(partial_dfAPIsIG)
+    for partial_df_dlls_ig, partial_df_apis_ig in results:
+        df_dlls_ig.append(partial_df_dlls_ig)
+        df_apis_ig.append(partial_df_apis_ig)
 
     df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
     df_apis_ig = pd.concat(df_apis_ig, axis=1)
 
-    labels = pd.read_pickle(os.path.join(config.DATASET_DIRECTORY, experiment, 'labels.pickle'))
-    if binary:
-        df_dlls_ig.loc['benign', df_dlls_ig.columns] = labels.loc[df_dlls_ig.columns, 'benign']
-        df_apis_ig.loc['benign', df_apis_ig.columns] = labels.loc[df_apis_ig.columns, 'benign']
-    else:
-        df_dlls_ig.loc['benign', df_dlls_ig.columns] = labels.loc[df_dlls_ig.columns, 'family']
-        df_apis_ig.loc['benign', df_apis_ig.columns] = labels.loc[df_apis_ig.columns, 'family']
+
+    #labels = pd.read_pickle(os.path.join(config.DATASET_DIRECTORY, experiment, 'labels.pickle'))
+    df_dlls_ig.loc[df_dlls_ig.columns] = df.loc[df_dlls_ig.columns]
+    df_apis_ig.loc[df_apis_ig.columns] = df.loc[df_apis_ig.columns]
 
     ig_dlls = compute_information_gain(df_dlls_ig)
     ig_apis = compute_information_gain(df_apis_ig)

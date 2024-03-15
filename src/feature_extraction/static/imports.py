@@ -9,6 +9,7 @@ class ImportsExtractor(StaticFeatureExtractor):
     def extract(self, sha1_family):
         sha1, family = sha1_family
         filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        print(filepath)
         try:
             pe = pefile.PE(filepath)
             if pe.FILE_HEADER.Machine != 332:
