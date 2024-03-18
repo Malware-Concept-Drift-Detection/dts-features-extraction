@@ -12,12 +12,13 @@ from src.feature_extraction import config
 
 
 def compute_information_gain(imports):
-    #labels = imports.loc['benign']
-    #imports = imports.drop('benign')
-    retDict = pd.DataFrame(0.0, index=imports.index, columns=['IG'])
+    labels = imports.loc['benign']
+    imports = imports.drop('benign')
+    ret_dict = pd.DataFrame(0.0, index=imports.index, columns=['IG'])
     for imp, row in imports.iterrows():
-        retDict.at[imp, 'IG'] = info_gain.info_gain(imports, row)
-    return retDict
+        ret_dict.at[imp, 'IG'] = info_gain.info_gain(labels, row)
+    return ret_dict
+
 
 def create_chunks(data, size=500):
     it = iter(data)
@@ -47,17 +48,16 @@ def df_ig(sha1s, top_dlls, top_apis):
 
 
 def top_imports(experiment):
-    df = malware_dataset.training_dataset[['sha256', 'family']]
     # sha1s = config.get_list(experiment, validation=True, binary=binary)
-    sha1s = malware_dataset.training_dataset[['sha256', 'family']]  # .to_numpy()
-    sha1s = sha1s[sha1s["family"] == "mocrt"].to_numpy()
+    sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
+    # sha1s = sha1s[sha1s["family"] == "mocrt"].to_numpy()
     samples_len = len(sha1s)
     imports_extractor = ImportsExtractor()
     print(f"Extracting imports (DLL and APIs) from all the {samples_len} samples in the training set")
-    all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.CORES)
+    all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=12)
     all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
-    print(all_samples_imports)
+    # print(all_samples_imports)
 
     # Checking problems with extraction
     # problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
@@ -95,8 +95,12 @@ def top_imports(experiment):
     df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
     df_apis_ig = pd.concat(df_apis_ig, axis=1)
 
+    df = malware_dataset.df_malware_family_fsd
     df_dlls_ig.loc['benign', df_dlls_ig.columns] = df[df["sha256"].isin(list(df_dlls_ig.columns))]["family"]
     df_apis_ig.loc['benign', df_apis_ig.columns] = df[df["sha256"].isin(list(df_apis_ig.columns))]["family"]
+
+    # print(df_dlls_ig.head())
+    # print(df_apis_ig.head())
 
     ig_dlls = compute_information_gain(df_dlls_ig)
     ig_apis = compute_information_gain(df_apis_ig)

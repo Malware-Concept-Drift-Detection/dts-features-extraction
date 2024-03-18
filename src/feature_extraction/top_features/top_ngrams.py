@@ -1,5 +1,6 @@
+from src.dataset.setup_dataset import malware_dataset
 from src.feature_extraction import config
-from src.feature_extraction.static import ngrams
+from src.feature_extraction.static.ngrams import NGramsExtractor
 from collections import Counter
 from p_tqdm import p_map
 from tqdm import tqdm
@@ -28,19 +29,20 @@ def partial_counter(i_sha1s):
 
 
 def filter_out_very_unlikely(binary, experiment):
-    sha1s = config.get_list(experiment, validation=True, binary=binary, max_size=20)
+    sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy() #config.get_list(experiment, validation=True, binary=binary, max_size=20)
     samples_len = len(sha1s)
     subsample = 1000
     sha1s = random.sample(sha1s, subsample)
 
-    print("Extracting nGrams from a randomly selected set of {} samples from the validation set".format(subsample))
+    print("Extracting nGrams from a randomly selected set of {} samples from the training set".format(subsample))
     # Clean temp folder
     subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
     # #REMOVE
     # for x in sha1s:
     #     ngrams.extractAndSave(x)
     # #REMOVE
-    p_map(ngrams.extract_and_save, sha1s, num_cpus=config.CORES)
+    ngrams_extractor = NGramsExtractor()
+    p_map(ngrams_extractor.extract_and_save, sha1s, num_cpus=config.CORES)
 
     # Computing nGrams frequecy
     # (unique nGrams per binary so this means that if a nGram appears more than once
