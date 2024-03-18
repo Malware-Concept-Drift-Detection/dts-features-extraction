@@ -81,7 +81,7 @@ def extract_malware_family(file_path) -> pd.DataFrame:
     return df.rename(str.lower, axis='columns')
 
 
-malware_dataset = MalwareDataset(pd.Timestamp("2021-01-01"))
+malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
 
 # df1 = extract_malware_family(
 #     "/home/luca/Desktop/WD/NortonDataset670/dataset_info/siggregator_all_samples_no_fuzzy_hash.csv")

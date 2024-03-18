@@ -21,17 +21,13 @@ def create_chunks(data, size=12):
 
 def top_strings(experiment):
     sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
-    #sha1s = sha1s[sha1s["family"] == "mocrt"].to_numpy()
+    #sha1s = sha1s[sha1s["family"].isin(fam)].to_numpy()
     samples_len = len(sha1s)
-    print("Extracting strings from all the samples in the training set")
+    print(f"Extracting strings from all the samples in the training set ({samples_len})")
     strings_extractor = StringsExtractor()
 
     chunks = create_chunks(sha1s, config.CORES)
     print([len(chunk) for chunk in chunks])
-
-    # print(np.array_equal(np.concatenate(chunks), sha1s)) -> True
-    # with Pool(config.CORES) as p:
-    #     all_samples_strings = p.map(strings_extractor.extract, chunks)
 
     all_samples_strings = p_map(strings_extractor.extract, chunks, num_cpus=config.CORES)
 
@@ -71,10 +67,3 @@ def top_strings(experiment):
     filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'strings.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(['str_' + s for s, _ in top_strings_reduced]))
-
-    # Save for matplotlib
-    # if plot:
-    #     print("Saving strings for CCDF ")
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'strings_count.pickle')
-    #     with open(filepath, 'wb') as w_file:
-    #         pickle.dump(top_strings, w_file)
