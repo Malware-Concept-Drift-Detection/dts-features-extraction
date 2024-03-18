@@ -27,7 +27,6 @@ def top_strings(experiment):
     strings_extractor = StringsExtractor()
 
     chunks = create_chunks(sha1s, config.CORES)
-
     print([len(chunk) for chunk in chunks])
 
     # print(np.array_equal(np.concatenate(chunks), sha1s)) -> True

@@ -38,12 +38,9 @@ class NGramsExtractor(StaticFeatureExtractor):
             extracted_n_grams[consideredNgram] = True
         return extracted_n_grams
 
-    def __extract_and_save(self, sha1_family):
+    def extract_and_save(self, sha1_family):
         sha1, family = sha1_family
-        if family:
-            filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        else:
-            filepath = os.path.join(config.GOODWARE_DIRECTORY, sha1)
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
         with open(filepath, 'rb') as f:
             all_bytes = f.read()
         # Check the two

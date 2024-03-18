@@ -80,22 +80,22 @@ def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, al
 
 if __name__ == '__main__':
     # Read all Section Features for padding
-    with open('./PRE_topFeatures/allSections.list', 'r') as section_file:
+    with open('top_features/allSections.list', 'r') as section_file:
         all_sections = {k: v for k, v in (l.split('\t') for l in section_file.read().splitlines())}
     # Read most common DLLs
-    with open('./PRE_topFeatures/dlls.list', 'r') as dll_file:
+    with open('top_features/dlls.list', 'r') as dll_file:
         top_dlls = set(dll_file.read().splitlines())
     # Read most common Imports
-    with open('./PRE_topFeatures/apis.list', 'r') as imports_file:
+    with open('top_features/apis.list', 'r') as imports_file:
         top_imports = set(imports_file.read().splitlines())
     # Read most common Strings
-    with open('./PRE_topFeatures/strings.list', 'r') as strings_file:
+    with open('top_features/strings.list', 'r') as strings_file:
         top_strings = set(strings_file.read().splitlines())
     # Read most common N_grams
-    with open('./PRE_topFeatures/nGrams.list', 'r') as n_gram_file:
+    with open('top_features/nGrams.list', 'r') as n_gram_file:
         top_n_grams = set(n_gram_file.read().splitlines())
     # Read most common Opcodes
-    with open('./PRE_topFeatures/opcodes.pickle', 'rb') as opcodes_file:
+    with open('top_features/opcodes.pickle', 'rb') as opcodes_file:
         top_opcodes = pickle.load(opcodes_file)
 
     # This number represents the number of document for which the extraction of opcodes was successful

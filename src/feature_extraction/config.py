@@ -5153,7 +5153,7 @@ GOODWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/benign-dataset/
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_with_fam_labels/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_without_fams/files/singleton/"
-MALWARE_DIRECTORY = "/run/media/luca/WD/NortonDataset670/MALWARE/"
+MALWARE_DIRECTORY = "/home/luca/Desktop/WD/NortonDataset670/MALWARE/"
 
 # Motif-like dataset
 MOTIF_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/other/motif_like_dataset.tsv"
@@ -5165,7 +5165,7 @@ PACK_INF_DIRECTORY = "/worker/scratch/savino.dambra/data/pe-mal-class-code/"
 AVCLASS_AGREEMENT = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/final_dataset_family_conf_metrics.tsv"
 
 # Parents directories
-PARENTS = ['dataset', 'PLOTS', 'PRE_topFeatures', 'results']
+PARENTS = ['dataset', 'PLOTS', 'top_features', 'results']
 
 # Dataset directory
 DATASET_DIRECTORY = "dataset"
@@ -5174,7 +5174,7 @@ DATASET_DIRECTORY = "dataset"
 PLOTS_DIRECTORY = "PLOTS"
 
 # Directory of frequency pickles
-SELECT_DIRECTORY = "PRE_topFeatures"
+SELECT_DIRECTORY = "top_features"
 
 # Max size for opcode Ngrams
 OPCODES_MAX_SIZE = 3
@@ -5186,7 +5186,7 @@ TEMP_DIRECTORY = ".temp"
 RESULT_DIRECTORY = "results"
 
 # How many cores do you have
-CORES = 72
+CORES = 13
 
 # Feature identification
 FEAT_PREFIX = {

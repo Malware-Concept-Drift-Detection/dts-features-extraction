@@ -77,22 +77,22 @@ def STANDARD_enrich_features(raw):
 def build_dataset(binary, N, experiment, sha_list=None):
     # Read all Section Features for padding
 
-    with open(os.path.join('PRE_topFeatures', 'all_sections.list'), 'r') as sectionFile:
+    with open(os.path.join('top_features', 'all_sections.list'), 'r') as sectionFile:
         all_sections = {k: v for k, v in (l.split('\t') for l in sectionFile.read().splitlines())}
     # Read most common DLLs
-    with open(os.path.join('PRE_topFeatures', experiment, 'dlls.list'), 'r') as dllFile:
+    with open(os.path.join('top_features', experiment, 'dlls.list'), 'r') as dllFile:
         top_DLLs = set(dllFile.read().splitlines())
     # Read most common Imports
-    with open(os.path.join('PRE_topFeatures', experiment, 'apis.list'), 'r') as importsFile:
+    with open(os.path.join('top_features', experiment, 'apis.list'), 'r') as importsFile:
         top_imports = set(importsFile.read().splitlines())
     # Read most common Strings
-    with open(os.path.join('PRE_topFeatures', experiment, 'strings.list'), 'r') as stringsFile:
+    with open(os.path.join('top_features', experiment, 'strings.list'), 'r') as stringsFile:
         top_strings = set(stringsFile.read().splitlines())
     # Read most common N_grams
-    with open(os.path.join('PRE_topFeatures', experiment, 'nGrams.list'), 'r') as N_gramFile:
+    with open(os.path.join('top_features', experiment, 'nGrams.list'), 'r') as N_gramFile:
         top_n_grams = set(N_gramFile.read().splitlines())
     # Read most common Opcodes
-    with open(os.path.join('PRE_topFeatures', experiment, 'trainTopOpcodesCounter.pickle'), 'rb') as opcodesFile:
+    with open(os.path.join('top_features', experiment, 'trainTopOpcodesCounter.pickle'), 'rb') as opcodesFile:
         top_opcodes = pickle.load(opcodesFile)
 
     # For singleton

@@ -47,9 +47,9 @@ class MalwareDatasetBuilder:
                               malware_dir_path: str = None,
                               min_samples: int = 100) -> pd.DataFrame:
 
-        sha_fsd_file_path = "/run/media/luca/WD/NortonDataset670/dataset_info/vt_reports67k.jsons" \
+        sha_fsd_file_path = "/home/luca/Desktop/WD/NortonDataset670/dataset_info/vt_reports67k.jsons" \
             if sha_fsd_file_path is None else sha_fsd_file_path
-        malware_dir_path = "/run/media/luca/WD/NortonDataset670/MALWARE/" \
+        malware_dir_path = "/home/luca/Desktop/WD/NortonDataset670/MALWARE/" \
             if malware_dir_path is None else malware_dir_path
         merge_dataset_filename = f"{self.__base_dir}/../vt_reports/merge.csv"
 
@@ -59,6 +59,7 @@ class MalwareDatasetBuilder:
             df = pd.merge(left=self.__build_sha_family_df(malware_dir_path, min_samples),
                           right=self.__build_sha_fsd_df(sha_fsd_file_path), on="sha256")
             # df.set_index("sha256", inplace=True)
+            df["benign"] = False
             df["first_submission_date"] = (df["first_submission_date"]
                                            .apply(lambda t: pd.to_datetime(t, unit="s")))
             print(df.columns)

@@ -5,16 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dataset/setup_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/setup_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/top_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/top_imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/build_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/build_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/dataset/labels.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/dataset/sha256_family.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/extract_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/extract_features.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/pipeline_bootstrap.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/pipeline_bootstrap.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/ngrams.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/ngrams.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/strings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_strings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp/PRE_topFeatures/apis.list" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/PRE_topFeatures/apis.list" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp/PRE_topFeatures/dlls.list" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/PRE_topFeatures/dlls.list" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +49,8 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.prova.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prova1.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -74,9 +80,10 @@
       <recent name="$PROJECT_DIR$/src/feature_extraction/static" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.merge_vt_family">
+  <component name="RunManager" selected="Python.prova1">
     <configuration name="camel_to_snake" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="concept_drift" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -99,6 +106,7 @@
     </configuration>
     <configuration name="config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="concept_drift" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -121,6 +129,7 @@
     </configuration>
     <configuration name="merge_vt_family" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="concept_drift" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -141,8 +150,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pipeline" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="concept_drift" />
+    <configuration name="prova" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ml-malware-concept-drift" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -153,8 +163,29 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/pipeline.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/prova.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="prova1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ml-malware-concept-drift" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/prova1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -165,10 +196,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.prova1" />
+        <item itemvalue="Python.prova" />
         <item itemvalue="Python.merge_vt_family" />
         <item itemvalue="Python.config" />
         <item itemvalue="Python.camel_to_snake" />
-        <item itemvalue="Python.pipeline" />
       </list>
     </recent_temporary>
   </component>

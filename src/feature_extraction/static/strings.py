@@ -1,5 +1,7 @@
 import os
 
+import numpy as np
+
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
 from src.feature_extraction import config
 import subprocess
@@ -8,18 +10,19 @@ import subprocess
 class StringsExtractor(StaticFeatureExtractor):
 
     def extract(self, sha1_family):
-        sha1, family = sha1_family
-        if family:
+        all_strings = []
+        for sha1, family in sha1_family:
+            print(sha1, family)
             filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        else:
-            filepath = os.path.join(config.GOODWARE_DIRECTORY, sha1)
-        cmd = ['strings', filepath]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        output = proc.communicate()[0].decode("utf-8")
-        strings = output.split('\n')
-        strings = [string.strip() for string in strings]
-        strings = [string for string in strings if len(string) > 3]
-        return strings
+            cmd = ['strings', filepath]
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+            output = proc.communicate()[0].decode("utf-8")
+            strings = output.split('\n')
+            for string in strings:
+                s = string.strip()
+                if len(s) > 3 and s not in all_strings:
+                    all_strings.append(s)
+        return all_strings
 
     def extract_and_pad(self, args):
         filepath, top_strings = args

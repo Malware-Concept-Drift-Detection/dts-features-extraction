@@ -26,20 +26,20 @@ def check_broken():
     max_sections = max(results)
 
     # Generate all_sections File
-    with open(os.path.join('PRE_topFeatures', 'sectionProcessedTemplate'), 'r') as rFile:
+    with open(os.path.join('top_features', 'sectionProcessedTemplate'), 'r') as rFile:
         section_template_processed = rFile.read().splitlines()
-    with open(os.path.join('PRE_topFeatures', 'section_template'), 'r') as rFile:
+    with open(os.path.join('top_features', 'section_template'), 'r') as rFile:
         section_template = rFile.read().splitlines()
 
     to_write = section_template_processed.copy()
     for section in range(1, max_sections + 1):
         to_write.extend([f'pesection_{section}_{x}' for x in section_template])
 
-    with open(os.path.join('PRE_topFeatures', 'all_sections.list'), 'w') as w_file:
+    with open(os.path.join('top_features', 'all_sections.list'), 'w') as w_file:
         w_file.write("\n".join(to_write))
 
     # TOP Sections needed
-    with open(os.path.join('PRE_topFeatures', 'all_sections.list'), 'r') as sectionFile:
+    with open(os.path.join('top_features', 'all_sections.list'), 'r') as sectionFile:
         all_sections = {k: v for k, v in (l.split('\t') for l in sectionFile.read().splitlines())}
 
     # Fake TOP Opcodes needed
