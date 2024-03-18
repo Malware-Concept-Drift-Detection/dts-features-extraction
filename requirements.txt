@@ -4,3 +4,8 @@ matplotlib==3.8.3
 seaborn==0.13.2
 scikit-learn==1.4.1.post1
 numpy==1.26.4
+tqdm~=4.66.2
+scipy~=1.12.0
+pefile~=2023.2.7
+capstone~=5.0.1
+setuptools~=65.5.0

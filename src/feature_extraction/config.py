@@ -5153,7 +5153,7 @@ GOODWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/benign-dataset/
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_with_fam_labels/files/"
 # MALWARE_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/testing_datasets/malicious_without_fams/files/singleton/"
-MALWARE_DIRECTORY = "/home/luca/Desktop/WD/NortonDataset670/MALWARE/"
+MALWARE_DIRECTORY = "/run/media/luca/WD/NortonDataset670/MALWARE/"
 
 # Motif-like dataset
 MOTIF_DIRECTORY = "/worker/scratch/platon.kotzias/pe-classify/malware-datasets/run2-complete/other/motif_like_dataset.tsv"

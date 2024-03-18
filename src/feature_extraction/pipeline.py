@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
-        n = compute_top_features(False, args.experiment + suffix)
+        n = compute_top_features(args.experiment + suffix)
         # Third step: Build dataset
         # build_dataset(False, n, args.experiment + suffix)
     #
