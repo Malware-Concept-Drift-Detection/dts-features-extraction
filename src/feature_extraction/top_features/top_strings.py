@@ -15,8 +15,9 @@ import IPython
 
 
 def create_chunks(data, size=12):
+    data = [list(d) for d in data]
     n = round(len(data) / size)
-    return [data[i * n: (i + 1) * n] if i < size - 1 else data[i * n:] for i in range(size)]
+    return [list(data[i * n: (i + 1) * n]) if i < size - 1 else list(data[i * n:]) for i in range(size)]
 
 
 def top_strings(experiment):

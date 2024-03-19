@@ -3,7 +3,7 @@ from src.feature_extraction import config
 import os
 import pickle
 from collections import Counter
-
+from nltk import ngrams
 
 class NGramsExtractor(StaticFeatureExtractor):
 
@@ -18,11 +18,19 @@ class NGramsExtractor(StaticFeatureExtractor):
     def __get_ngrams_from_bytes(allbytes, ngram_size):
         ngrams = []
         minsize = min(ngram_size)
-        for i in range(len(allbytes) - minsize):
+
+        n = len(allbytes) - minsize
+        size = round(n / 500)
+        k = [j for j in range(size, n, size)]
+        for i in range(n):
+
             for s in ngram_size:
                 ngram = allbytes[i:i + s]
                 if len(ngram) == s:
                     ngrams.append(str(ngram))
+
+            if i in k:
+                ngrams = list(set(ngrams))
         # We never need frequency for byte-nGrams
         ngrams = set(ngrams)
         return ngrams
@@ -39,19 +47,20 @@ class NGramsExtractor(StaticFeatureExtractor):
         return extracted_n_grams
 
     def extract_and_save(self, sha1_family):
-        sha1, family = sha1_family
-        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        with open(filepath, 'rb') as f:
-            all_bytes = f.read()
-        # Check the two
-        ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
-        # jout = subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification
-        # /pipeline_updated/F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT) jout = json.loads(
-        # subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification/pipeline_updated
-        # /F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT)) ngrams2 = [] for a in [4,5,6]: ngrams2.extend([
-        # "".join(['{:x}'.format(x) for x in sublist]) for sublist in jout[str(a)]]) ngrams2 = set(ngrams2)
-        ngrams = Counter({k: 1 for k in set(ngrams)})
-        save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
-        with open(save_path, 'wb') as wFile:
-            pickle.dump(ngrams, wFile)
-        return
+        for i, el in enumerate(sha1_family):
+            print(i)
+            sha1, family = el[0], el[1]
+            filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+            with open(filepath, 'rb') as f:
+                all_bytes = f.read()
+            # Check the two
+            ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
+            # jout = subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification
+            # /pipeline_updated/F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT) jout = json.loads(
+            # subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification/pipeline_updated
+            # /F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT)) ngrams2 = [] for a in [4,5,6]: ngrams2.extend([
+            # "".join(['{:x}'.format(x) for x in sublist]) for sublist in jout[str(a)]]) ngrams2 = set(ngrams2)
+            ngrams = Counter({k: 1 for k in set(ngrams)})
+            save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
+            with open(save_path, 'wb') as wFile:
+                pickle.dump(ngrams, wFile)
