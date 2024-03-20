@@ -7,7 +7,6 @@ import pandas as pd
 from info_gain import info_gain
 
 from src.feature_extraction.static.imports import ImportsExtractor
-from src.dataset.setup_dataset import malware_dataset
 from src.feature_extraction import config
 
 
@@ -47,7 +46,7 @@ def df_ig(sha1s, top_dlls, top_apis):
     return df_dlls_ig, df_api_ig
 
 
-def top_imports(experiment):
+def top_imports(malware_dataset, experiment):
     # sha1s = config.get_list(experiment, validation=True, binary=binary)
     sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
     # sha1s = sha1s[sha1s["family"] == "mocrt"].to_numpy()

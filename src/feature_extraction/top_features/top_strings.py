@@ -3,7 +3,7 @@ from itertools import islice
 import numpy as np
 from tqdm import tqdm
 
-from src.dataset.setup_dataset import malware_dataset
+from src.dataset.setup_dataset import MalwareDataset
 from src.feature_extraction import config
 from src.feature_extraction.static.strings import StringsExtractor
 from collections import Counter
@@ -20,7 +20,7 @@ def create_chunks(data, size=12):
     return [list(data[i * n: (i + 1) * n]) if i < size - 1 else list(data[i * n:]) for i in range(size)]
 
 
-def top_strings(experiment):
+def top_strings(malware_dataset, experiment):
     sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
     #sha1s = sha1s[sha1s["family"].isin(fam)].to_numpy()
     samples_len = len(sha1s)

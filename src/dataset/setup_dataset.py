@@ -1,3 +1,4 @@
+import gc
 import os
 
 import pandas as pd
@@ -71,17 +72,17 @@ class MalwareDataset:
 
     def __init__(self, split: pd.Timestamp):
         fsd = "first_submission_date"
-        self.df_malware_family_fsd = MalwareDatasetBuilder().malware_family_fsd_df()
-        self.training_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] < split]
-        self.testing_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] >= split]
-
+        df_malware_family_fsd = MalwareDatasetBuilder().malware_family_fsd_df()
+        self.training_dataset = df_malware_family_fsd[df_malware_family_fsd[fsd] < split]
+        # self.testing_dataset = df_malware_family_fsd[df_malware_family_fsd[fsd] >= split]
+        del df_malware_family_fsd
+        gc.collect()
 
 def extract_malware_family(file_path) -> pd.DataFrame:
     df = pd.read_csv(file_path, usecols=['SHA256', 'FAMILY'])
     return df.rename(str.lower, axis='columns')
 
 
-malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
 
 # df1 = extract_malware_family(
 #     "/home/luca/Desktop/WD/NortonDataset670/dataset_info/siggregator_all_samples_no_fuzzy_hash.csv")

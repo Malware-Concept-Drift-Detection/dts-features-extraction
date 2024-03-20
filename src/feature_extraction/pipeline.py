@@ -3,6 +3,9 @@ import os
 import shutil
 import time
 
+import pandas as pd
+
+from src.dataset.setup_dataset import MalwareDataset
 from src.feature_extraction import config
 from src.feature_extraction.compute_top_features import compute_top_features
 from src.feature_extraction.build_dataset import build_dataset
@@ -36,12 +39,13 @@ if __name__ == '__main__':
 
     # First step: build dataframe with all the labels, families and paths
     # config.buildLabelDataFrame(args.experiment,int(args.minSamples),args.excludepacked,args.binary)
-
+    malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
+    #print(sym)
     suffixes = ['']
 
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
-        n = compute_top_features(args.experiment + suffix)
+        n = compute_top_features(malware_dataset, args.experiment + suffix)
         # Third step: Build dataset
         # build_dataset(False, n, args.experiment + suffix)
     #

@@ -1,17 +1,20 @@
-from src.feature_extraction.top_features.top_strings import create_chunks
-from src.dataset.setup_dataset import malware_dataset
-from src.feature_extraction import config
-from src.feature_extraction.static.ngrams import NGramsExtractor
-from collections import Counter
-from p_tqdm import p_map
-from tqdm import tqdm
 import os
-import subprocess
 import pickle
 import random
+import subprocess
+import sys
+from collections import Counter
+from multiprocessing import Pool
+
+import numpy as np
 import pandas as pd
 from info_gain import info_gain
-import numpy as np
+from p_tqdm import p_map
+from tqdm import tqdm
+
+from src.feature_extraction import config
+from src.feature_extraction.static.ngrams import NGramsExtractor
+from src.feature_extraction.top_features.top_strings import create_chunks
 
 
 def partial_counter(i_sha1s):
@@ -29,11 +32,12 @@ def partial_counter(i_sha1s):
     return
 
 
-def filter_out_very_unlikely(experiment):
+def filter_out_very_unlikely(malware_dataset, experiment):
     sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy()) #config.get_list(experiment, validation=True, binary=binary, max_size=20)
     samples_len = len(sha1s)
     subsample = 1000
-    sha1s = random.sample(sha1s, subsample)
+    random.seed(42)
+    sha1s_sample = random.sample(sha1s, subsample)
 
     print(f"Extracting nGrams from a randomly selected set of {subsample} samples from the training set")
     # Clean temp folder
@@ -42,18 +46,20 @@ def filter_out_very_unlikely(experiment):
     # for x in sha1s:
     #     ngrams.extractAndSave(x)
     # #REMOVE
+
+    chunks = create_chunks(sha1s_sample, config.CORES)
+
     ngrams_extractor = NGramsExtractor()
+    with Pool(config.CORES) as p:
+        p.map(ngrams_extractor.extract_and_save, chunks)
 
-    chunks = create_chunks(sha1s, config.CORES)
-    #print(chunks)
-
-    p_map(ngrams_extractor.extract_and_save, chunks, num_cpus=config.CORES)
+    #ngrams_extractor.extract_and_save(sha1s_sample)
 
     # Computing nGrams frequecy
     # (unique nGrams per binary so this means that if a nGram appears more than once
     # in the binary it is counted only once)
     print("Computing nGrams prevalence")
-    sha1s_only = [s for s, _ in sha1s]
+    sha1s_only = [s for s, _ in sha1s_sample]
     chunks = [sha1s_only[x:x + 100] for x in range(0, len(sha1s_only), 100)]
     chunks = list(zip(range(0, len(chunks)), chunks))
     p_map(partial_counter, chunks)
@@ -91,7 +97,7 @@ def filter_out_very_unlikely(experiment):
 def partial_df_IG(sha1s):
     with open(f'./{config.TEMP_DIRECTORY}/top_n_grams.pickle', 'rb') as rFile:
         top_n_grams = pickle.load(rFile)
-    top_n_grams = set(top_n_grams.keys())
+    top_n_grams = top_n_grams.keys()
     df_IG = pd.DataFrame(True, index=top_n_grams, columns=[])
     for sha1 in sha1s:
         with open(f'./{config.TEMP_DIRECTORY}/{sha1}', 'rb') as rFile:
@@ -118,7 +124,7 @@ def compute_information_gain(n_grams):
     return ret_dict
 
 
-def compute_IG_for_likely_ones(experiment):
+def compute_IG_for_likely_ones(malware_dataset, experiment):
     with open(f'./{config.TEMP_DIRECTORY}/sha1s', 'r') as r_file:
         sha1s = r_file.read().splitlines()
     print("Computing and merging relevant nGrams for sample files")
@@ -160,7 +166,7 @@ def compute_IG_for_likely_ones(experiment):
     IG = IG.head(13000)
     IGs = ['ngram_' + x for x in IG.index]
 
-    filepath = os.path.join(config.SELECT_DIRECTORY, experiment, 'nGrams.list')
+    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'nGrams.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(IGs))
 
@@ -169,6 +175,6 @@ def compute_IG_for_likely_ones(experiment):
     return
 
 
-def top_n_grams(experiment):
-    filter_out_very_unlikely(experiment)
-    compute_IG_for_likely_ones(experiment)
+def top_n_grams(malware_dataset, experiment):
+    filter_out_very_unlikely(malware_dataset, experiment)
+    compute_IG_for_likely_ones(malware_dataset, experiment)
