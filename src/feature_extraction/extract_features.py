@@ -11,8 +11,8 @@ from src.feature_extraction import config
 import pickle
 
 
-def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, all_sections=None, top_DLLs=None,
-                     top_imports=None, top_strings=None, top_n_grams=None, top_opcodes=None):
+def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, all_sections=None, top_dlls=None,
+                     top_imports=None, top_strings=None, top_ngrams=None, top_opcodes=None):
     # Singleton
     filepath = os.path.join(config.MALWARE_DIRECTORY, sha1_family)
     sha1 = sha1_family
@@ -43,28 +43,32 @@ def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, al
 
         # Section features
         if all_sections:
-            extracted_sections = SectionsExtractor().extract(filepath, all_sections)
+            extracted_sections = SectionsExtractor().extract((filepath, all_sections))
             row.update(extracted_sections)
 
         # DLLs and Imports features
-        if top_DLLs and top_imports:
-            extracted_dlls, extracted_imports = imports.extract_and_pad((filepath, top_DLLs, top_imports))
+        if top_dlls and top_imports:
+            extracted_dlls, extracted_imports = (ImportsExtractor()
+                                                 .extract_and_pad((filepath, top_dlls, top_imports)))
             row.update(extracted_dlls)
             row.update(extracted_imports)
 
         # Strings features
         if top_strings:
-            extracted_strings = strings.extract_and_pad(filepath, top_strings)
+            extracted_strings = (StringsExtractor()
+                                 .extract_and_pad((filepath, top_strings)))
             row.update(extracted_strings)
 
         # N_grams features
-        if top_n_grams:
-            extracted_n_grams = ngrams.extract_and_pad(filepath, top_n_grams)
+        if top_ngrams:
+            extracted_n_grams = (NGramsExtractor()
+                                 .extract_and_pad((filepath, top_ngrams)))
             row.update(extracted_n_grams)
 
         # Opcodes features
         if top_opcodes:
-            extracted_opcodes = opcodes.extract_and_pad(filepath, top_opcodes, N)
+            extracted_opcodes = (OpCodesExtractor()
+                                 .extract_and_pad((filepath, top_opcodes, N)))
             row.update(extracted_opcodes)
 
         # Get end time
@@ -108,8 +112,8 @@ if __name__ == '__main__':
         headers_flag=True,
         all_sections=all_sections,
         top_strings=top_strings,
-        top_DLLs=top_dlls,
+        top_dlls=top_dlls,
         top_imports=top_imports,
-        top_n_grams=top_n_grams,
+        top_ngrams=top_n_grams,
         top_opcodes=top_opcodes
     )

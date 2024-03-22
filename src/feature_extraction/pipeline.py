@@ -46,8 +46,9 @@ if __name__ == '__main__':
     for suffix in suffixes:
         # Second step: select top features for imports, ngrams, opcodes and strings
         n = compute_top_features(malware_dataset, args.experiment + suffix)
+        #print(f"N: {n}")
         # Third step: Build dataset
-        # build_dataset(False, n, args.experiment + suffix)
+        build_dataset(66993, args.experiment + suffix)
     #
     # # Fourth step: Classifier
     # # classifier.tuneTrees(args.binary,args.experiment)

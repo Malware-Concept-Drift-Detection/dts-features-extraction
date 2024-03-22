@@ -25,27 +25,15 @@ class NGramsExtractor(StaticFeatureExtractor):
         return self.__pad_ngrams(set(["ngram_" + ngram for ngram in set(ngrams)]), top_n_grams)
 
     def __get_ngrams_from_bytes(self, allbytes, ngram_size):
-        j = 0
         ngrams = []
         for i in ngram_size:
             i_grams = []
             for k in range(len(allbytes) - i):
                 ngram = allbytes[k:k + i]
                 if len(ngram) == i:
-                    j += 1
                     i_grams.append(str(ngram))
-                # if j % 100_000 == 0:
-                #     j = 0
-                #     print("pruning")
-                #     i_grams = list(set(i_grams))
-
-
-            #print((sys.getsizeof(ngrams) + sys.getsizeof(allbytes)) / 10 ** 6)
-            ngrams = ngrams + list(set(i_grams))
-            del i_grams
-            gc.collect()
-        #print(h.heap())
-        l = list(set(ngrams))
+            #ngrams = ngrams + list(set(i_grams))
+        return list(set(ngrams))
 
 
     # def __get_ngrams_from_bytes(self, allbytes, ngram_size):
@@ -70,26 +58,19 @@ class NGramsExtractor(StaticFeatureExtractor):
         return extracted_n_grams
 
     def extract_and_save(self, sha1_family):
-        for i, el in enumerate(sha1_family):
-            print(i)
-            sha1, family = el[0], el[1]
+        sha1, family = sha1_family[0], sha1_family[1]
+        save_path = f"/home/luca/ml-malware-concept-drift/{config.TEMP_DIRECTORY}/{sha1}"
+        print(save_path)
+        if not os.path.exists(save_path):
             filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
             with open(filepath, 'rb') as f:
-
                 all_bytes = f.read()
-                f.close()
-            # print(os.path.getsize(filepath) / 10 ** 6)
 
             # Check the two
-            self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
-            # # jout = subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification
-            # # /pipeline_updated/F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT) jout = json.loads(
-            # # subprocess.check_output(['/worker/scratch/savino.dambra/pe-mal-class-code/classification/pipeline_updated
-            # # /F_N_grams/rust_ngram', filepath], stderr=subprocess.STDOUT)) ngrams2 = [] for a in [4,5,6]: ngrams2.extend([
-            # # "".join(['{:x}'.format(x) for x in sublist]) for sublist in jout[str(a)]]) ngrams2 = set(ngrams2)
-            # ngrams = Counter({k: 1 for k in ngrams})
-            # save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
-            # with open(save_path, 'wb') as w_file:
-            #     pickle.dump(ngrams, w_file)
-            #     w_file.close()
-            # gc.collect()
+            ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
+            ngrams = Counter({k: 1 for k in ngrams})
+            save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
+            with open(save_path, 'wb') as w_file:
+                pickle.dump(ngrams, w_file)
+        else:
+            print("exists")

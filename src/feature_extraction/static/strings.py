@@ -11,26 +11,17 @@ class StringsExtractor(StaticFeatureExtractor):
 
     def extract(self, sha1_family):
         all_strings = []
-        off = round(len(sha1_family) / 10)
-        k = [j for j in range(off, sha1_family, off)]
-        for i, (sha1, family) in enumerate(sha1_family):
-            #print(sha1, family)
-            filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-            cmd = ['strings', filepath]
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            output = proc.communicate()[0].decode("utf-8")
-            strings = output.split('\n')
-            # tmp_strings = [string.strip() for string in strings if len(string.strip()) > 3]
-            # all_strings = all_strings + tmp_strings
-            tmp_strings = []
-            for string in strings:
-                s = string.strip()
-                if len(s) > 3:
-                    tmp_strings.append(s)
-            all_strings = all_strings + tmp_strings
-            if i in k:
-                all_strings = list(set(all_strings))
-        return set(all_strings)
+        sha1, family = sha1_family
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        cmd = ['strings', filepath]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        output = proc.communicate()[0].decode("utf-8")
+        strings = output.split('\n')
+        for string in strings:
+            s = string.strip()
+            if len(s) > 3:
+                all_strings.append(s)
+        return list(set(all_strings))
 
     def extract_and_pad(self, args):
         filepath, top_strings = args

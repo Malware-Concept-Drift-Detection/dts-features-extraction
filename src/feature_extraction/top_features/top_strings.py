@@ -27,10 +27,7 @@ def top_strings(malware_dataset, experiment):
     print(f"Extracting strings from all the samples in the training set ({samples_len})")
     strings_extractor = StringsExtractor()
 
-    chunks = create_chunks(sha1s, config.CORES)
-    print([len(chunk) for chunk in chunks])
-
-    all_samples_strings = p_map(strings_extractor.extract, chunks, num_cpus=config.CORES)
+    all_samples_strings = p_map(strings_extractor.extract, sha1s, num_cpus=config.CORES)
 
     # Computing strings frequency
     # (unique strings per binary so this means that if a string appears more than once

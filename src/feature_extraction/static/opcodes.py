@@ -47,14 +47,14 @@ class OpCodesExtractor(StaticFeatureExtractor):
             for j in range(len(opcodes) - i):
                 ngram = ' '.join(opcodes[j:j + i])
                 ngrams[ngram] += 1
-        tf_idfs = {"opcode_" + k: (self.__tf(ngrams[k]) * self.__idf(v, N) if k in list(ngrams.keys()) else 0.00)
+        tf_idfs = {"opcode_" + k: (self.tf(ngrams[k]) * self.idf(v, N) if k in list(ngrams.keys()) else 0.00)
                    for k, v in zip(top_opcodes.keys(), top_opcodes.values())}
         return tf_idfs
 
     @staticmethod
-    def __idf(x, N):
+    def idf(x, N):
         return math.log(N / (1.0 + x))
 
     @staticmethod
-    def __tf(x):
+    def tf(x):
         return math.log(1 + x)

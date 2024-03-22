@@ -41,19 +41,14 @@ def filter_out_very_unlikely(malware_dataset, experiment):
 
     print(f"Extracting nGrams from a randomly selected set of {subsample} samples from the training set")
     # Clean temp folder
-    subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
+    # subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
     # #REMOVE
     # for x in sha1s:
     #     ngrams.extractAndSave(x)
     # #REMOVE
-
-    chunks = create_chunks(sha1s_sample, config.CORES)
-
     ngrams_extractor = NGramsExtractor()
-    with Pool(config.CORES) as p:
-        p.map(ngrams_extractor.extract_and_save, chunks)
-
-    #ngrams_extractor.extract_and_save(sha1s_sample)
+    # chunks = create_chunks(sha1s_sample, config.CORES)
+    p_map(ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=config.CORES)
 
     # Computing nGrams frequecy
     # (unique nGrams per binary so this means that if a nGram appears more than once
@@ -172,7 +167,6 @@ def compute_IG_for_likely_ones(malware_dataset, experiment):
 
     # Cleaning
     subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
-    return
 
 
 def top_n_grams(malware_dataset, experiment):

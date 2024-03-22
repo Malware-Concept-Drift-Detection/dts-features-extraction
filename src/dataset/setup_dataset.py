@@ -48,9 +48,9 @@ class MalwareDatasetBuilder:
                               malware_dir_path: str = None,
                               min_samples: int = 100) -> pd.DataFrame:
 
-        sha_fsd_file_path = "/home/luca/Desktop/WD/NortonDataset670/dataset_info/vt_reports67k.jsons" \
+        sha_fsd_file_path = "/home/luca/WD/NortonDataset670/dataset_info/vt_reports67k.jsons" \
             if sha_fsd_file_path is None else sha_fsd_file_path
-        malware_dir_path = "/home/luca/Desktop/WD/NortonDataset670/MALWARE/" \
+        malware_dir_path = "/home/luca/WD/NortonDataset670/MALWARE/" \
             if malware_dir_path is None else malware_dir_path
         merge_dataset_filename = f"{self.__base_dir}/../vt_reports/merge.csv"
 
@@ -72,17 +72,14 @@ class MalwareDataset:
 
     def __init__(self, split: pd.Timestamp):
         fsd = "first_submission_date"
-        df_malware_family_fsd = MalwareDatasetBuilder().malware_family_fsd_df()
-        self.training_dataset = df_malware_family_fsd[df_malware_family_fsd[fsd] < split]
-        # self.testing_dataset = df_malware_family_fsd[df_malware_family_fsd[fsd] >= split]
-        del df_malware_family_fsd
-        gc.collect()
+        self.df_malware_family_fsd = MalwareDatasetBuilder().malware_family_fsd_df()
+        self.training_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] < split]
+        self.testing_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] >= split]
+
 
 def extract_malware_family(file_path) -> pd.DataFrame:
     df = pd.read_csv(file_path, usecols=['SHA256', 'FAMILY'])
     return df.rename(str.lower, axis='columns')
-
-
 
 # df1 = extract_malware_family(
 #     "/home/luca/Desktop/WD/NortonDataset670/dataset_info/siggregator_all_samples_no_fuzzy_hash.csv")
