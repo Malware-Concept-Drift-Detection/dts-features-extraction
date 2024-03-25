@@ -73,8 +73,12 @@ class MalwareDataset:
     def __init__(self, split: pd.Timestamp):
         fsd = "first_submission_date"
         self.df_malware_family_fsd = MalwareDatasetBuilder().malware_family_fsd_df()
-        self.training_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] < split]
-        self.testing_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] >= split]
+        training_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] < split]
+        # filter families with less than three samples
+        counts = training_dataset.groupby("family").size().reset_index(name="size")
+        counts = counts[counts["size"] > 3]
+        self.training_dataset = training_dataset[training_dataset["family"].isin(counts["family"])]
+        # self.testing_dataset = self.df_malware_family_fsd[self.df_malware_family_fsd[fsd] >= split]
 
 
 def extract_malware_family(file_path) -> pd.DataFrame:

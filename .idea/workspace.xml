@@ -4,26 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ruff.xml" beforeDir="false" />
+    <list default="true" id="aff70610-d3c7-4eda-af83-0284da154d58" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/dataset/setup_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/setup_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/build_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/build_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/extract_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/extract_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/ngrams.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/ngrams.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/opcodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/opcodes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/strings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_imports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_ngrams.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_ngrams.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_opcodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_opcodes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_strings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_strings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/utils/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/utils/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/PRE_topFeatures/apis.list" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/PRE_topFeatures/dlls.list" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/top_features/strings.list" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +21,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
       </list>
     </option>
@@ -45,52 +32,30 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 8
 }</component>
-  <component name="ProjectId" id="2cLkKQXLrJODti5Xa4M7QlQxt4K" />
+  <component name="ProjectId" id="2e2RNuIDCcMQFUTI47fWcx2V4uL" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.prova (1).executor": "Run",
-    "Python.prova (2).executor": "Run",
-    "Python.prova.executor": "Run",
-    "Python.prova1.executor": "Run",
-    "Python.setup_dataset.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "develop",
-    "last_opened_file_path": "/home/luca/Desktop/remote-ml-malware-concept-drift",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/vt_reports" />
-      <recent name="$PROJECT_DIR$" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tmp/top_features" />
-      <recent name="$PROJECT_DIR$/src/dataset" />
-      <recent name="$PROJECT_DIR$/src/notebooks/setup_dataset" />
-      <recent name="$PROJECT_DIR$/src/notebooks" />
-      <recent name="$PROJECT_DIR$/src" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Python.prova (2)">
-    <configuration name="prova (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ml-malware-concept-drift" />
+}</component>
+  <component name="RunManager" selected="Python.ok">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="remote_concept_drift" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -98,12 +63,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/feature_extraction/top_features" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/top_features/prova.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,7 +77,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="prova (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ok" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="remote_concept_drift" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -125,76 +90,8 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/static/prova.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="prova" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ml-malware-concept-drift" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/feature_extraction" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/prova.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="prova1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ml-malware-concept-drift" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/PRE_topFeatures/prova1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="setup_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ml-malware-concept-drift" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/dataset" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/dataset/setup_dataset.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_extraction/static/ok.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -205,87 +102,21 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.prova (2)" />
-        <item itemvalue="Python.prova (1)" />
-        <item itemvalue="Python.setup_dataset" />
-        <item itemvalue="Python.prova1" />
-        <item itemvalue="Python.prova" />
+        <item itemvalue="Python.ok" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ffd3a42c-9814-4982-9a43-27e2d33e8631" name="Changes" comment="" />
-      <created>1707898181938</created>
+      <changelist id="aff70610-d3c7-4eda-af83-0284da154d58" name="Changes" comment="" />
+      <created>1711100650870</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1707898181938</updated>
-      <workItem from="1707898182947" duration="6208000" />
-      <workItem from="1707905602844" duration="6981000" />
-      <workItem from="1707916377771" duration="1338000" />
-      <workItem from="1707918443375" duration="10589000" />
-      <workItem from="1707948640245" duration="6351000" />
-      <workItem from="1707986385250" duration="17794000" />
-      <workItem from="1708010356548" duration="2870000" />
-      <workItem from="1708070945519" duration="173000" />
-      <workItem from="1708071130001" duration="84000" />
-      <workItem from="1708071214888" duration="172000" />
-      <workItem from="1708071446886" duration="81000" />
-      <workItem from="1708071539234" duration="42000" />
-      <workItem from="1708071582452" duration="384000" />
-      <workItem from="1708071980387" duration="175000" />
-      <workItem from="1708072165255" duration="10000" />
-      <workItem from="1708072177282" duration="434000" />
-      <workItem from="1708072624678" duration="905000" />
-      <workItem from="1708073548685" duration="71000" />
-      <workItem from="1708073797993" duration="129000" />
-      <workItem from="1708073945025" duration="20627000" />
-      <workItem from="1708195412885" duration="5503000" />
-      <workItem from="1708241240393" duration="543000" />
-      <workItem from="1708242407332" duration="10849000" />
-      <workItem from="1708276415039" duration="555000" />
-      <workItem from="1708277409122" duration="1476000" />
-      <workItem from="1708279024486" duration="395000" />
-      <workItem from="1708279636296" duration="1030000" />
-      <workItem from="1708280859290" duration="1790000" />
-      <workItem from="1708286821503" duration="311000" />
-      <workItem from="1708287816657" duration="321000" />
-      <workItem from="1708324640692" duration="628000" />
-      <workItem from="1708325520021" duration="956000" />
-      <workItem from="1708330615447" duration="3709000" />
-      <workItem from="1708334977529" duration="1464000" />
-      <workItem from="1708337347484" duration="1680000" />
-      <workItem from="1708346655666" duration="827000" />
-      <workItem from="1708353281358" duration="1638000" />
-      <workItem from="1708354936420" duration="304000" />
-      <workItem from="1708355479199" duration="18180000" />
-      <workItem from="1708416438074" duration="21878000" />
-      <workItem from="1708510728814" duration="9898000" />
-      <workItem from="1708590755140" duration="41744000" />
-      <workItem from="1708700678629" duration="5568000" />
-      <workItem from="1708932988772" duration="57539000" />
-      <workItem from="1709195199490" duration="1888000" />
-      <workItem from="1709218393713" duration="2052000" />
-      <workItem from="1709282716179" duration="26608000" />
-      <workItem from="1709477339482" duration="11000" />
-      <workItem from="1709540828638" duration="1157000" />
-      <workItem from="1709545223104" duration="46845000" />
-      <workItem from="1709714103801" duration="41691000" />
-      <workItem from="1709887795207" duration="48000" />
-      <workItem from="1709888066971" duration="11795000" />
-      <workItem from="1709977248781" duration="7000" />
-      <workItem from="1710088019913" duration="16911000" />
-      <workItem from="1710146195585" duration="11359000" />
-      <workItem from="1710231881352" duration="3572000" />
-      <workItem from="1710249054891" duration="10200000" />
-      <workItem from="1710319510719" duration="22417000" />
-      <workItem from="1710366707835" duration="64000" />
-      <workItem from="1710405680809" duration="19671000" />
-      <workItem from="1710493954326" duration="1613000" />
-      <workItem from="1710626108808" duration="3387000" />
-      <workItem from="1710712498888" duration="3167000" />
-      <workItem from="1711058723616" duration="461000" />
+      <updated>1711100650870</updated>
+      <workItem from="1711100653560" duration="18000" />
+      <workItem from="1711186158095" duration="3442000" />
+      <workItem from="1711196014783" duration="829000" />
     </task>
     <servers />
   </component>
@@ -293,9 +124,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/concept_drift$config.coverage" NAME="config Coverage Results" MODIFIED="1710413587774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/feature_extraction" />
-    <SUITE FILE_PATH="coverage/concept_drift$pipeline.coverage" NAME="pipeline Coverage Results" MODIFIED="1710321854959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/feature_extraction" />
-    <SUITE FILE_PATH="coverage/concept_drift$camel_to_snake.coverage" NAME="camel_to_snake Coverage Results" MODIFIED="1710337225452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/concept_drift$merge_vt_siggregator.coverage" NAME="merge_vt_siggregator Coverage Results" MODIFIED="1710423397098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/data_splits/setup_dataset" />
+    <SUITE FILE_PATH="coverage/remote_concept_drift$ok.coverage" NAME="ok Coverage Results" MODIFIED="1711188070524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/feature_extraction/static" />
   </component>
 </project>
