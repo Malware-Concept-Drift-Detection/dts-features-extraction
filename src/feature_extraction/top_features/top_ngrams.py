@@ -33,13 +33,12 @@ def partial_counter(i_sha1s):
 
 
 def filter_out_very_unlikely(malware_dataset, experiment):
-    sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy()) #config.get_list(experiment, validation=True, binary=binary, max_size=20)
-    samples_len = len(sha1s)
+    sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy())
     subsample = 1000
     random.seed(42)
     sha1s_sample = random.sample(sha1s, subsample)
 
-    print(f"Extracting nGrams from a randomly selected set of {subsample} samples from the training set")
+    print(f"Extracting n-grams from a randomly selected set of {subsample} samples from the training set")
     # Clean temp folder
     # subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
     # #REMOVE
@@ -50,10 +49,10 @@ def filter_out_very_unlikely(malware_dataset, experiment):
     # chunks = create_chunks(sha1s_sample, config.CORES)
     p_map(ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=config.CORES)
 
-    # Computing nGrams frequecy
-    # (unique nGrams per binary so this means that if a nGram appears more than once
+    # Computing n-grams frequecy
+    # (unique n-grams per binary so this means that if a nGram appears more than once
     # in the binary it is counted only once)
-    print("Computing nGrams prevalence")
+    print("Computing n-grams prevalence")
     sha1s_only = [s for s, _ in sha1s_sample]
     chunks = [sha1s_only[x:x + 100] for x in range(0, len(sha1s_only), 100)]
     chunks = list(zip(range(0, len(chunks)), chunks))
@@ -66,7 +65,7 @@ def filter_out_very_unlikely(malware_dataset, experiment):
         partial = pd.read_pickle(filepath)
         top_n_grams.update(partial)
 
-    print(f"Total number of unique ngram is: {len(top_n_grams)}")
+    print(f"Total number of unique n-grams is: {len(top_n_grams)}")
 
     # Saving for Matplotlib
     # if plot:
@@ -122,7 +121,7 @@ def compute_information_gain(n_grams):
 def compute_IG_for_likely_ones(malware_dataset, experiment):
     with open(f'./{config.TEMP_DIRECTORY}/sha1s', 'r') as r_file:
         sha1s = r_file.read().splitlines()
-    print("Computing and merging relevant nGrams for sample files")
+    print("Computing and merging relevant n-grams for sample files")
     chunks = [sha1s[i:i + 10] for i in range(0, len(sha1s), 10)]
     results = p_map(partial_df_IG, chunks, num_cpus=config.CORES)
     df_IG = pd.concat(results, axis=1)
@@ -144,12 +143,6 @@ def compute_IG_for_likely_ones(malware_dataset, experiment):
     results = p_map(compute_information_gain, chunks, num_cpus=config.CORES)
     IG = pd.concat(results)
 
-    # Render in matplotlib
-    # if plot:
-    #     print("Saving nGrams IG for CCDF plot")
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'nGrams_ig.pickle')
-    #     IG.to_pickle(filepath)
-
     # igThresh = input("Which IG value do you want to cut Ngrams?")
     # # Multiclass
     # igThresh = 0.47
@@ -161,7 +154,7 @@ def compute_IG_for_likely_ones(malware_dataset, experiment):
     IG = IG.head(13000)
     IGs = ['ngram_' + x for x in IG.index]
 
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'nGrams.list')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'ngrams.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(IGs))
 

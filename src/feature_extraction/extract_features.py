@@ -11,25 +11,18 @@ from src.feature_extraction import config
 import pickle
 
 
-def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, all_sections=None, top_dlls=None,
-                     top_imports=None, top_strings=None, top_ngrams=None, top_opcodes=None):
-    # Singleton
-    filepath = os.path.join(config.MALWARE_DIRECTORY, sha1_family)
-    sha1 = sha1_family
+def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, all_sections=None,
+                     top_dlls=None, top_imports=None, top_strings=None, top_ngrams=None, top_opcodes=None):
 
-    # #Restore the following
-    # sha1,family = sha1_family
-    # if family:
-    #     filepath = os.path.join(config.MALWARE_DIRECTORY,family,sha1)
-    # else:
-    #     filepath = os.path.join(config.GOODWARE_DIRECTORY,sha1)
+    # Singleton
+    sha1, family = sha1_family
+    filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
     # Row is a dictionary with sample hash and then all the features as key:value
     row = dict()
     row['sample_hash'] = sha1
 
     # Get init time
     start = time.time() * 1000
-
     try:
         # Generic features
         if generics_flag:
@@ -70,7 +63,6 @@ def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, al
             extracted_opcodes = (OpCodesExtractor()
                                  .extract_and_pad((filepath, top_opcodes, N)))
             row.update(extracted_opcodes)
-
         # Get end time
         end = time.time() * 1000
         elapsed = int(end - start)
@@ -80,40 +72,3 @@ def extract_features(sha1_family, N, generics_flag=False, headers_flag=False, al
     except Exception as e:
         print(e)
         return False, {sha1: {'error': e}}
-
-
-if __name__ == '__main__':
-    # Read all Section Features for padding
-    with open('top_features/allSections.list', 'r') as section_file:
-        all_sections = {k: v for k, v in (l.split('\t') for l in section_file.read().splitlines())}
-    # Read most common DLLs
-    with open('top_features/dlls.list', 'r') as dll_file:
-        top_dlls = set(dll_file.read().splitlines())
-    # Read most common Imports
-    with open('top_features/apis.list', 'r') as imports_file:
-        top_imports = set(imports_file.read().splitlines())
-    # Read most common Strings
-    with open('top_features/strings.list', 'r') as strings_file:
-        top_strings = set(strings_file.read().splitlines())
-    # Read most common N_grams
-    with open('top_features/nGrams.list', 'r') as n_gram_file:
-        top_n_grams = set(n_gram_file.read().splitlines())
-    # Read most common Opcodes
-    with open('top_features/opcodes.pickle', 'rb') as opcodes_file:
-        top_opcodes = pickle.load(opcodes_file)
-
-    # This number represents the number of document for which the extraction of opcodes was successful
-    N = 57048
-    sha1s = config.get_list(training=True, test=True, binary=False)
-    extract_features(
-        sha1s[0],
-        N,
-        generics_flag=True,
-        headers_flag=True,
-        all_sections=all_sections,
-        top_strings=top_strings,
-        top_dlls=top_dlls,
-        top_imports=top_imports,
-        top_ngrams=top_n_grams,
-        top_opcodes=top_opcodes
-    )

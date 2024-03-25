@@ -6,6 +6,7 @@ from p_tqdm import p_map
 import pandas as pd
 from info_gain import info_gain
 
+from src.feature_extraction.utils import utils
 from src.feature_extraction.static.imports import ImportsExtractor
 from src.feature_extraction import config
 
@@ -54,12 +55,11 @@ def top_imports(malware_dataset, experiment):
     all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.CORES)
     all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
-    # print(all_samples_imports)
-
     # Checking problems with extraction
-    # problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
-    # utils.update_label_data_frame(experiment, problematic_sha1s)
-    # all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
+    problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
+
+    #utils.update_label_data_frame(experiment, problematic_sha1s)
+    all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
 
     # Computing frequency
     print("Computing DLLs and APIs prevalence")
@@ -102,15 +102,6 @@ def top_imports(malware_dataset, experiment):
     ig_dlls = compute_information_gain(df_dlls_ig)
     ig_apis = compute_information_gain(df_apis_ig)
 
-    # Render in matplotlib
-    # if plot:
-    #     print("Saving DLLs IG for CCDF plot")
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'dlls_ig.pickle')
-    #     ig_dlls.to_pickle(filepath)
-    #     print("Saving APIs IG for CCDF plot")
-    #     filepath = os.path.join(config.PLOTS_DIRECTORY, experiment, 'apis_ig.pickle')
-    #     ig_apis.to_pickle(filepath)
-
     # igThresh = input("Which IG value do you want to cut DLLs?")
     # #Multiclass value
     # igThresh = 0.0152
@@ -119,7 +110,7 @@ def top_imports(malware_dataset, experiment):
     # ig_dlls  = ig_dlls[ig_dlls.IG>=float(igThresh)].index
     ig_dlls = ig_dlls.index
 
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'dlls.list')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'dlls.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(ig_dlls))
 
@@ -134,6 +125,6 @@ def top_imports(malware_dataset, experiment):
     ig_apis = ig_apis.head(4500)
     ig_apis = ig_apis.index
 
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'apis.list')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'apis.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(ig_apis))

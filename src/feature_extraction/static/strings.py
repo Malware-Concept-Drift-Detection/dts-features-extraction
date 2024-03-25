@@ -20,16 +20,7 @@ class StringsExtractor(StaticFeatureExtractor):
         strings = output.split('\n')
         strings = [string.strip() for string in strings]
         strings = [string for string in strings if len(string) > 3]
-
-        unique_strings = list(Counter(strings).keys())
-        # Saving the list of nGrams and randomSha1s considered for the next step
-        # with open(f'./tmp/strings/sha1s/{sha1}.pickle', 'wb') as w_file:
-        #     pickle.dump(unique_strings, w_file)
-        #np.savetxt(f"./tmp/strings/sha1s/{sha1}.pickle", unique_strings)
-        with open(f"./tmp/strings/sha1s/{sha1}.pickle", "w", encoding="utf-8") as file:
-            # Write each string of the array to a separate line in the file
-            for string in unique_strings:
-                file.write(string + "\n")
+        return list(set(strings))
 
     def extract_and_pad(self, args):
         filepath, top_strings = args

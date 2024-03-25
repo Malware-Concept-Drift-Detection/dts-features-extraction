@@ -66,19 +66,18 @@ def compute_information_gain(opcodes, labels):
 
 def top_opcodes(malware_dataset, experiment):
     sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
-    sha1s = sha1s[:1000]
-    print("Extracting opcodes from all the samples in the validation set")
+    print("Extracting opcodes from all the samples in the training set")
     # Clean temp folder
-    # subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
+    subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
     opcodes_extractor = OpCodesExtractor()
     n_grams_frequences = p_map(opcodes_extractor.extract, sha1s, num_cpus=config.CORES)
     n_grams_frequences = {k: v for d in n_grams_frequences for k, v in d.items()}
 
-    # Checking problems with extraction
-    problematic_sha1s = {k: v for k, v in n_grams_frequences.items() if v['error']}
-    #utils.update_label_data_frame(experiment, problematic_sha1s)
-    # n_grams_frequences = {k:v for k,v in n_grams_frequences.items() if not v['error']}
-    n_grams_frequences = {k: v['ngrams'] for k, v in n_grams_frequences.items() if not v['error']}
+    # # Checking problems with extraction
+    # problematic_sha1s = {k: v for k, v in n_grams_frequences.items() if v['error']}
+    # #utils.update_label_data_frame(experiment, problematic_sha1s)
+    # # n_grams_frequences = {k:v for k,v in n_grams_frequences.items() if not v['error']}
+    # n_grams_frequences = {k: v['ngrams'] for k, v in n_grams_frequences.items() if not v['error']}
 
     # #Add here could not disassemble
     # problematic_sha1s = {k:{'error':'Disassembled is empty'} for k,v in n_grams_frequences.items() if not v['ngrams']}
@@ -147,18 +146,17 @@ def top_opcodes(malware_dataset, experiment):
 
     # Save opcodes and docFreq
     top_opcodes = Counter({k: v for k, v in top_opcodes.items() if k in IG.index})
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'opcodes.list')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'opcodes.list')
     with open(filepath, 'w') as w_file:
         w_file.write("\n".join(top_opcodes))
 
     # Cleaning
     subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
-    return
 
 
 def post_selection_op_codes(malware_dataset, experiment):
     # loading top opcodes
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'opcodes.list')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'opcodes.list')
     with open(filepath, 'r') as r_file:
         top_opcodes = r_file.read().splitlines()
 
@@ -194,7 +192,7 @@ def post_selection_op_codes(malware_dataset, experiment):
 
     print("Only considering opcodes...")
     ngram_whole_dataset = Counter({k: v for k, v in ngram_whole_dataset.items() if k in top_opcodes})
-    filepath = os.path.join(experiment, config.SELECT_DIRECTORY, 'trainTopOpcodesCounter.pickle')
+    filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'opcodes.pickle')
     with open(filepath, 'wb') as wFile:
         pickle.dump(ngram_whole_dataset, wFile)
     return samples_len

@@ -35,7 +35,7 @@ class SectionsExtractor(StaticFeatureExtractor):
             features['virtualSize'] = section.Misc_VirtualSize
             features['virtualAddress'] = section.VirtualAddress
             features['physicalAddress'] = section.Misc_PhysicalAddress
-            features['entropy'] = section.__get_entropy()
+            features['entropy'] = section.get_entropy()
             features['rawAddress(pointerToRawData)'] = section.PointerToRawData
             features['pointerToRelocations'] = section.PointerToRelocations
             features['numberOfRelocations'] = section.NumberOfRelocations
@@ -104,10 +104,7 @@ class SectionsExtractor(StaticFeatureExtractor):
     @staticmethod
     def __get_max_sections(sha1_family):
         sha1, family = sha1_family
-        if family:
-            filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        else:
-            filepath = os.path.join(config.GOODWARE_DIRECTORY, sha1)
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
         pe = pefile.PE(filepath)
         if pe.FILE_HEADER.Machine != 332:
             return -1

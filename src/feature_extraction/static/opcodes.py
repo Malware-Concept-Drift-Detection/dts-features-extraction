@@ -12,10 +12,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
 
     def extract(self, sha1_family):
         sha1, family = sha1_family
-        if family:
-            filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        else:
-            filepath = os.path.join(config.GOODWARE_DIRECTORY, sha1)
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
         try:
             pe = pefile.PE(filepath)
             eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
