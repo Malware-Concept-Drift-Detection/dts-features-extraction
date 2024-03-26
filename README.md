@@ -20,8 +20,8 @@ Code for the project "ML-driven malware classification and Concept drift detecti
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
+   git clone git@github.com:w-disaster/ml-malware-concept-drift.git
+   cd ml-malware-concept-drift
    
 2. Create the virtualenv:
 
@@ -33,8 +33,3 @@ Code for the project "ML-driven malware classification and Concept drift detecti
     ```bash
    pip install -r requirements.txt
    
-
-## Usage
-
-1. Open and run ``merge.ipynb`` with Jupyter Notebook to merge VirusTotal reports with VTClass2 labelled malware's;
-2. Visualize families distribution in ``families_distribution.ipynb``
