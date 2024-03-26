@@ -30,7 +30,8 @@ class ImportsExtractor(StaticFeatureExtractor):
                             imp = 'imp_{}'.format(imp)
                             imps.append(imp)
             return {sha1: {'dlls': dlls, 'imps': imps, 'error': ''}}
-        except:
+        except Exception as e:
+            print(f"{sha1} {e}")
             return {sha1: {'dlls': [], 'imps': [], 'error': "error"}}
 
     def extract_and_pad(self, args):
