@@ -40,7 +40,7 @@ def filter_out_very_unlikely(malware_dataset, experiment):
 
     print(f"Extracting n-grams from a randomly selected set of {subsample} samples from the training set")
     # Clean temp folder
-    # subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
+    subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
     # #REMOVE
     # for x in sha1s:
     #     ngrams.extractAndSave(x)

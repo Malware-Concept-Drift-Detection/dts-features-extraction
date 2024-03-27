@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aff70610-d3c7-4eda-af83-0284da154d58" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/malware_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/malware_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/compute_top_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_extraction/static/imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/static/imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_imports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_extraction/top_features/top_ngrams.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_extraction/top_features/top_ngrams.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

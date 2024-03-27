@@ -56,9 +56,9 @@ def top_imports(malware_dataset, experiment):
     all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
     # Checking problems with extraction
-    #problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
-    #utils.update_label_data_frame(experiment, problematic_sha1s)
-    all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
+    # problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
+    # utils.update_label_data_frame(experiment, problematic_sha1s)
+    # all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
 
     # Computing frequency
     print("Computing DLLs and APIs prevalence")
