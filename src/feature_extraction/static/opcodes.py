@@ -28,6 +28,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
                     ngrams[ngram] += 1
             return {sha1: {'ngrams': ngrams, 'error': ''}}
         except Exception as e:
+            print(f"Exception {e} on sha {sha1}")
             return {sha1: {'ngrams': None, 'error': e}}
 
     def extract_and_pad(self, args):
