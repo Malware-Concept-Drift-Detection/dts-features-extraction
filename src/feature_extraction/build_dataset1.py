@@ -54,7 +54,6 @@ def build_dataset(N, experiment, malware_dataset):
     # For singleton
     sha1s = malware_dataset.df_malware_family_fsd[['sha256', 'family']].to_numpy()
 
-
     current_extracting_function = partial(extract_features,
                                           N=N,
                                           experiment=experiment,
@@ -68,9 +67,8 @@ def build_dataset(N, experiment, malware_dataset):
                                           top_opcodes=top_opcodes
                                           )
 
-
-    #Split into chunks
-    c_len = 15 * config.CORES
+    # Split into chunks
+    c_len = 15 * 16
     chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
 
     exclude_shas = []
@@ -83,19 +81,17 @@ def build_dataset(N, experiment, malware_dataset):
     sha1s = sha1s[~sha1s["sha256"].isin(exclude_shas)]
     sha1s = sha1s[['sha256', 'family']].to_numpy()
 
-    #Split into chunks
+    # Split into chunks
     chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
 
     for index, chunk in enumerate(chunks):
-        if index >=25:
+        if index >= 25:
             print(f"Round {index}/{len(chunks)}", flush=True)
             with Pool(config.CORES) as p:
                 results = p.map(current_extracting_function, chunk)
             dataset = pd.DataFrame(results).set_index('sample_hash')
-            dataset.to_pickle(os.path.join(experiment, config.DATASET_DIRECTORY,
-                f'chunk_{index}_1.pickle')
-            )
-
+            dataset.to_pickle(str(os.path.join(experiment, config.DATASET_DIRECTORY,
+                                               f'chunk_{index}_1.pickle')))
 
     chunks_id = [f'chunk_{i}_1.pickle' for i in range(len(chunks))]
     chunks_id = chunks_id + [f'chunk_{i}.pickle' for i in range(202)]
@@ -110,13 +106,9 @@ def build_dataset(N, experiment, malware_dataset):
         )
     dataset = pd.concat(dataset_pieces)
 
-    #Convert section names in features that indicate whether the section exists and has a standard name
+    # Convert section names in features that indicate whether the section exists and has a standard name
     dataset = enrich_features(dataset)
 
-    # We are done
-    end = time.time()  # those are seconds
-    elapsed = int(end - start)
-    print("It took {} minutes to create the dataset".format(elapsed / 60))
     print("Minimum extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.min()))
     print("Maximum extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.max()))
     print("Average extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.mean()))
