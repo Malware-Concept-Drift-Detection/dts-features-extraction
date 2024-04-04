@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/luca/ml-malware-concept-drift/src/feature_extraction/pipeline.py", line 10, in <module>
+    from src.feature_extraction.compute_top_features import compute_top_features
+  File "/home/luca/ml-malware-concept-drift/src/feature_extraction/compute_top_features.py", line 1, in <module>
+    from src.feature_extraction.top_features import top_ngrams
+  File "/home/luca/ml-malware-concept-drift/src/feature_extraction/top_features/top_ngrams.py", line 11, in <module>
+    from info_gain import info_gain
+  File "/home/luca/.local/lib/python3.10/site-packages/info_gain/info_gain.py", line 2, in <module>
+    from scipy.stats import entropy
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/stats/__init__.py", line 605, in <module>
+    from ._stats_py import *
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/stats/_stats_py.py", line 37, in <module>
+    from scipy.spatial.distance import cdist
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/spatial/__init__.py", line 116, in <module>
+    from ._geometric_slerp import geometric_slerp
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/spatial/_geometric_slerp.py", line 9, in <module>
+    from scipy.spatial.distance import euclidean
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/spatial/distance.py", line 121, in <module>
+    from ..special import rel_entr
+  File "/home/luca/.local/lib/python3.10/site-packages/scipy/special/__init__.py", line 785, in <module>
+    from . import _basic
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1012, in get_code
+  File "<frozen importlib._bootstrap_external>", line 672, in _compile_bytecode
+KeyboardInterrupt
