@@ -68,47 +68,29 @@ def build_dataset(N, experiment, malware_dataset):
                                           )
 
     # Split into chunks
-    c_len = 15 * 16
-    chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
+    # c_len = 15 * config.CORES
+    # chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
 
-    exclude_shas = []
-    for index, chunk in enumerate(chunks):
-        if index <= 201:
-            shas = [x for x, y in chunk]
-            exclude_shas = exclude_shas + shas
+    # for index, chunk in enumerate(chunks):
+    #     print(f"Round {index}/{len(chunks) - 1}", flush=True)
+    with Pool(config.CORES) as p:
+        results = p.map(current_extracting_function, sha1s)
+    dataset = pd.DataFrame(results).set_index('sample_hash')
+    #dataset.to_pickle(str(os.path.join(experiment, config.DATASET_DIRECTORY,
+    #                                    f'chunk_{index}.pickle')))
 
-    sha1s = malware_dataset.df_malware_family_fsd
-    sha1s = sha1s[~sha1s["sha256"].isin(exclude_shas)]
-    sha1s = sha1s[['sha256', 'family']].to_numpy()
 
-    # Split into chunks
-    chunks = [sha1s[i:i + c_len] for i in range(0, len(sha1s), c_len)]
-
-    for index, chunk in enumerate(chunks):
-        if index >= 25:
-            print(f"Round {index}/{len(chunks)}", flush=True)
-            with Pool(config.CORES) as p:
-                results = p.map(current_extracting_function, chunk)
-            dataset = pd.DataFrame(results).set_index('sample_hash')
-            dataset.to_pickle(str(os.path.join(experiment, config.DATASET_DIRECTORY,
-                                               f'chunk_{index}_1.pickle')))
-
-    chunks_id = [f'chunk_{i}_1.pickle' for i in range(len(chunks))]
-    chunks_id = chunks_id + [f'chunk_{i}.pickle' for i in range(202)]
-
-    print(f"Merging all the {len(chunks)} pieces...")
-    dataset_pieces = []
-    for f_name in tqdm.tqdm(chunks_id):
-        dataset_pieces.append(
-            pd.read_pickle(str(
-                os.path.join(experiment, config.DATASET_DIRECTORY, f_name))
-            )
-        )
-    dataset = pd.concat(dataset_pieces)
-
-    # Convert section names in features that indicate whether the section exists and has a standard name
+    # chunks_id = [f'chunk_{i}.pickle' for i in range(len(chunks))]
+    # print(f"Merging all the {len(chunks)} pieces...")
+    # dataset_pieces = []
+    # for f_name in tqdm.tqdm(chunks_id):
+    #     dataset_pieces.append(
+    #         pd.read_pickle(str(
+    #             os.path.join(experiment, config.DATASET_DIRECTORY, f_name))
+    #         )
+    #     )
+    #dataset = pd.concat(dataset_pieces)
     dataset = enrich_features(dataset)
-
     print("Minimum extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.min()))
     print("Maximum extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.max()))
     print("Average extraction time is {:.2f} milliseconds".format(dataset.ms_elapsed.mean()))

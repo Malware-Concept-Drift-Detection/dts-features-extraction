@@ -28,7 +28,7 @@ TEMP_DIRECTORY = ".temp"
 RESULT_DIRECTORY = "results"
 
 # How many cores do you have
-CORES = 8
+CORES = 32
 
 # Feature identification
 FEAT_PREFIX = {

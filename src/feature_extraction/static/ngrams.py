@@ -12,8 +12,28 @@ class NGramsExtractor(StaticFeatureExtractor):
         filepath, top_n_grams = args
         with open(filepath, 'rb') as f:
             all_bytes = f.read()
-        ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
-        return self.__pad_ngrams(set(["ngram_" + ngram for ngram in set(ngrams)]), top_n_grams)
+        #ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
+        #return self.__extract_from_top(set(["ngram_" + ngram for ngram in set(ngrams)]), ngram_size=[4, 6], top_n_grams=top_n_grams)
+        return self.__extract_from_top(all_bytes=all_bytes, ngram_size=[4, 6], top_n_grams=top_n_grams)
+
+
+
+    def __extract_from_top(self, all_bytes, ngram_size, top_n_grams):
+        ngrams_in_malware = set()
+        minsize = min(ngram_size)
+        for i in range(len(all_bytes) - minsize):
+            for s in ngram_size:
+                ngram = all_bytes[i:i + s]
+                if len(ngram) == s:
+                    if ngram in top_n_grams:
+                        ngrams_in_malware.update(ngram)
+
+        # Put all ngrams to false and mark true only those intersected
+        extracted_n_grams = dict.fromkeys(top_n_grams, False)
+        for ngram in ngrams_in_malware:
+            extracted_n_grams[ngram] = True
+        return extracted_n_grams
+
 
     def extract_and_save(self, sha1_family):
         sha1, family = sha1_family
@@ -28,14 +48,16 @@ class NGramsExtractor(StaticFeatureExtractor):
 
     @staticmethod
     def __get_ngrams_from_bytes(all_bytes, ngram_size):
-        ngrams = []
+        ngrams = set()
         minsize = min(ngram_size)
         for i in range(len(all_bytes) - minsize):
+            i_ngrams = set()
             for s in ngram_size:
                 ngram = all_bytes[i:i + s]
                 if len(ngram) == s:
-                    ngrams.append(str(ngram))
-        return set(ngrams)
+                    i_ngrams.update(str(ngram))
+            ngrams.update(i_ngrams)
+        return ngrams
 
     @staticmethod
     def __pad_ngrams(ngrams, top_n_grams):
