@@ -7,7 +7,7 @@ VT_REPORTS = "/home/luca/WD/NortonDataset670/dataset_info/vt_reports67k.jsons"
 MERGE_DATASET_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/../vt_reports/merge.csv"
 
 # Malware directory
-MALWARE_DIRECTORY = "/home/luca/WD/NortonDataset670/MALWARE/"
+MALWARE_DIRECTORY = " /run/media/luca/WD/NortonDataset670/MALWARE/"
 
 # Parents directories
 PARENTS = ['dataset', 'top_features', 'results']
@@ -28,7 +28,7 @@ TEMP_DIRECTORY = ".temp"
 RESULT_DIRECTORY = "results"
 
 # How many cores do you have
-CORES = 32
+CORES = 6
 
 # Feature identification
 FEAT_PREFIX = {
