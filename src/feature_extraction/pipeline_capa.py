@@ -1,12 +1,10 @@
 import argparse
 import os
-import time
 
 import pandas as pd
 
-from src.feature_extraction import config
 from src.dataset.malware_dataset import MalwareDataset
-from src.feature_extraction.build_capa_dataset import build_capa_dataset
+from dataset.builder.build_capa_dataset import build_capa_dataset
 
 def setup_experiment_directories(experiment_path: str):
     d = os.path.join(experiment_path, "capa")

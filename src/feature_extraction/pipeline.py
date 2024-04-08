@@ -1,13 +1,12 @@
 import argparse
 import os
-import time
 
 import pandas as pd
 
 from src.feature_extraction import config
 from src.dataset.malware_dataset import MalwareDataset
-from src.feature_extraction.build_dataset1 import build_dataset
-from src.feature_extraction.compute_top_features import compute_top_features
+from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
+from src.feature_extraction.top_features.top_features_extractor import TopFeaturesExtractor
 
 
 def setup_experiment_directories(experiment_path: str):
@@ -19,7 +18,7 @@ def setup_experiment_directories(experiment_path: str):
 
 if __name__ == '__main__':
     # Get arguments
-    parser = argparse.ArgumentParser(description='Pipeline for binary or family classification')
+    parser = argparse.ArgumentParser(description='Pipeline for building malware features dataset')
     parser.add_argument("--experiment", required=True)
 
     args, _ = parser.parse_known_args()
@@ -30,6 +29,7 @@ if __name__ == '__main__':
     malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
 
     # Second step: select top features for imports, ngrams, opcodes and strings
-    # n = compute_top_features(malware_dataset, args.experiment)
-    # Third step: Build dataset
-    build_dataset(67000, args.experiment, malware_dataset)
+    TopFeaturesExtractor().extract_top_features(malware_dataset, args.experiment)
+    # Third step: Build dataset -> side effect on the file system
+    # DatasetBuilder().build_dataset(len(malware_dataset.df_malware_family_fsd),
+    #                                args.experiment, malware_dataset)

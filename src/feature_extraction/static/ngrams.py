@@ -12,11 +12,18 @@ class NGramsExtractor(StaticFeatureExtractor):
         filepath, top_n_grams = args
         with open(filepath, 'rb') as f:
             all_bytes = f.read()
-        #ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
-        #return self.__extract_from_top(set(["ngram_" + ngram for ngram in set(ngrams)]), ngram_size=[4, 6], top_n_grams=top_n_grams)
         return self.__extract_from_top(all_bytes=all_bytes, ngram_size=[4, 6], top_n_grams=top_n_grams)
 
-
+    def extract_and_save(self, sha1_family):
+        sha1, family = sha1_family
+        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        with open(filepath, 'rb') as f:
+            all_bytes = f.read()
+        ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
+        ngrams = Counter({k: 1 for k in ngrams})
+        save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
+        with open(save_path, 'wb') as w_file:
+            pickle.dump(ngrams, w_file)
 
     def __extract_from_top(self, all_bytes, ngram_size, top_n_grams):
         ngrams_in_malware = set()
@@ -34,29 +41,15 @@ class NGramsExtractor(StaticFeatureExtractor):
             extracted_n_grams[ngram] = True
         return extracted_n_grams
 
-
-    def extract_and_save(self, sha1_family):
-        sha1, family = sha1_family
-        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
-        with open(filepath, 'rb') as f:
-            all_bytes = f.read()
-        ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
-        ngrams = Counter({k: 1 for k in ngrams})
-        save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
-        with open(save_path, 'wb') as w_file:
-            pickle.dump(ngrams, w_file)
-
     @staticmethod
     def __get_ngrams_from_bytes(all_bytes, ngram_size):
         ngrams = set()
         minsize = min(ngram_size)
         for i in range(len(all_bytes) - minsize):
-            i_ngrams = set()
             for s in ngram_size:
                 ngram = all_bytes[i:i + s]
                 if len(ngram) == s:
-                    i_ngrams.update(str(ngram))
-            ngrams.update(i_ngrams)
+                    ngrams.update(str(ngram))
         return ngrams
 
     @staticmethod
