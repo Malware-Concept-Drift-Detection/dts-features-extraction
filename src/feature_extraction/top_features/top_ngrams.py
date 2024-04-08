@@ -141,7 +141,7 @@ class TopNGrams(TopFeatureExtractor):
 
         print("Computing information gain")
         results = p_map(self.__compute_information_gain, chunks, num_cpus=config.CORES)
-        IG = pd.concat(results)
+        ig = pd.concat(results)
 
         # igThresh = input("Which IG value do you want to cut Ngrams?")
         # # Multiclass
@@ -150,9 +150,9 @@ class TopNGrams(TopFeatureExtractor):
         # # igThresh = 0.022
         # IG  = IG[IG.IG>=float(igThresh)]
 
-        IG = IG.sort_values(by='IG', ascending=False)
-        IG = IG.head(13000)
-        IGs = ['ngram_' + x for x in IG.index]
+        ig = ig.sort_values(by='IG', ascending=False)
+        ig = ig.head(13000)
+        IGs = ['ngram_' + x for x in ig.index]
 
         filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'ngrams.list')
         with open(filepath, 'w') as w_file:

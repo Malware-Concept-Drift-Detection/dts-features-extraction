@@ -108,9 +108,10 @@ class TopOpCodes(TopFeatureExtractor):
         # Cleaning
         subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
 
-        self.__post_selection_op_codes(malware_dataset, experiment)
+        self.__post_selection_op_codes(experiment)
 
-    def __partial_counter(self, i_sha1s):
+    @staticmethod
+    def __partial_counter(i_sha1s):
         i = i_sha1s[0]
         sha1s = i_sha1s[1]
         top_n_grams = Counter()
@@ -124,7 +125,8 @@ class TopOpCodes(TopFeatureExtractor):
             pickle.dump(top_n_grams, wFile)
         return
 
-    def __partial_tf_idf(self, frequences, malware_dataset, experiment, top_opcodes, N):
+    @staticmethod
+    def __partial_tf_idf(frequences, malware_dataset, experiment, top_opcodes, N):
         sha1s = list(frequences.keys())
         considered_opcodes = set(top_opcodes.keys())
         doc_freq = pd.DataFrame(top_opcodes.values(), index=top_opcodes.keys(), columns=['idf'])
@@ -148,13 +150,15 @@ class TopOpCodes(TopFeatureExtractor):
         doc_freq.loc['benign', doc_freq.columns] = df[df["sha256"].isin(list(doc_freq.columns))]["family"]
         return doc_freq
 
-    def __compute_information_gain(self, opcodes, labels):
+    @staticmethod
+    def __compute_information_gain(opcodes, labels):
         ret_df = pd.DataFrame(0.0, index=opcodes.index, columns=['IG'])
         for opcode, row in opcodes.iterrows():
             ret_df.at[opcode, 'IG'] = info_gain.info_gain(labels, row)
         return ret_df
 
-    def __post_selection_op_codes(self, malware_dataset, experiment):
+    @staticmethod
+    def __post_selection_op_codes(malware_dataset, experiment):
 
         # loading top opcodes
         filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'opcodes.list')

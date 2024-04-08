@@ -47,7 +47,7 @@ class TopImports(TopFeatureExtractor):
 
         print("Computing Information Gain")
         partial_df_ig = partial(self.__df_ig, top_dlls=top_dlls, top_apis=top_apis)
-        chunks = [chunk for chunk in self.__create_chunks(all_samples_imports, 500)]
+        chunks = [chunk for chunk in self.__create_chunks(500)]
         results = p_map(partial_df_ig, chunks)
 
         df_dlls_ig = []
@@ -66,8 +66,8 @@ class TopImports(TopFeatureExtractor):
         # print(df_dlls_ig.head())
         # print(df_apis_ig.head())
 
-        ig_dlls = self.__compute_information_gain(df_dlls_ig)
-        ig_apis = self.__compute_information_gain(df_apis_ig)
+        ig_dlls = self.__compute_information_gain()
+        ig_apis = self.__compute_information_gain()
 
         # igThresh = input("Which IG value do you want to cut DLLs?")
         # #Multiclass value
@@ -96,7 +96,8 @@ class TopImports(TopFeatureExtractor):
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(ig_apis))
 
-    def __compute_information_gain(self, imports):
+    @staticmethod
+    def __compute_information_gain(imports):
         labels = imports.loc['benign']
         imports = imports.drop('benign')
         ret_dict = pd.DataFrame(0.0, index=imports.index, columns=['IG'])
@@ -104,12 +105,14 @@ class TopImports(TopFeatureExtractor):
             ret_dict.at[imp, 'IG'] = info_gain.info_gain(labels, row)
         return ret_dict
 
-    def __create_chunks(self, data, size=500):
+    @staticmethod
+    def __create_chunks(data, size=500):
         it = iter(data)
         for i in range(0, len(data), size):
             yield {k: data[k] for k in islice(it, size)}
 
-    def __df_ig(self, sha1s, top_dlls, top_apis):
+    @staticmethod
+    def __df_ig(sha1s, top_dlls, top_apis):
         df_dlls_ig = pd.DataFrame(True, index=list(top_dlls), columns=sha1s)
         df_api_ig = pd.DataFrame(True, index=list(top_apis), columns=sha1s)
 

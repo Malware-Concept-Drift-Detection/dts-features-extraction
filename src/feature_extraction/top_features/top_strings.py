@@ -53,7 +53,8 @@ class TopStrings(TopFeatureExtractor):
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(['str_' + s for s, _ in top_strings_reduced]))
 
-    def __create_chunks(self, data, size=12):
+    @staticmethod
+    def __create_chunks(data, size=12):
         data = [list(d) for d in data]
         n = round(len(data) / size)
         return [list(data[i * n: (i + 1) * n]) if i < size - 1 else list(data[i * n:]) for i in range(size)]
