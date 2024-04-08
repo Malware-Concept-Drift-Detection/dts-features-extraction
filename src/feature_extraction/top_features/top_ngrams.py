@@ -21,20 +21,6 @@ class TopNGrams(TopFeatureExtractor):
         self.__filter_out_very_unlikely(malware_dataset, experiment)
         self.__compute_ig_for_likely_ones(malware_dataset, experiment)
 
-    def __partial_counter(self, i_sha1s):
-        i = i_sha1s[0]
-        sha1s = i_sha1s[1]
-        top_n_grams = Counter()
-        for sha1 in sha1s:
-            filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
-            current = pd.read_pickle(filepath)
-            top_n_grams.update(current)
-        # Save to pickle
-        filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
-        with open(filepath, 'wb') as wFile:
-            pickle.dump(top_n_grams, wFile)
-        return
-
     def __filter_out_very_unlikely(self, malware_dataset, experiment):
         sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy())
         subsample = 1000
@@ -88,35 +74,6 @@ class TopNGrams(TopFeatureExtractor):
 
         # Rm temp files
         subprocess.call(f"cd {config.TEMP_DIRECTORY} && ls | grep partial | xargs rm", shell=True)
-        return
-
-    def __partial_df_ig(self, sha1s):
-        with open(f'./{config.TEMP_DIRECTORY}/top_n_grams.pickle', 'rb') as rFile:
-            top_n_grams = pickle.load(rFile)
-        top_n_grams = top_n_grams.keys()
-        df_IG = pd.DataFrame(True, index=top_n_grams, columns=[])
-        for sha1 in sha1s:
-            with open(f'./{config.TEMP_DIRECTORY}/{sha1}', 'rb') as rFile:
-                n_grams = pickle.load(rFile)
-
-            n_grams = set(n_grams.keys())
-            # Take only those that are in the top N_grams
-            considered_n_grams = n_grams & top_n_grams
-
-            # Put all n_grams to false and mark true only those intersected
-            extracted_n_grams = pd.Series(False, index=top_n_grams)
-            for consideredNgram in considered_n_grams:
-                extracted_n_grams[consideredNgram] = True
-            df_IG[sha1] = extracted_n_grams
-        return df_IG
-
-    def __compute_information_gain(self, n_grams):
-        labels = n_grams.loc['benign']
-        n_grams = n_grams.drop('benign')
-        ret_dict = pd.DataFrame(0.0, index=n_grams.index, columns=['IG'])
-        for ngram, row in n_grams.iterrows():
-            ret_dict.at[ngram, 'IG'] = info_gain.info_gain(labels, row)
-        return ret_dict
 
     def __compute_ig_for_likely_ones(self, malware_dataset, experiment):
         with open(f'./{config.TEMP_DIRECTORY}/sha1s', 'r') as r_file:
@@ -160,3 +117,48 @@ class TopNGrams(TopFeatureExtractor):
 
         # Cleaning
         subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
+
+    @staticmethod
+    def __partial_counter(i_sha1s):
+        i = i_sha1s[0]
+        sha1s = i_sha1s[1]
+        top_n_grams = Counter()
+        for sha1 in sha1s:
+            filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
+            current = pd.read_pickle(filepath)
+            top_n_grams.update(current)
+        # Save to pickle
+        filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
+        with open(filepath, 'wb') as wFile:
+            pickle.dump(top_n_grams, wFile)
+        return
+
+    @staticmethod
+    def __partial_df_ig(sha1s):
+        with open(f'./{config.TEMP_DIRECTORY}/top_n_grams.pickle', 'rb') as rFile:
+            top_n_grams = pickle.load(rFile)
+        top_n_grams = top_n_grams.keys()
+        df_IG = pd.DataFrame(True, index=top_n_grams, columns=[])
+        for sha1 in sha1s:
+            with open(f'./{config.TEMP_DIRECTORY}/{sha1}', 'rb') as rFile:
+                n_grams = pickle.load(rFile)
+
+            n_grams = set(n_grams.keys())
+            # Take only those that are in the top N_grams
+            considered_n_grams = n_grams & top_n_grams
+
+            # Put all n_grams to false and mark true only those intersected
+            extracted_n_grams = pd.Series(False, index=top_n_grams)
+            for consideredNgram in considered_n_grams:
+                extracted_n_grams[consideredNgram] = True
+            df_IG[sha1] = extracted_n_grams
+        return df_IG
+
+    @staticmethod
+    def __compute_information_gain(n_grams):
+        labels = n_grams.loc['benign']
+        n_grams = n_grams.drop('benign')
+        ret_dict = pd.DataFrame(0.0, index=n_grams.index, columns=['IG'])
+        for ngram, row in n_grams.iterrows():
+            ret_dict.at[ngram, 'IG'] = info_gain.info_gain(labels, row)
+        return ret_dict

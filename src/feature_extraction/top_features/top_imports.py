@@ -66,8 +66,8 @@ class TopImports(TopFeatureExtractor):
         # print(df_dlls_ig.head())
         # print(df_apis_ig.head())
 
-        ig_dlls = self.__compute_information_gain()
-        ig_apis = self.__compute_information_gain()
+        ig_dlls = self.__compute_information_gain(df_dlls_ig)
+        ig_apis = self.__compute_information_gain(df_apis_ig)
 
         # igThresh = input("Which IG value do you want to cut DLLs?")
         # #Multiclass value
