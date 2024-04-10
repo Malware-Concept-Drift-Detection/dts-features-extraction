@@ -1,9 +1,9 @@
 from typing import List
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
-from src.feature_extraction.top_features.top_imports import TopImports
-from src.feature_extraction.top_features.top_ngrams import TopNGrams
-from src.feature_extraction.top_features.top_opcodes import TopOpCodes
-from src.feature_extraction.top_features.top_strings import TopStrings
+from feature_extraction.static.top_features.top_imports import TopImports
+from feature_extraction.static.top_features.top_ngrams import TopNGrams
+from feature_extraction.static.top_features.top_opcodes import TopOpCodes
+from feature_extraction.static.top_features.top_strings import TopStrings
 
 
 class TopFeaturesExtractor:

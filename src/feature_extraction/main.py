@@ -6,7 +6,6 @@ import pandas as pd
 from src.feature_extraction import config
 from src.dataset.malware_dataset import MalwareDataset
 from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
-from src.feature_extraction.top_features.top_features_extractor import TopFeaturesExtractor
 
 
 def setup_experiment_directories(experiment_path: str):

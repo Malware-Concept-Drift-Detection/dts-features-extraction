@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from src.feature_extraction import config
 from src.feature_extraction.static.strings import StringsExtractor
-from src.feature_extraction.top_features.top_feature_extractor import TopFeatureExtractor
+from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
 
 
 class TopStrings(TopFeatureExtractor):

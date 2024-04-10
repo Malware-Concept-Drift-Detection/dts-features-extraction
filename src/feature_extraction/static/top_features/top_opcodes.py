@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 import src.feature_extraction.config as config
 from src.feature_extraction.static.opcodes import OpCodesExtractor
-from src.feature_extraction.top_features.top_feature_extractor import TopFeatureExtractor
+from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
 
 
 class TopOpCodes(TopFeatureExtractor):

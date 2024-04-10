@@ -10,7 +10,7 @@ from info_gain import info_gain
 from p_tqdm import p_map
 from tqdm import tqdm
 
-from src.feature_extraction.top_features.top_feature_extractor import TopFeatureExtractor
+from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
 from src.feature_extraction import config
 from src.feature_extraction.static.ngrams import NGramsExtractor
 
