@@ -24,7 +24,6 @@ class TopNGrams(TopFeatureExtractor):
     def __filter_out_very_unlikely(self, malware_dataset, experiment):
         sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy())
         subsample = 1000
-        random.seed(42)
         sha1s_sample = random.sample(sha1s, subsample)
 
         print(f"Extracting n-grams from a randomly selected set of {subsample} samples from the training set")
@@ -131,7 +130,6 @@ class TopNGrams(TopFeatureExtractor):
         filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
         with open(filepath, 'wb') as wFile:
             pickle.dump(top_n_grams, wFile)
-        return
 
     @staticmethod
     def __partial_df_ig(sha1s):

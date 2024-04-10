@@ -21,33 +21,22 @@ class TopOpCodes(TopFeatureExtractor):
 
     def top(self, malware_dataset, experiment):
         sha1s = malware_dataset.training_dataset[['sha256', 'family']].to_numpy()
-        print("Extracting opcodes from all the samples in the training set")
+        print(f"Extracting opcodes from all {len(sha1s)} the samples in the training set")
         # Clean temp folder
         subprocess.call('cd {} && rm -rf *'.format(config.TEMP_DIRECTORY), shell=True)
         opcodes_extractor = OpCodesExtractor()
-        n_grams_frequences = p_map(opcodes_extractor.extract, sha1s, num_cpus=config.CORES)
-        n_grams_frequences = {k: v for d in n_grams_frequences for k, v in d.items()}
-
-        # # Checking problems with extraction
-        # problematic_sha1s = {k: v for k, v in n_grams_frequences.items() if v['error']}
-        # #utils.update_label_data_frame(experiment, problematic_sha1s)
-        # # n_grams_frequences = {k:v for k,v in n_grams_frequences.items() if not v['error']}
-        # n_grams_frequences = {k: v['ngrams'] for k, v in n_grams_frequences.items() if not v['error']}
-
-        # #Add here could not disassemble
-        # problematic_sha1s = {k:{'error':'Disassembled is empty'} for k,v in n_grams_frequences.items() if not v['ngrams']}
-        # config.updateLabelDataFrame(experiment,problematic_sha1s)
-        # n_grams_frequences = {k:v['ngrams'] for k,v in n_grams_frequences.items() if v['ngrams']}
-
-        sha1s = n_grams_frequences.keys()
+        n_grams_frequencies = p_map(opcodes_extractor.extract, sha1s, num_cpus=config.CORES)
+        n_grams_frequencies = {k: v for d in n_grams_frequencies for k, v in d.items()}
+        n_grams_frequencies = {k: v['ngrams'] for k, v in n_grams_frequencies.items() if not v['error']}
+        sha1s = n_grams_frequencies.keys()
         samples_len = len(sha1s)
 
         print("Computing document frequency")
         ngram_whole_dataset = Counter()
-        for sha1Counter in tqdm(n_grams_frequences.values()):
+        for sha1Counter in tqdm(n_grams_frequencies.values()):
             ngram_whole_dataset.update(Counter({k: 1 for k in sha1Counter.keys()}))
 
-        print("Total number of unique opcodes nGrams is: {}".format(len(ngram_whole_dataset)))
+        print("Total number of unique opcodes n-grams is: {}".format(len(ngram_whole_dataset)))
 
         # Saving for plot
         # if plot:
@@ -63,11 +52,11 @@ class TopOpCodes(TopFeatureExtractor):
 
         # TF IDF
         print("Computing Tf-Idf")
-        it = iter(n_grams_frequences)
+        it = iter(n_grams_frequencies)
         chunks = []
-        per_chunk = math.ceil(len(n_grams_frequences) / (4 * config.CORES))
-        for i in range(0, len(n_grams_frequences), per_chunk):
-            chunks.append({k: n_grams_frequences[k] for k in islice(it, per_chunk)})
+        per_chunk = math.ceil(len(n_grams_frequencies) / (4 * config.CORES))
+        for i in range(0, len(n_grams_frequencies), per_chunk):
+            chunks.append({k: n_grams_frequencies[k] for k in islice(it, per_chunk)})
 
         fun_partial_tf_idf = partial(self.__partial_tf_idf, malware_dataset=malware_dataset,
                                      experiment=experiment, top_opcodes=top_opcodes, N=samples_len)
@@ -108,21 +97,21 @@ class TopOpCodes(TopFeatureExtractor):
         # Cleaning
         subprocess.call(f'cd {config.TEMP_DIRECTORY} && rm -rf *', shell=True)
 
-        self.__post_selection_op_codes(experiment)
+        self.__post_selection_op_codes(malware_dataset, experiment)
 
-    @staticmethod
-    def __partial_counter(i_sha1s):
-        i = i_sha1s[0]
-        sha1s = i_sha1s[1]
-        top_n_grams = Counter()
-        for sha1 in sha1s:
-            filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
-            current = pd.read_pickle(filepath)
-            top_n_grams.update(current)
-        # Save to pickle
-        filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
-        with open(filepath, 'wb') as wFile:
-            pickle.dump(top_n_grams, wFile)
+    # @staticmethod
+    # def __partial_counter(i_sha1s):
+    #     i = i_sha1s[0]
+    #     sha1s = i_sha1s[1]
+    #     top_n_grams = Counter()
+    #     for sha1 in sha1s:
+    #         filepath = os.path.join(config.TEMP_DIRECTORY, sha1)
+    #         current = pd.read_pickle(filepath)
+    #         top_n_grams.update(current)
+    #     # Save to pickle
+    #     filepath = os.path.join(config.TEMP_DIRECTORY, 'nGrams_partial_{}'.format(i))
+    #     with open(filepath, 'wb') as wFile:
+    #         pickle.dump(top_n_grams, wFile)
         return
 
     @staticmethod

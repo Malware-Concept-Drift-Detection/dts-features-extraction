@@ -47,7 +47,7 @@ class TopImports(TopFeatureExtractor):
 
         print("Computing Information Gain")
         partial_df_ig = partial(self.__df_ig, top_dlls=top_dlls, top_apis=top_apis)
-        chunks = [chunk for chunk in self.__create_chunks(500)]
+        chunks = [chunk for chunk in self.__create_chunks(all_samples_imports, 500)]
         results = p_map(partial_df_ig, chunks)
 
         df_dlls_ig = []

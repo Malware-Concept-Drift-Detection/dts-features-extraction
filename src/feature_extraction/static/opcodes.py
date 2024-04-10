@@ -26,13 +26,14 @@ class OpCodesExtractor(StaticFeatureExtractor):
                 for j in range(len(opcodes) - i):
                     ngram = ' '.join(opcodes[j:j + i])
                     ngrams[ngram] += 1
+            # print(ngrams)
             return {sha1: {'ngrams': ngrams, 'error': ''}}
         except Exception as e:
             print(f"Exception {e} on sha {sha1}")
             return {sha1: {'ngrams': None, 'error': e}}
 
     def extract_and_pad(self, args):
-        filepath, top_opcodes, N = args
+        filepath, top_opcodes, n = args
         pe = pefile.PE(filepath)
         eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
         code_section = pe.get_section_by_rva(eop)
@@ -45,7 +46,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
             for j in range(len(opcodes) - i):
                 ngram = ' '.join(opcodes[j:j + i])
                 ngrams[ngram] += 1
-        tf_idfs = {"opcode_" + k: (self.tf(ngrams[k]) * self.idf(v, N) if k in list(ngrams.keys()) else 0.00)
+        tf_idfs = {"opcode_" + k: (self.tf(ngrams[k]) * self.idf(v, n) if k in list(ngrams.keys()) else 0.00)
                    for k, v in zip(top_opcodes.keys(), top_opcodes.values())}
         return tf_idfs
 

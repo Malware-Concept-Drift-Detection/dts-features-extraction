@@ -29,7 +29,10 @@ if __name__ == '__main__':
     malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
 
     # Second step: select top features for imports, ngrams, opcodes and strings
-    TopFeaturesExtractor().extract_top_features(malware_dataset, args.experiment)
-    # Third step: Build dataset -> side effect on the file system
-    # DatasetBuilder().build_dataset(len(malware_dataset.df_malware_family_fsd),
-    #                                args.experiment, malware_dataset)
+    # -> side effect on the file system inside experiment path
+    #TopFeaturesExtractor().extract_top_static_features(malware_dataset, args.experiment)
+
+    # Third step: Build dataset -> side effect on the file system inside experiment path
+    # dataset directory
+    DatasetBuilder().build_dataset(len(malware_dataset.df_malware_family_fsd),
+                                   args.experiment, malware_dataset)
