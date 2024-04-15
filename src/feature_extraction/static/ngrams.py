@@ -28,17 +28,20 @@ class NGramsExtractor(StaticFeatureExtractor):
     def __extract_from_top(self, all_bytes, ngram_size, top_n_grams):
         ngrams_in_malware = set()
         minsize = min(ngram_size)
+
         for i in range(len(all_bytes) - minsize):
             for s in ngram_size:
                 ngram = all_bytes[i:i + s]
                 if len(ngram) == s:
+                    ngram = "ngram_" + str(ngram)
                     if ngram in top_n_grams:
-                        ngrams_in_malware.update(ngram)
+                        ngrams_in_malware.add(ngram)
 
         # Put all ngrams to false and mark true only those intersected
         extracted_n_grams = dict.fromkeys(top_n_grams, False)
         for ngram in ngrams_in_malware:
             extracted_n_grams[ngram] = True
+
         return extracted_n_grams
 
     @staticmethod
