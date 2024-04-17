@@ -1,8 +1,8 @@
 FROM python:3.11
 
-WORKDIR /usr/app
+WORKDIR /usr/app/
 
-COPY . ./feature_extraction/
+COPY . .
 
 RUN pip install .
 
