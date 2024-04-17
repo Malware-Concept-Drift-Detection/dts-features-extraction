@@ -11,7 +11,7 @@ from p_tqdm import p_map
 from tqdm import tqdm
 
 from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
-from src.feature_extraction.config1.config import config
+from src.feature_extraction.config.config import config
 from src.feature_extraction.static.ngrams import NGramsExtractor
 
 
@@ -23,16 +23,11 @@ class TopNGrams(TopFeatureExtractor):
 
     def __filter_out_very_unlikely(self, malware_dataset, experiment):
         sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy())
-        subsample = 1000
+        subsample = 10
         sha1s_sample = random.sample(sha1s, subsample)
 
         print(f"Extracting n-grams from a randomly selected set of {subsample} samples from the training set")
-        # Clean temp folder
-        subprocess.call(f'cd {config.temp_results_dir} && rm -rf *', shell=True)
-        # #REMOVE
-        # for x in sha1s:
-        #     ngrams.extractAndSave(x)
-        # #REMOVE
+        subprocess.call(f"mkdir -p {config.temp_results_dir} && cd {config.temp_results_dir} && rm -rf *", shell=True)
         ngrams_extractor = NGramsExtractor()
         p_map(ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=config.n_processes)
 

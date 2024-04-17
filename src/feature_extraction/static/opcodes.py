@@ -2,7 +2,7 @@ import capstone
 from collections import Counter
 
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
-from src.feature_extraction.config1.config import config
+from src.feature_extraction.config.config import config
 import math
 import pefile
 import os

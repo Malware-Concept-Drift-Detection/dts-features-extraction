@@ -70,4 +70,4 @@ class ConfigFactory:
 
 
 # Singleton
-config = ConfigFactory().standard_feature_extraction_config()
+config = ConfigFactory().feature_extraction_config()

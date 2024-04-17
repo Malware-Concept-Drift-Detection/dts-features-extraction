@@ -8,7 +8,7 @@ from info_gain import info_gain
 from p_tqdm import p_map
 
 from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
-from src.feature_extraction.config1.config import config
+from src.feature_extraction.config.config import config
 from src.feature_extraction.static.imports import ImportsExtractor
 
 
@@ -22,11 +22,6 @@ class TopImports(TopFeatureExtractor):
         print(f"Extracting imports (DLL and APIs) from all the {samples_len} samples in the training set")
         all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.n_processes)
         all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
-
-        # Checking problems with extraction
-        # problematic_sha1s = {k: v for k, v in all_samples_imports.items() if v['error']}
-        # utils.update_label_data_frame(experiment, problematic_sha1s)
-        # all_samples_imports = {k: v for k, v in all_samples_imports.items() if not v['error']}
 
         # Computing frequency
         print("Computing DLLs and APIs prevalence")
@@ -63,30 +58,13 @@ class TopImports(TopFeatureExtractor):
         df_dlls_ig.loc['benign', df_dlls_ig.columns] = df[df["sha256"].isin(list(df_dlls_ig.columns))]["family"]
         df_apis_ig.loc['benign', df_apis_ig.columns] = df[df["sha256"].isin(list(df_apis_ig.columns))]["family"]
 
-        # print(df_dlls_ig.head())
-        # print(df_apis_ig.head())
-
         ig_dlls = self.__compute_information_gain(df_dlls_ig)
         ig_apis = self.__compute_information_gain(df_apis_ig)
-
-        # igThresh = input("Which IG value do you want to cut DLLs?")
-        # #Multiclass value
-        # igThresh = 0.0152
-        # #Binary value
-        # igThresh = 0.0008
-        # ig_dlls  = ig_dlls[ig_dlls.IG>=float(igThresh)].index
         ig_dlls = ig_dlls.index
 
         filepath = os.path.join(experiment, config.top_features_directory, 'dlls.list')
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(ig_dlls))
-
-        # igThresh = input("Which IG value do you want to cut APIs?")
-        # #Multiclass value
-        # igThresh = 0.015
-        # #Binary value
-        # igThresh = 0.0006
-        # ig_apis  = ig_apis[ig_apis.IG>=float(igThresh)].index
 
         ig_apis = ig_apis.sort_values(by='IG', ascending=False)
         ig_apis = ig_apis.head(4500)

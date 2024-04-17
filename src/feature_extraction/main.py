@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 from src.feature_extraction.static.top_features.top_features_extractor import TopFeaturesExtractor
-from src.feature_extraction.config1.config import config
+from src.feature_extraction.config.config import config
 from src.dataset.malware_dataset import MalwareDataset
 from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
 
@@ -26,13 +26,16 @@ if __name__ == '__main__':
 
     # First step: build [sha256, first submission date, family] dataset,
     # choosing 62%-38% as training-test split
+    print("Building dataset with malware families and submission dates")
     malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
 
     # Second step: select top features for imports, ngrams, opcodes and strings
     # -> side effect on the file system inside experiment path
+    print("Extracting top features...")
     TopFeaturesExtractor().extract_top_static_features(malware_dataset, args.experiment)
 
     # Third step: Build dataset -> side effect on the file system inside experiment path
     # dataset directory
+    print("Building dataset...")
     DatasetBuilder().build_dataset(len(malware_dataset.df_malware_family_fsd),
                                    args.experiment, malware_dataset)
