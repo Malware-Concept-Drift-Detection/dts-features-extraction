@@ -3,7 +3,7 @@ version: '3'
 services:
 
   feature-extraction-pipeline:
-    image: concept-drift
+    image: ghcr.io/w-disaster/ml-malware-concept-drift:main
     container_name: feature-extraction-pipeline
     environment:
       MALWARE_DIR_PATH: /usr/input_data/malware/
