@@ -1,4 +1,7 @@
 import os
+import random
+
+random.seed(42)
 
 # VirusTotal reports path
 VT_REPORTS = "/home/luca/WD/NortonDataset670/dataset_info/vt_reports67k.jsons"

@@ -1,5 +1,5 @@
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
-from src.feature_extraction import config
+from src.feature_extraction.config.config import config
 import array
 import pefile
 import math
@@ -104,7 +104,7 @@ class SectionsExtractor(StaticFeatureExtractor):
     @staticmethod
     def __get_max_sections(sha1_family):
         sha1, family = sha1_family
-        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        filepath = os.path.join(config.malware_directory_path, family, sha1)
         pe = pefile.PE(filepath)
         if pe.FILE_HEADER.Machine != 332:
             return -1

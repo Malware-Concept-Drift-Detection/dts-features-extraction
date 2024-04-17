@@ -11,3 +11,5 @@ capstone~=5.0.1
 setuptools~=65.5.0
 nltk~=3.8.1
 ipython~=8.22.2
+info-gain==1.0.1
+p_tqdm==1.4.0

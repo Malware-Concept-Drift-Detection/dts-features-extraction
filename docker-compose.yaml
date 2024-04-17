@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  feature-extraction-pipeline:
+    image: concept-drift
+    container_name: feature-extraction-pipeline
+    environment:
+      MALWARE_DIR_PATH: /usr/input_data/malware/
+      VT_REPORTS_PATH: /usr/input_data/vt_reports67k.jsons
+      MERGE_DATASET_PATH: /usr/app/src/vt_reports/merge.csv
+      FINAL_DATASET_DIR: /usr/app/data/
+      N_PROCESSES: 32
+    volumes:
+      - "/run/media/luca/WD/NortonDataset670/MALWARE/:/usr/input_data/malware/"
+      - "/run/media/luca/WD/NortonDataset670/dataset_info/:/usr/input_data/"
+      - "./:/usr/app/"
