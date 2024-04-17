@@ -14,5 +14,5 @@ setup(
     package_dir={"": "src"},
     install_requires=requirements,
     zip_safe=False,
-    python_requires="==3.11.7",
+    python_requires="==3.11.9",
 )
