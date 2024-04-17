@@ -3,13 +3,14 @@ import os
 
 import pandas as pd
 
-from src.feature_extraction import config
+from src.feature_extraction.static.top_features.top_features_extractor import TopFeaturesExtractor
+from src.feature_extraction.config1.config import config
 from src.dataset.malware_dataset import MalwareDataset
 from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
 
 
 def setup_experiment_directories(experiment_path: str):
-    for parent in config.PARENTS:
+    for parent in config.experiment_subdirectories:
         d = os.path.join(experiment_path, parent)
         if not os.path.exists(d):
             os.makedirs(d)
@@ -29,7 +30,7 @@ if __name__ == '__main__':
 
     # Second step: select top features for imports, ngrams, opcodes and strings
     # -> side effect on the file system inside experiment path
-    #TopFeaturesExtractor().extract_top_static_features(malware_dataset, args.experiment)
+    TopFeaturesExtractor().extract_top_static_features(malware_dataset, args.experiment)
 
     # Third step: Build dataset -> side effect on the file system inside experiment path
     # dataset directory

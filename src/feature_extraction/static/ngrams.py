@@ -2,7 +2,7 @@ import os
 import pickle
 from collections import Counter
 
-from src.feature_extraction import config
+from src.feature_extraction.config1.config import config
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
 
 
@@ -16,12 +16,12 @@ class NGramsExtractor(StaticFeatureExtractor):
 
     def extract_and_save(self, sha1_family):
         sha1, family = sha1_family
-        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        filepath = os.path.join(config.malware_directory_path, family, sha1)
         with open(filepath, 'rb') as f:
             all_bytes = f.read()
         ngrams = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
         ngrams = Counter({k: 1 for k in ngrams})
-        save_path = os.path.join(config.TEMP_DIRECTORY, sha1)
+        save_path = os.path.join(config.temp_results_dir, sha1)
         with open(save_path, 'wb') as w_file:
             pickle.dump(ngrams, w_file)
 

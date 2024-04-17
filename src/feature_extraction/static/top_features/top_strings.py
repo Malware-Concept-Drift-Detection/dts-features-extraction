@@ -4,7 +4,7 @@ from collections import Counter
 from p_tqdm import p_map
 from tqdm import tqdm
 
-from src.feature_extraction import config
+from src.feature_extraction.config1.config import config
 from src.feature_extraction.static.strings import StringsExtractor
 from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
 
@@ -16,7 +16,7 @@ class TopStrings(TopFeatureExtractor):
         samples_len = len(sha1s)
         print(f"Extracting strings from all the samples in the training set ({samples_len})")
         strings_extractor = StringsExtractor()
-        all_strings = p_map(strings_extractor.extract, sha1s, num_cpus=config.CORES)
+        all_strings = p_map(strings_extractor.extract, sha1s, num_cpus=config.n_processes)
 
         # Computing strings frequency
         # (unique strings per binary so this means that if a string appears more than once
@@ -49,7 +49,7 @@ class TopStrings(TopFeatureExtractor):
         print(f"99.99% of the strings are seen in less than {seen_in_less_than_percentage}% of the samples")
 
         # Save top_strings
-        filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'strings.list')
+        filepath = os.path.join(experiment, config.top_features_directory, 'strings.list')
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(['str_' + s for s, _ in top_strings_reduced]))
             

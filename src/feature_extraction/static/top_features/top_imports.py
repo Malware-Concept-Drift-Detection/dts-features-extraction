@@ -8,7 +8,7 @@ from info_gain import info_gain
 from p_tqdm import p_map
 
 from feature_extraction.static.top_features.top_feature_extractor import TopFeatureExtractor
-from src.feature_extraction import config
+from src.feature_extraction.config1.config import config
 from src.feature_extraction.static.imports import ImportsExtractor
 
 
@@ -20,7 +20,7 @@ class TopImports(TopFeatureExtractor):
         samples_len = len(sha1s)
         imports_extractor = ImportsExtractor()
         print(f"Extracting imports (DLL and APIs) from all the {samples_len} samples in the training set")
-        all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.CORES)
+        all_samples_imports = p_map(imports_extractor.extract, sha1s, num_cpus=config.n_processes)
         all_samples_imports = {k: v for d in all_samples_imports for k, v in d.items()}
 
         # Checking problems with extraction
@@ -77,7 +77,7 @@ class TopImports(TopFeatureExtractor):
         # ig_dlls  = ig_dlls[ig_dlls.IG>=float(igThresh)].index
         ig_dlls = ig_dlls.index
 
-        filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'dlls.list')
+        filepath = os.path.join(experiment, config.top_features_directory, 'dlls.list')
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(ig_dlls))
 
@@ -92,7 +92,7 @@ class TopImports(TopFeatureExtractor):
         ig_apis = ig_apis.head(4500)
         ig_apis = ig_apis.index
 
-        filepath = os.path.join(experiment, config.TOP_FEATURES_SUBDIR, 'apis.list')
+        filepath = os.path.join(experiment, config.top_features_directory, 'apis.list')
         with open(filepath, 'w') as w_file:
             w_file.write("\n".join(ig_apis))
 

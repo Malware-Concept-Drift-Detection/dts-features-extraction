@@ -2,7 +2,7 @@ import capstone
 from collections import Counter
 
 from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
-from src.feature_extraction import config
+from src.feature_extraction.config1.config import config
 import math
 import pefile
 import os
@@ -12,7 +12,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
 
     def extract(self, sha1_family):
         sha1, family = sha1_family
-        filepath = os.path.join(config.MALWARE_DIRECTORY, family, sha1)
+        filepath = os.path.join(config.malware_directory_path, family, sha1)
         try:
             pe = pefile.PE(filepath)
             eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
@@ -22,7 +22,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
             md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
             opcodes = [str(i.mnemonic) for i in md.disasm(code_dump, code_addr)]
             ngrams = Counter()
-            for i in range(1, config.OPCODES_MAX_SIZE + 1):
+            for i in range(1, config.opcodes_max_size + 1):
                 for j in range(len(opcodes) - i):
                     ngram = ' '.join(opcodes[j:j + i])
                     ngrams[ngram] += 1
@@ -42,7 +42,7 @@ class OpCodesExtractor(StaticFeatureExtractor):
         md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
         opcodes = [str(i.mnemonic) for i in md.disasm(code_dump, code_addr)]
         ngrams = Counter()
-        for i in range(1, config.OPCODES_MAX_SIZE + 1):
+        for i in range(1, config.opcodes_max_size + 1):
             for j in range(len(opcodes) - i):
                 ngram = ' '.join(opcodes[j:j + i])
                 ngrams[ngram] += 1

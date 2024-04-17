@@ -6,6 +6,7 @@ import pandas as pd
 from src.dataset.malware_dataset import MalwareDataset
 from dataset.builder.build_capa_dataset import build_capa_dataset
 
+
 def setup_experiment_directories(experiment_path: str):
     d = os.path.join(experiment_path, "capa")
     if not os.path.exists(d):
