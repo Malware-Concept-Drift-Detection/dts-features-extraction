@@ -52,7 +52,7 @@ class NGramsExtractor(StaticFeatureExtractor):
             for s in ngram_size:
                 ngram = all_bytes[i:i + s]
                 if len(ngram) == s:
-                    ngrams.update(str(ngram))
+                    ngrams.add(str(ngram))
         return ngrams
 
     @staticmethod

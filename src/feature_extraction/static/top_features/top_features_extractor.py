@@ -11,7 +11,9 @@ class TopFeaturesExtractor:
 
     @staticmethod
     def extract_top_static_features(malware_dataset, experiment):
-        top_feature_extractors: List[TopFeatureExtractor] = [TopStrings(), TopImports(), TopNGrams(),
-                                                             TopOpCodes()]
+        # top_feature_extractors: List[TopFeatureExtractor] = [TopStrings(), TopImports(), TopNGrams(),
+        #                                                      TopOpCodes()]
+        top_feature_extractors: List[TopFeatureExtractor] = [TopNGrams()]
+        
         for top_feature_extractor in top_feature_extractors:
             top_feature_extractor.top(malware_dataset, experiment)

@@ -23,13 +23,13 @@ class TopNGrams(TopFeatureExtractor):
 
     def __filter_out_very_unlikely(self, malware_dataset, experiment):
         sha1s = list(malware_dataset.training_dataset[['sha256', 'family']].to_numpy())
-        subsample = 10
+        subsample = 1000
         sha1s_sample = random.sample(sha1s, subsample)
 
         print(f"Extracting n-grams from a randomly selected set of {subsample} samples from the training set")
         subprocess.call(f"mkdir -p {config.temp_results_dir} && cd {config.temp_results_dir} && rm -rf *", shell=True)
         ngrams_extractor = NGramsExtractor()
-        p_map(ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=config.n_processes)
+        p_map(ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=16)
 
         # Computing n-grams frequecy
         # (unique n-grams per binary so this means that if a nGram appears more than once
@@ -49,13 +49,6 @@ class TopNGrams(TopFeatureExtractor):
 
         print(f"Total number of unique n-grams is: {len(top_n_grams)}")
 
-        # Saving for Matplotlib
-        # if plot:
-        #     print("Saving complete list for CCDF plot")
-        #     filepath = os.path.join(config.PLOTS_DIRECTORY,experiment,'nGrams_count.pickle')
-        #     with open(filepath, 'wb') as w_file:
-        #         pickle.dump(top_n_grams,w_file)
-
         # Filtering the most and least common  (they carry no useful info)
         top_n_grams = Counter({k: v for k, v in top_n_grams.items() if 10 < v < 990})
 
@@ -65,12 +58,13 @@ class TopNGrams(TopFeatureExtractor):
         with open(f'./{config.temp_results_dir}/sha1s', 'w') as w_file:
             w_file.write("\n".join(sha1s_only))
 
-        # Rm temp files
+        # Rm temp (partial) files
         subprocess.call(f"cd {config.temp_results_dir} && ls | grep partial | xargs rm", shell=True)
 
     def __compute_ig_for_likely_ones(self, malware_dataset, experiment):
         with open(f'./{config.temp_results_dir}/sha1s', 'r') as r_file:
             sha1s = r_file.read().splitlines()
+
         print("Computing and merging relevant n-grams for sample files")
         chunks = [sha1s[i:i + 10] for i in range(0, len(sha1s), 10)]
         results = p_map(self.__partial_df_ig, chunks, num_cpus=config.n_processes)
@@ -93,12 +87,6 @@ class TopNGrams(TopFeatureExtractor):
         results = p_map(self.__compute_information_gain, chunks, num_cpus=config.n_processes)
         ig = pd.concat(results)
 
-        # igThresh = input("Which IG value do you want to cut Ngrams?")
-        # # Multiclass
-        # igThresh = 0.47
-        # # Binary
-        # # igThresh = 0.022
-        # IG  = IG[IG.IG>=float(igThresh)]
 
         ig = ig.sort_values(by='IG', ascending=False)
         ig = ig.head(13000)
