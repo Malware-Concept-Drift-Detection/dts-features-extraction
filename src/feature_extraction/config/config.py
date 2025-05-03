@@ -26,7 +26,6 @@ class FeatureExtractionConfig:
 
 
 class ConfigFactory:
-
     @staticmethod
     def standard_feature_extraction_config() -> FeatureExtractionConfig:
         """
@@ -38,13 +37,13 @@ class ConfigFactory:
             vt_reports_path="/home/luca/WD/NortonDataset670/dataset_info/vt_reports67k.jsons",
             merge_dataset_path=f"{os.path.dirname(os.path.abspath(__file__))}/../../vt_reports/merge.csv",
             experiment_directory="experiment",
-            experiment_subdirectories=['dataset', 'top_features', 'results'],
+            experiment_subdirectories=["dataset", "top_features", "results"],
             final_dataset_directory="dataset",
             top_features_directory="top_features",
             opcodes_max_size=3,
             temp_results_dir=".temp",
             results_directory="results",
-            n_processes=32
+            n_processes=32,
         )
 
     @staticmethod
@@ -59,13 +58,13 @@ class ConfigFactory:
             vt_reports_path=os.environ.get("VT_REPORTS_PATH"),
             merge_dataset_path=os.environ.get("MERGE_DATASET_PATH"),
             experiment_directory="experiment",
-            experiment_subdirectories=['dataset', 'top_features', 'results'],
+            experiment_subdirectories=["dataset", "top_features", "results"],
             final_dataset_directory=os.environ.get("FINAL_DATASET_DIR"),
             top_features_directory="top_features",
             opcodes_max_size=3,
             temp_results_dir=".temp",
             results_directory="results",
-            n_processes=int(os.environ.get("N_PROCESSES"))
+            n_processes=int(os.environ.get("N_PROCESSES")),
         )
 
 

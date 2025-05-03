@@ -1,14 +1,15 @@
 import math
 from collections import Counter
 
-from src.feature_extraction.static.static_feature_extractor import StaticFeatureExtractor
+from src.feature_extraction.static.static_feature_extractor import (
+    StaticFeatureExtractor,
+)
 
 
 class GenericExtractor(StaticFeatureExtractor):
-
     # It is impossible to get a failure with this function so no dictionary needed with error
     def extract(self, filepath):
-        with open(filepath, 'rb') as f:
+        with open(filepath, "rb") as f:
             byte_arr = f.read()
             file_size = len(byte_arr)
 
@@ -25,5 +26,5 @@ class GenericExtractor(StaticFeatureExtractor):
                 ent = ent + freq * math.log(freq, 2)
         ent = -ent
 
-        generics = {'generic_fileSize': file_size, 'generic_fileEntropy': ent}
+        generics = {"generic_fileSize": file_size, "generic_fileEntropy": ent}
         return generics

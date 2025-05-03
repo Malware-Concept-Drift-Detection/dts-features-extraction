@@ -3,7 +3,9 @@ import os
 
 import pandas as pd
 
-from src.feature_extraction.static.top_features.top_features_extractor import TopFeaturesExtractor
+from src.feature_extraction.static.top_features.top_features_extractor import (
+    TopFeaturesExtractor,
+)
 from src.feature_extraction.config.config import config
 from src.dataset.malware_dataset import MalwareDataset
 from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
@@ -16,9 +18,11 @@ def setup_experiment_directories(experiment_path: str):
             os.makedirs(d)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Get arguments
-    parser = argparse.ArgumentParser(description='Pipeline for building malware features dataset')
+    parser = argparse.ArgumentParser(
+        description="Pipeline for building malware features dataset"
+    )
     parser.add_argument("--experiment", required=True)
 
     args, _ = parser.parse_known_args()
@@ -37,5 +41,6 @@ if __name__ == '__main__':
     # Third step: Build dataset -> side effect on the file system inside experiment path
     # dataset directory
     print("Building dataset...")
-    DatasetBuilder().build_dataset(len(malware_dataset.df_malware_family_fsd),
-                                   args.experiment, malware_dataset)
+    DatasetBuilder().build_dataset(
+        len(malware_dataset.df_malware_family_fsd), args.experiment, malware_dataset
+    )

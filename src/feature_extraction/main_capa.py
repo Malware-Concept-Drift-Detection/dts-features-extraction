@@ -13,9 +13,11 @@ def setup_experiment_directories(experiment_path: str):
         os.makedirs(d)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Get arguments
-    parser = argparse.ArgumentParser(description='Pipeline for binary or family classification')
+    parser = argparse.ArgumentParser(
+        description="Pipeline for binary or family classification"
+    )
     parser.add_argument("--experiment", required=True)
 
     args, _ = parser.parse_known_args()

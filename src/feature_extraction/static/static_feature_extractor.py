@@ -1,5 +1,4 @@
 class StaticFeatureExtractor:
-
     def extract(self, args):
         """
         Base extract method, to be overridden by subclasses
