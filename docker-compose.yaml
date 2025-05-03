@@ -3,7 +3,7 @@ version: '3'
 services:
 
   feature-extraction-pipeline:
-    image: ghcr.io/w-disaster/malware-static-features-engine:main
+    image: ghcr.io/malware-concept-drift-detection/dts-features-extraction:main
     container_name: feature-extraction-pipeline
     environment:
       MALWARE_DIR_PATH: /usr/input_data/malware/
