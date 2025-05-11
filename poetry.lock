@@ -1717,12 +1717,12 @@ files = [
 
 [[package]]
 name = "p-tqdm"
-version = "1.4.0"
+version = "1.4.2"
 description = "Parallel processing with progress bars"
 optional = false
 python-versions = "*"
 files = [
-    {file = "p_tqdm-1.4.0.tar.gz", hash = "sha256:0d12aa223443f387244cce5e74a0aecc472d1f98189d58ccdfcda86772772bfc"},
+    {file = "p_tqdm-1.4.2.tar.gz", hash = "sha256:0f860c5facd0b0059da39998e55cfc035563f92d85d2f4895ba88a675c3c7529"},
 ]
 
 [package.dependencies]
@@ -3143,4 +3143,4 @@ test = ["websockets"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7cc467a70204d31a8169b06f5ba1357350e9d3ac3c3f59576f3665c6aab979e1"
+content-hash = "3484c672655e046f7c524593139ecf625a562d7881fccb31aa16c25da013e7ee"
