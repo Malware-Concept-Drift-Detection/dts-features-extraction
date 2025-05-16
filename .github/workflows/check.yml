@@ -79,6 +79,7 @@ jobs:
 
   deploy:
      name: Deploy
+     if: github.event_name != 'pull_request'
     #  needs:
     #    - test
      uses: ./.github/workflows/deploy.yml
