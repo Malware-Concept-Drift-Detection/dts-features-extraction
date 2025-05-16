@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from src.feature_extraction.config.config import config
 from src.feature_extraction.static.strings import StringsExtractor
-from feature_extraction.static.top_features.top_feature_extractor import (
+from src.feature_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
 )
 
