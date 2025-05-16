@@ -29,34 +29,22 @@ class NGramsExtractor(StaticFeatureExtractor):
             pickle.dump(ngrams, w_file)
 
     def __extract_from_top(self, all_bytes, ngram_size, top_n_grams):
-        ngrams_in_malware = set()
-        minsize = min(ngram_size)
-
-        for i in range(len(all_bytes) - minsize):
-            for s in ngram_size:
-                ngram = all_bytes[i : i + s]
-                if len(ngram) == s:
-                    ngram = "ngram_" + str(ngram)
-                    if ngram in top_n_grams:
-                        ngrams_in_malware.add(ngram)
-
+        ngrams_in_malware = __get_ngrams_from_bytes(all_bytes, ngram_size)
         # Put all ngrams to false and mark true only those intersected
         extracted_n_grams = dict.fromkeys(top_n_grams, False)
         for ngram in ngrams_in_malware:
             extracted_n_grams[ngram] = True
-
         return extracted_n_grams
 
     @staticmethod
     def __get_ngrams_from_bytes(all_bytes, ngram_size):
-        ngrams = set()
         minsize = min(ngram_size)
-        for i in range(len(all_bytes) - minsize):
-            for s in ngram_size:
-                ngram = all_bytes[i : i + s]
-                if len(ngram) == s:
-                    ngrams.add(str(ngram))
-        return ngrams
+        return {
+            all_bytes[i : i + s]
+            for i in range(len(all_bytes) - minsize)
+            for s in ngram_size
+            if len(all_bytes[i : i + s]) == s
+        }
 
     @staticmethod
     def __pad_ngrams(ngrams, top_n_grams):
