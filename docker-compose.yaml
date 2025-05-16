@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
   feature-extraction-pipeline:
@@ -12,6 +10,6 @@ services:
       FINAL_DATASET_DIR: /usr/app/data/
       N_PROCESSES: 32
     volumes:
-      - "/run/media/luca/WD/NortonDataset670/MALWARE/:/usr/input_data/malware/"
-      - "/run/media/luca/WD/NortonDataset670/dataset_info/:/usr/input_data/"
+      - "/home/luca/WD/NortonDataset670/MALWARE/:/usr/input_data/malware/"
+      - "/home/luca/WD/NortonDataset670/dataset_info/:/usr/input_data/"
       - "./data/:/usr/app/data/"
