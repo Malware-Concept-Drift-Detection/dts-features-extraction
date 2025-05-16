@@ -5,6 +5,7 @@ on:
 jobs:
   release:
     name: Release
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     concurrency:
       # Only one release job at a time. Strictly sequential.
       group: deploy
