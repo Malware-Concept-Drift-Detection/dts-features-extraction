@@ -4,6 +4,7 @@ WORKDIR /usr/app/
 
 COPY . .
 
-RUN pip install .
+RUN pip install -r requirements.txt
+RUN poetry install
 
-CMD [ "python3", "-m", "src.feature_extraction.main", "--experiment", "data/"]
+CMD [ "poetry", "run", "python3", "-m", "src.feature_extraction.main", "--experiment", "data/"]
