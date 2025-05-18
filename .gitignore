@@ -5,7 +5,8 @@ venv/
 src/vt_reports/
 tmp/
 .temp/
-data/
+data/*
+!data/top_features/all_sections.list
 .installed.cfg
 bin
 develop-eggs
