@@ -1,7 +1,7 @@
-from src.feature_extraction.static.static_feature_extractor import (
+from features_extraction.static.static_feature_extractor import (
     StaticFeatureExtractor,
 )
-from src.feature_extraction.config.config import config
+from features_extraction.config.config import config
 import array
 import pefile
 import math
