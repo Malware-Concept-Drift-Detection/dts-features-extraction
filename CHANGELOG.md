@@ -1,3 +1,33 @@
+## [1.1.0](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.0.1...1.1.0) (2025-05-18)
+
+### Features
+
+* extend extraction to any pre-defined train/test split ([7524ce5](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/7524ce5ef6f1e970cd973034100855e0a636480a))
+
+### Dependency updates
+
+* **deps:** update dependency notebook to v7.2.2 [security] ([#17](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/issues/17)) ([c5b0ead](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/c5b0ead4ce70ebf59fa4732e393d19ebfd5fa237))
+
+### Bug Fixes
+
+* family label - sha correspondence in extraction ([3b81f90](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/3b81f90d5bb973544aacb8c8f3ec5f2a3a7b7eca))
+
+### Build and continuous integration
+
+* avoid release job on PR ([c58beeb](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/c58beeb711c50af659932952e8cad6de119e1376))
+* update release job run condition ([cc16e08](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/cc16e088ce85c8414fa33a26e6bc07d6f9f30527))
+
+### General maintenance
+
+* add splitted dataset env var ([83da285](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/83da285cc4064400fbf35aec0bed4008e9301523))
+* update renovate config ([4094fae](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/4094fae49b5daa6a47934b0e701d508a8b49b2c5))
+
+### Refactoring
+
+* remove capa scripts ([e9ea8ab](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/e9ea8ab1614cf22e8d957ed07c3fc78456608696))
+* remove classification files ([e50411c](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/e50411cf72f63866246ee407f83446e22be1ea01))
+* remove comments ([111ff70](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/111ff705a5a76daf948deae90ce07133c0aece90))
+
 ## [1.0.1](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.0.0...1.0.1) (2025-05-16)
 
 ### Bug Fixes
