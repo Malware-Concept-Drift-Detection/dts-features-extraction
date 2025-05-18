@@ -7,11 +7,11 @@ import pandas as pd
 from info_gain import info_gain
 from p_tqdm import p_map
 
-from src.feature_extraction.static.top_features.top_feature_extractor import (
+from features_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
 )
-from src.feature_extraction.config.config import config
-from src.feature_extraction.static.imports import ImportsExtractor
+from features_extraction.config.config import config
+from features_extraction.static.imports import ImportsExtractor
 
 
 class TopImports(TopFeatureExtractor):

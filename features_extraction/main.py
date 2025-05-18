@@ -3,12 +3,12 @@ import os
 
 import pandas as pd
 
-from src.feature_extraction.static.top_features.top_features_extractor import (
+from features_extraction.static.top_features.top_features_extractor import (
     TopFeaturesExtractor,
 )
-from src.feature_extraction.config.config import config
-from src.dataset.malware_dataset import MalwareDataset
-from src.dataset.builder.malware_features_dataset_builder import DatasetBuilder
+from features_extraction.config.config import config
+from features_extraction.malware_dataset.malware_dataset import MalwareDataset
+from features_extraction.static.extract_features_from_top import DatasetBuilder
 
 
 def setup_experiment_directories(experiment_path: str):

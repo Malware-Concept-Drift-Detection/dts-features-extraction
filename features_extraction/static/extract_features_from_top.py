@@ -6,14 +6,14 @@ from multiprocessing import Pool
 
 import pandas as pd
 
-from src.feature_extraction.config.config import config
-from src.feature_extraction.static.generics import GenericExtractor
-from src.feature_extraction.static.headers import HeadersExtractor
-from src.feature_extraction.static.imports import ImportsExtractor
-from src.feature_extraction.static.ngrams import NGramsExtractor
-from src.feature_extraction.static.opcodes import OpCodesExtractor
-from src.feature_extraction.static.sections import SectionsExtractor
-from src.feature_extraction.static.strings import StringsExtractor
+from features_extraction.config.config import config
+from features_extraction.static.generics import GenericExtractor
+from features_extraction.static.headers import HeadersExtractor
+from features_extraction.static.imports import ImportsExtractor
+from features_extraction.static.ngrams import NGramsExtractor
+from features_extraction.static.opcodes import OpCodesExtractor
+from features_extraction.static.sections import SectionsExtractor
+from features_extraction.static.strings import StringsExtractor
 from p_tqdm import p_map
 
 
@@ -170,7 +170,7 @@ class DatasetBuilder:
             top_features.update({"top_strings": set(strings_file.read().splitlines())})
         # Read most common N_grams
         with open(
-            os.path.join(experiment, config.top_features_directory, "ngrams.list"), "r"
+            os.path.join(experiment, config.top_features_directory, "ngrams.list"), "rb"
         ) as n_gram_file:
             top_features.update({"top_n_grams": set(n_gram_file.read().splitlines())})
         # Read most common Opcodes

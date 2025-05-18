@@ -12,9 +12,9 @@ from info_gain import info_gain
 from p_tqdm import p_map
 from tqdm import tqdm
 
-from src.feature_extraction.config.config import config
-from src.feature_extraction.static.opcodes import OpCodesExtractor
-from src.feature_extraction.static.top_features.top_feature_extractor import (
+from features_extraction.config.config import config
+from features_extraction.static.opcodes import OpCodesExtractor
+from features_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
 )
 

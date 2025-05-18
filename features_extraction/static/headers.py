@@ -1,6 +1,6 @@
 import pefile
 
-from src.feature_extraction.static.static_feature_extractor import (
+from features_extraction.static.static_feature_extractor import (
     StaticFeatureExtractor,
 )
 

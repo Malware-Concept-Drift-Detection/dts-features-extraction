@@ -1,8 +1,8 @@
 import os
 import subprocess
 
-from src.feature_extraction.config.config import config
-from src.feature_extraction.static.static_feature_extractor import (
+from features_extraction.config.config import config
+from features_extraction.static.static_feature_extractor import (
     StaticFeatureExtractor,
 )
 
