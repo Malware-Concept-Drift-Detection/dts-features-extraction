@@ -5,8 +5,6 @@ venv/
 src/vt_reports/
 tmp/
 .temp/
-data/*
-!data/top_features/all_sections.list
 .installed.cfg
 bin
 develop-eggs
@@ -19,4 +17,7 @@ lib
 lib64
 __pycache__/
 output*
-src/notebooks/dataset_rp.csv
+data/**
+!data/top_features/
+!data/top_features/**/
+!data/top_features/all_sections.list
