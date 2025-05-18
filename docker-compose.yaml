@@ -1,15 +1,18 @@
 services:
 
   feature-extraction-pipeline:
-    image: ghcr.io/malware-concept-drift-detection/dts-features-extraction:main
+    image: dts-fe #ghcr.io/malware-concept-drift-detection/dts-features-extraction:main
     container_name: feature-extraction-pipeline
     environment:
       MALWARE_DIR_PATH: /usr/input_data/malware/
-      VT_REPORTS_PATH: /usr/input_data/vt_reports67k.jsons
-      MERGE_DATASET_PATH: /usr/app/data/merge.csv
+      SPLITTED_DATASET_PATH: /usr/input_data/splitted_dataset/
+      # VT_REPORTS_PATH: /usr/input_data/vt_reports67k.jsons
+      # MERGE_DATASET_PATH: /usr/app/data/merge.csv
       FINAL_DATASET_DIR: /usr/app/data/
       N_PROCESSES: 32
     volumes:
+      - "/home/luca/Malware-Concept-Drift-Detection/train_test_splits/splitted_dataset/Norton670/time_split/:/usr/input_data/splitted_dataset/"
       - "/home/luca/WD/NortonDataset670/MALWARE/:/usr/input_data/malware/"
       - "/home/luca/WD/NortonDataset670/dataset_info/:/usr/input_data/"
       - "./data/:/usr/app/data/"
+      - "./src/:/usr/app/src/"
