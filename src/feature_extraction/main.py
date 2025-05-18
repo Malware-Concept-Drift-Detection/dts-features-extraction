@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # First step: build [sha256, first submission date, family] dataset,
     # choosing 62%-38% as training-test split
     print("Building dataset with malware families and submission dates")
-    malware_dataset = MalwareDataset(pd.Timestamp("2021-09-03 13:47:49"))
+    malware_dataset = MalwareDataset()
 
     # Second step: select top features for imports, ngrams, opcodes and strings
     # -> side effect on the file system inside experiment path
