@@ -64,7 +64,7 @@ class TopImports(TopFeatureExtractor):
         df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
         df_apis_ig = pd.concat(df_apis_ig, axis=1)
 
-        df = malware_dataset.df_malware_family_fsd
+        df = malware_dataset.training_dataset
         df_dlls_ig.loc["benign", df_dlls_ig.columns] = df[
             df["sha256"].isin(list(df_dlls_ig.columns))
         ]["family"]

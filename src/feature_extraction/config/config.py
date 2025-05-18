@@ -13,8 +13,9 @@ class FeatureExtractionConfig:
     """
 
     malware_directory_path: str
-    vt_reports_path: str
-    merge_dataset_path: str
+    # vt_reports_path: str
+    splitted_dataset_path: str
+    # merge_dataset_path: str
     experiment_directory: str
     experiment_subdirectories: List[str]
     final_dataset_directory: str
@@ -55,8 +56,9 @@ class ConfigFactory:
 
         return FeatureExtractionConfig(
             malware_directory_path=os.environ.get("MALWARE_DIR_PATH"),
-            vt_reports_path=os.environ.get("VT_REPORTS_PATH"),
-            merge_dataset_path=os.environ.get("MERGE_DATASET_PATH"),
+            splitted_dataset_path=os.environ.get("SPLITTED_DATASET_PATH"),
+            # vt_reports_path=os.environ.get("VT_REPORTS_PATH"),
+            # merge_dataset_path=os.environ.get("MERGE_DATASET_PATH"),
             experiment_directory="experiment",
             experiment_subdirectories=["dataset", "top_features", "results"],
             final_dataset_directory=os.environ.get("FINAL_DATASET_DIR"),
