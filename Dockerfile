@@ -4,7 +4,9 @@ WORKDIR /usr/app/
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+
 RUN poetry install
 
-CMD [ "poetry", "run", "python3", "-m", "src.feature_extraction.main", "--experiment", "data/"]
+CMD [ "poetry", "run", "python3", "-m", "features_extraction.main", "--experiment", "data/"]
