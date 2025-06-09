@@ -26,6 +26,7 @@ nltk = "~3.8.1"
 ipython = "~8.22.2"
 info-gain = "1.0.1"
 p_tqdm = "1.4.0"
+pyarrow = "^20.0.0"
 
 [tool.poe.tasks]
 test = "pytest"
