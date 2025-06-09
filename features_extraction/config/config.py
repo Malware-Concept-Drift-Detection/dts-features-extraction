@@ -24,6 +24,7 @@ class FeatureExtractionConfig:
     temp_results_dir: str
     results_directory: str
     n_processes: int
+    random_seed: int
 
 
 class ConfigFactory:
@@ -45,6 +46,7 @@ class ConfigFactory:
             temp_results_dir=".temp",
             results_directory="results",
             n_processes=32,
+            random_seed=42,
         )
 
     @staticmethod
@@ -67,6 +69,7 @@ class ConfigFactory:
             temp_results_dir=".temp",
             results_directory="results",
             n_processes=int(os.environ.get("N_PROCESSES")),
+            random_seed=42,
         )
 
 
