@@ -13,9 +13,8 @@ class NGramsExtractor(StaticFeatureExtractor):
         filepath, top_n_grams = args
         with open(filepath, "rb") as f:
             all_bytes = f.read()
-        return self.__extract_from_top(
-            all_bytes=all_bytes, ngram_size=[4, 6], top_n_grams=top_n_grams
-        )
+        ngrams_in_malware = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
+        return self.__pad_ngrams(ngrams_in_malware, top_n_grams)
 
     def extract_and_save(self, sha1_family):
         sha1, family = sha1_family
@@ -27,14 +26,6 @@ class NGramsExtractor(StaticFeatureExtractor):
         save_path = os.path.join(config.temp_results_dir, sha1)
         with open(save_path, "wb") as w_file:
             pickle.dump(ngrams, w_file)
-
-    def __extract_from_top(self, all_bytes, ngram_size, top_n_grams):
-        ngrams_in_malware = __get_ngrams_from_bytes(all_bytes, ngram_size)
-        # Put all ngrams to false and mark true only those intersected
-        extracted_n_grams = dict.fromkeys(top_n_grams, False)
-        for ngram in ngrams_in_malware:
-            extracted_n_grams[ngram] = True
-        return extracted_n_grams
 
     @staticmethod
     def __get_ngrams_from_bytes(all_bytes, ngram_size):
