@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.0...1.2.1) (2025-06-10)
+
+### Bug Fixes
+
+* ngrams from top extraction ([77fe771](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/77fe7713892a63b8d2b9f72ca64a0ff7afd1f6ee))
+
 ## [1.2.0](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.1.0...1.2.0) (2025-06-09)
 
 ### Features
