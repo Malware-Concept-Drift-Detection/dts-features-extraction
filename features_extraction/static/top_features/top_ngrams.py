@@ -6,13 +6,9 @@ from collections import Counter
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
 from info_gain import info_gain
 from p_tqdm import p_map
 from tqdm import tqdm
-from sklearn.decomposition import TruncatedSVD
-from scipy.sparse import csr_matrix
 
 from features_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
@@ -68,7 +64,6 @@ class TopNGrams(TopFeatureExtractor):
         print(f"Total number of unique n-grams is: {len(top_n_grams)}")
 
         # Filtering the most and least common  (they carry no useful info)
-        # Equal to VarianceThreshold(0.01)
         lb, ub = round(n_subsample / 100), round(n_subsample * 99 / 100)
         top_n_grams = Counter({k: v for k, v in top_n_grams.items() if lb < v < ub})
 
@@ -95,53 +90,41 @@ class TopNGrams(TopFeatureExtractor):
         print("Computing and merging relevant n-grams for sample files")
         chunks = [sha1s[i : i + 10] for i in range(0, len(sha1s), 10)]
         results = p_map(self.__partial_df_ig, chunks, num_cpus=config.n_processes)
-        df_ig = pd.concat(results, axis=1).T
-        print("Opening file", flush=True)
-        # df_ig = pd.read_csv("data/df_ig.csv", index_col=0, engine="pyarrow").T
+        df_ig = pd.concat(results, axis=1)
 
-        # df_ig.to_csv("./data/df_ig.csv", index=True)
+        # Read labels and creating last row
+        df_train = malware_dataset.training_dataset.copy()
+        df_train.set_index("sha256", inplace=True)
+        df_ig.loc["family", df_ig.columns] = df_train.loc[df_ig.columns]["family"]
 
-        column_names = df_ig.columns
-        print("Computing sparse matrix")
-        X_sparse = csr_matrix(df_ig.values)
-        del df_ig  # Free memory
-        # Perform SVD to reduce dimensionality
-        n_components = 100
-        print("Computing SVD")
-        svd = TruncatedSVD(n_components=n_components, random_state=config.random_seed)
-        svd.fit(X_sparse)
-        # Get the components and their absolute values
-        components = np.abs(svd.components_)
-        # Aggregate importance per feature (e.g., sum across components)
-        feature_scores = components.sum(axis=0)  # shape: (n_features,)
-        best_t = 0.085
-        top_ngrams = column_names[feature_scores >= best_t]
-        assert len(top_ngrams) <= 20_000
-        # Save top features
-        cdf = [
-            len(feature_scores[feature_scores <= i]) / len(feature_scores)
-            for i in np.linspace(0, feature_scores.max(), 100)
-        ]
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.linspace(0, feature_scores.max(), 100), cdf)
-        plt.title(
-            "Cumulative Distribution Function of Binary n-grams Feature Importance Scores"
+        print("Chunks for information gain")
+        keys = df_ig.keys()
+        to_add = df_ig.loc["family"]
+        df_ig = df_ig.drop("family")
+        chunks = np.array_split(df_ig, config.n_processes)
+        for chunk in chunks:
+            chunk.loc["family"] = to_add
+
+        print("Computing information gain")
+        results = p_map(
+            self.__compute_information_gain, chunks, num_cpus=config.n_processes
         )
-        plt.xlabel("Importance Score")
-        plt.ylabel("Cumulative Count of Features")
-        plt.grid()
-        filepath = os.path.join(
-            experiment, config.top_features_directory, "cdf_bin_ngrams_importance.png"
-        )
-        plt.savefig(filepath)
+        ig = pd.concat(results)
 
-        print("Saving top n-grams")
+        ig = ig.sort_values(by="IG", ascending=False)
+
+        with open("data/ngrams_ig.pkl", "wb") as f:
+            pickle.dump(ig, f)
+
+        ig = ig.head(13000)
+        IGs = ig.index
+
         filepath = os.path.join(
             experiment, config.top_features_directory, "ngrams.list"
         )
         with open(filepath, "wb") as w_file:
-            for ngram in top_ngrams:
-                w_file.write(ngram.encode("utf-8") + b"\n")
+            for ngram in IGs:
+                w_file.write(ngram + b"\n")
 
         # Cleaning
         subprocess.call(f"cd {config.temp_results_dir} && rm -rf *", shell=True)

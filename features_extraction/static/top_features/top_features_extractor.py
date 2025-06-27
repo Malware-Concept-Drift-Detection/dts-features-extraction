@@ -13,8 +13,8 @@ class TopFeaturesExtractor:
     @staticmethod
     def extract_top_static_features(malware_dataset, experiment):
         top_feature_extractors: List[TopFeatureExtractor] = [
-            TopStrings(),
-            TopImports(),
+            # TopStrings(),
+            # TopImports(),
             TopNGrams(),
             TopOpCodes(),
         ]

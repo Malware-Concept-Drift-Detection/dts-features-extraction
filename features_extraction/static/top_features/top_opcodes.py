@@ -5,9 +5,7 @@ import subprocess
 from collections import Counter
 from functools import partial
 from itertools import islice
-from sklearn.decomposition import TruncatedSVD
-from scipy.sparse import csr_matrix
-import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
 from info_gain import info_gain
@@ -25,8 +23,7 @@ class TopOpCodes(TopFeatureExtractor):
     def top(self, malware_dataset, experiment):
         sha1s = malware_dataset.training_dataset[["sha256", "family"]].to_numpy()
         print(
-            f"Extracting opcodes from all {len(sha1s)} the samples in the training set",
-            flush=True,
+            f"Extracting opcodes from all {len(sha1s)} the samples in the training set"
         )
         # Clean temp folder
         subprocess.call("cd {} && rm -rf *".format(config.temp_results_dir), shell=True)
@@ -81,48 +78,26 @@ class TopOpCodes(TopFeatureExtractor):
             N=samples_len,
         )
         results = p_map(fun_partial_tf_idf, chunks)
-        tf_idf = pd.concat(results, axis=1).T
-        # tf_idf.to_csv("data/tf_idf.csv", index=True)
-        # tf_idf = pd.read_csv("data/tf_idf.csv", index_col=0)
+        tf_idf = pd.concat(results, axis=1)
 
-        column_names = tf_idf.columns
-        print("Computing sparse matrix")
-        X_sparse = csr_matrix(tf_idf.values)
-        del tf_idf  # Free memory
-        # Perform SVD to reduce dimensionality
-        n_components = 100
-        print("Computing SVD")
-        svd = TruncatedSVD(n_components=n_components, random_state=config.random_seed)
-        svd.fit(X_sparse)
-        # Get the components and their absolute values
-        components = np.abs(svd.components_)
-        # Aggregate importance per feature (e.g., sum across components)
-        feature_scores = components.sum(axis=0)  # shape: (n_features,)
-        best_t = 0.8
-        top_ngrams = column_names[feature_scores >= best_t]
+        # Compute Information Gain
+        print("Computing information gain")
+        to_readd = tf_idf.loc["benign"]
+        tf_idf = tf_idf.drop("benign")
+        chunks = np.array_split(tf_idf, config.n_processes)
+        fun_partial_IG = partial(self.__compute_information_gain, labels=to_readd)
+        ig = p_map(fun_partial_IG, chunks)
+        ig = pd.concat(ig)
 
-        # Save top features
-        cdf = [
-            len(feature_scores[feature_scores <= i]) / len(feature_scores)
-            for i in np.linspace(0, feature_scores.max(), 100)
-        ]
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.linspace(0, feature_scores.max(), 100), cdf)
-        plt.title(
-            "Cumulative Distribution Function of Opcode n-grams Feature Importance Scores"
-        )
-        plt.xlabel("Importance Score")
-        plt.ylabel("Cumulative Count of Features")
-        plt.grid()
-        filepath = os.path.join(
-            experiment,
-            config.top_features_directory,
-            "cdf_opcode_ngrams_importance.png",
-        )
-        plt.savefig(filepath)
+        ig = ig.sort_values(by="IG", ascending=False)
+
+        with open("data/opcode_ngrams_ig.pkl", "wb") as f:
+            pickle.dump(ig, f)
+
+        ig = ig.head(2500)
 
         # Save opcodes and docFreq
-        top_opcodes = Counter({k: v for k, v in top_opcodes.items() if k in top_ngrams})
+        top_opcodes = Counter({k: v for k, v in top_opcodes.items() if k in ig.index})
         filepath = os.path.join(
             experiment, config.top_features_directory, "opcodes.list"
         )
@@ -164,10 +139,10 @@ class TopOpCodes(TopFeatureExtractor):
         doc_freq = doc_freq.drop("idf", axis=1)
 
         # Read labels and creating last row
-        # df = malware_dataset.df_malware_family_fsd
-        # doc_freq.loc["benign", doc_freq.columns] = df[
-        #     df["sha256"].isin(list(doc_freq.columns))
-        # ]["family"]
+        df = malware_dataset.df_malware_family_fsd
+        doc_freq.loc["benign", doc_freq.columns] = df[
+            df["sha256"].isin(list(doc_freq.columns))
+        ]["family"]
         return doc_freq
 
     @staticmethod
