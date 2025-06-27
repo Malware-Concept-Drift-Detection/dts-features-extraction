@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.1...1.2.2) (2025-06-27)
+
+### Bug Fixes
+
+* undo SVD feature selection to IG based one ([e220fef](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/e220fefecdf50dc60809f6b25406e8213d0317fd))
+
 ## [1.2.1](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.0...1.2.1) (2025-06-10)
 
 ### Bug Fixes
