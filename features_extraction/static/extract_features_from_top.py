@@ -16,6 +16,8 @@ from features_extraction.static.sections import SectionsExtractor
 from features_extraction.static.strings import StringsExtractor
 from p_tqdm import p_map
 
+from features_extraction.utils import load_data
+
 
 def extract_features(
     sha1_family,
@@ -75,7 +77,7 @@ def extract_features(
         )
         row.update(extracted_opcodes)
 
-    print(f"Done {sha1}", flush=True)
+    # print(f"Done {sha1}", flush=True)
     return row
 
 
@@ -136,12 +138,10 @@ class DatasetBuilder:
     @staticmethod
     def __top_features_from_files(experiment):
         top_features = {}
+        top_feat_path = os.path.join(experiment, config.top_features_directory)
         # Read all Section Features for padding
         with open(
-            os.path.join(
-                experiment, config.top_features_directory, "all_sections.list"
-            ),
-            "r",
+            os.path.join(top_feat_path, "all_sections.list"), "r"
         ) as section_file:
             top_features.update(
                 {
@@ -153,30 +153,36 @@ class DatasetBuilder:
                     }
                 }
             )
-        # Read most common DLLs
-        with open(
-            os.path.join(experiment, config.top_features_directory, "dlls.list"), "r"
-        ) as dll_file:
-            top_features.update({"top_dlls": set(dll_file.read().splitlines())})
-        # Read most common Imports
-        with open(
-            os.path.join(experiment, config.top_features_directory, "apis.list"), "r"
-        ) as imports_file:
-            top_features.update({"top_imports": set(imports_file.read().splitlines())})
-        # Read most common Strings
-        with open(
-            os.path.join(experiment, config.top_features_directory, "strings.list"), "r"
-        ) as strings_file:
-            top_features.update({"top_strings": set(strings_file.read().splitlines())})
-        # Read most common N_grams
-        with open(
-            os.path.join(experiment, config.top_features_directory, "ngrams.list"), "rb"
-        ) as n_gram_file:
-            top_features.update({"top_n_grams": set(n_gram_file.read().splitlines())})
-        # Read most common Opcodes
-        with open(
-            os.path.join(experiment, config.top_features_directory, "opcodes.pickle"),
-            "rb",
-        ) as opcodes_file:
-            top_features.update({"top_opcodes": pickle.load(opcodes_file)})
+        # Read most top DLLs
+        top_features.update(
+            {"top_dlls": load_data(os.path.join(top_feat_path, "top_dlls.pkl"))}
+        )
+        # Read most top Imports
+        top_features.update(
+            {"top_imports": load_data(os.path.join(top_feat_path, "top_apis.pkl"))}
+        )
+        # Read most top Strings
+        top_features.update(
+            {
+                "top_strings": set(
+                    load_data(os.path.join(top_feat_path, "top_strings.pkl"))
+                )
+            }
+        )
+        # Read most top N_grams
+        top_features.update(
+            {
+                "top_n_grams": set(
+                    load_data(os.path.join(top_feat_path, "top_byte_ngrams.pkl"))
+                )
+            }
+        )
+        # Read most top Opcodes
+        top_features.update(
+            {
+                "top_opcodes": load_data(
+                    os.path.join(top_feat_path, "top_opcode_ngrams.pkl")
+                )
+            }
+        )
         return top_features
