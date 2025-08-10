@@ -36,7 +36,9 @@ if __name__ == "__main__":
     # Second step: select top features for imports, ngrams, opcodes and strings
     # -> side effect on the file system inside experiment path
     print("Extracting top features...")
-    TopFeaturesExtractor().extract_top_static_features(malware_dataset, args.experiment)
+    TopFeaturesExtractor(experiment_path=args.experiment).extract_top_static_features(
+        malware_dataset
+    )
 
     # Third step: Build dataset -> side effect on the file system inside experiment path
     # dataset directory
