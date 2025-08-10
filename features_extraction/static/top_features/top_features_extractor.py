@@ -19,13 +19,12 @@ import matplotlib.pyplot as plt
 class TopFeaturesExtractor:
     def __init__(self, experiment_path):
         self.experiment_path = experiment_path
+        self.base_top_path = os.path.join(
+            experiment_path, config.top_features_directory
+        )
         self.ig_byte_ngrams, self.ig_opcode_ngrams = (
-            os.path.join(
-                experiment_path, config.top_features_directory, "ig_byte_ngrams.pkl"
-            ),
-            os.path.join(
-                experiment_path, config.top_features_directory, "ig_opcode_ngrams.pkl"
-            ),
+            os.path.join(self.base_top_path, "ig_byte_ngrams.pkl"),
+            os.path.join(self.base_top_path, "ig_opcode_ngrams.pkl"),
         )
 
         self.top_feature_extractors: List[TopFeatureExtractor] = [
@@ -56,9 +55,7 @@ class TopFeaturesExtractor:
         ccdf_elbow = ccdf_byte[sorted_ig >= ig_elbow][0]
         top_ngrams = sorted_ig[sorted_ig > ig_elbow].index
 
-        ig_figure_path = os.path.join(
-            self.experiment_path, config.top_features_directory, "ccdf_ig_ngrams.png"
-        )
+        ig_figure_path = os.path.join(self.base_top_path, "ccdf_ig_ngrams.png")
 
         plt.figure()
         plt.plot(sorted_ig, ccdf_byte)
@@ -78,16 +75,8 @@ class TopFeaturesExtractor:
         print(f"Top opcode n-grams: {len(top_opcode_ngrams)}")
 
         top_byte_ngrams_filename, top_opcode_ngrams_filename = (
-            os.path.join(
-                self.experiment_path,
-                config.top_features_directory,
-                "top_byte_ngrams.pkl",
-            ),
-            os.path.join(
-                self.experiment_path,
-                config.top_features_directory,
-                "ig_top_opcode_ngrams.pkl",
-            ),
+            os.path.join(self.base_top_path, "top_byte_ngrams.pkl"),
+            os.path.join(self.base_top_path, "ig_top_opcode_ngrams.pkl"),
         )
 
         # Dump top byte and opcode n-grams
