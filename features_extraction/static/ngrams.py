@@ -16,6 +16,19 @@ class NGramsExtractor(StaticFeatureExtractor):
         ngrams_in_malware = self.__get_ngrams_from_bytes(all_bytes, ngram_size=[4, 6])
         return self.__pad_ngrams(ngrams_in_malware, top_n_grams)
 
+    def shas_list_max_size(self, sha_family, mb_size):
+        def get_file_size_mb(row):
+            filepath = os.path.join(
+                config.malware_directory_path, row["family"], row["sha256"]
+            )
+            size_bytes = os.path.getsize(filepath)
+            return size_bytes / (1024**2)  # Convert to MB
+
+        sha_family["size_mb"] = sha_family.apply(get_file_size_mb, axis=1)
+        sha_family = sha_family[sha_family["size_mb"] <= mb_size]
+        sha_family = sha_family.drop(columns=["size_mb"])
+        return sha_family
+
     def extract_and_save(self, sha1_family):
         sha1, family = sha1_family
         filepath = os.path.join(config.malware_directory_path, family, sha1)
