@@ -1,3 +1,22 @@
+## [1.3.0](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.2...1.3.0) (2025-08-10)
+
+### Features
+
+* perform IG feature selection concatenating byte and opcode n-grams ([f4a7178](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/f4a71781ab1931c8685a311f8e59d23ef13f2ffb))
+
+### Bug Fixes
+
+* dataframe columns ([d9e14b5](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/d9e14b5f85b1a56284d553170cc98d487d10d1f9))
+
+### General maintenance
+
+* add base path variable for top feat dir ([de9bf91](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/de9bf91f4270b07e836acbdf27864fbf21bdf7ea))
+* add utils to load and save objects with pickle ([4853b67](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/4853b67d88fa55714b8dc36efd27881f2ca4977e))
+* extract onlu 4,6 byte n-grams ([560b40e](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/560b40e9bb40f8fa615d0bab8acf0c2d0c618e4f))
+* update docker compose ([1e3732f](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/1e3732f02020b317292851d7a2cfd49574bec2f8))
+* update params ([176bd64](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/176bd64539b4a9666ce4ce3ce6c315d84b36497e))
+* update top feature filenames ([70b5a29](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/70b5a291a21e934d7b179bb5d992bf3c0e5475b0))
+
 ## [1.2.2](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.1...1.2.2) (2025-06-27)
 
 ### Bug Fixes
