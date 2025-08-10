@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import pickle
@@ -17,9 +18,14 @@ from features_extraction.static.opcodes import OpCodesExtractor
 from features_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
 )
+from features_extraction.utils import dump_data, load_data
 
 
 class TopOpCodes(TopFeatureExtractor):
+    def __init__(self, ig_filename):
+        super().__init__()
+        self.ig_filename = ig_filename
+
     def top(self, malware_dataset, experiment):
         sha1s = malware_dataset.training_dataset[["sha256", "family"]].to_numpy()
         print(
@@ -82,31 +88,68 @@ class TopOpCodes(TopFeatureExtractor):
 
         # Compute Information Gain
         print("Computing information gain")
-        to_readd = tf_idf.loc["benign"]
-        tf_idf = tf_idf.drop("benign")
+        to_readd = tf_idf.loc["family"]
+        tf_idf = tf_idf.drop("family")
         chunks = np.array_split(tf_idf, config.n_processes)
         fun_partial_IG = partial(self.__compute_information_gain, labels=to_readd)
         ig = p_map(fun_partial_IG, chunks)
         ig = pd.concat(ig)
 
-        ig = ig.sort_values(by="IG", ascending=False)
-
-        with open("data/opcode_ngrams_ig.pkl", "wb") as f:
-            pickle.dump(ig, f)
-
-        ig = ig.head(2500)
-
-        # Save opcodes and docFreq
-        top_opcodes = Counter({k: v for k, v in top_opcodes.items() if k in ig.index})
-        filepath = os.path.join(
-            experiment, config.top_features_directory, "opcodes.list"
+        dump_data(self.ig_filename, ig)
+        dump_data(
+            os.path.join(
+                experiment, config.top_features_directory, "opcode_docfreq.pkl"
+            ),
+            top_opcodes,
         )
-        with open(filepath, "w") as w_file:
-            w_file.write("\n".join(top_opcodes))
-
         # Cleaning
         subprocess.call(f"cd {config.temp_results_dir} && rm -rf *", shell=True)
-        self.__post_selection_op_codes(malware_dataset, experiment)
+
+    def post_feature_selection(self, malware_dataset, experiment):
+        # Open opcodes and docFreq
+        opcode_docfreq = load_data(
+            os.path.join(
+                experiment, config.top_features_directory, "opcode_docfreq.pkl"
+            )
+        )
+        top_opcodes_ig = load_data(
+            os.path.join(
+                experiment, config.top_features_directory, "ig_top_opcode_ngrams.pkl"
+            )
+        )
+        top_opcodes = Counter(
+            {k: v for k, v in opcode_docfreq.items() if k in top_opcodes_ig}
+        )
+        sha1s = malware_dataset.df_malware_family_fsd[["sha256", "family"]].to_numpy()
+        # extracting opcodes from the training test set
+        print(
+            "Extracting opcodes from the training/test set for computing the tf idf..."
+        )
+        opcodes_extractor = OpCodesExtractor()
+        ngrams_frequences = p_map(
+            opcodes_extractor.extract, sha1s, num_cpus=config.n_processes
+        )
+        ngrams_frequences = {k: v for d in ngrams_frequences for k, v in d.items()}
+        ngrams_frequences = {
+            k: v["ngrams"] for k, v in ngrams_frequences.items() if not v["error"]
+        }
+        sha1s = ngrams_frequences.keys()
+        samples_len = len(sha1s)
+        print(
+            f"Opcode extraction was successful for {samples_len} samples in training dataset. This is your N"
+        )
+        print("Computing document frequency")
+        ngram_whole_dataset = Counter()
+        for sha1Counter in tqdm(ngrams_frequences.values()):
+            ngram_whole_dataset.update(Counter({k: 1 for k in sha1Counter.keys()}))
+        print("Only considering opcodes...")
+        ngram_whole_dataset = Counter(
+            {k: v for k, v in ngram_whole_dataset.items() if k in top_opcodes}
+        )
+        filepath = os.path.join(
+            experiment, config.top_features_directory, "top_opcode_ngrams.pkl"
+        )
+        dump_data(filepath, ngram_whole_dataset)
 
     @staticmethod
     def __partial_tf_idf(frequences, malware_dataset, experiment, top_opcodes, N):
@@ -140,7 +183,7 @@ class TopOpCodes(TopFeatureExtractor):
 
         # Read labels and creating last row
         df = malware_dataset.df_malware_family_fsd
-        doc_freq.loc["benign", doc_freq.columns] = df[
+        doc_freq.loc["family", doc_freq.columns] = df[
             df["sha256"].isin(list(doc_freq.columns))
         ]["family"]
         return doc_freq
@@ -151,49 +194,3 @@ class TopOpCodes(TopFeatureExtractor):
         for opcode, row in opcodes.iterrows():
             ret_df.at[opcode, "IG"] = info_gain.info_gain(labels, row)
         return ret_df
-
-    @staticmethod
-    def __post_selection_op_codes(malware_dataset, experiment):
-        # loading top opcodes
-        filepath = os.path.join(
-            experiment, config.top_features_directory, "opcodes.list"
-        )
-        with open(filepath, "r") as r_file:
-            top_opcodes = r_file.read().splitlines()
-
-        sha1s = malware_dataset.df_malware_family_fsd[["sha256", "family"]].to_numpy()
-
-        # extracting opcodes from the training test set
-        print(
-            "Extracting opcodes from the training/test set for computing the tf idf..."
-        )
-        opcodes_extractor = OpCodesExtractor()
-        ngrams_frequences = p_map(
-            opcodes_extractor.extract, sha1s, num_cpus=config.n_processes
-        )
-        ngrams_frequences = {k: v for d in ngrams_frequences for k, v in d.items()}
-        ngrams_frequences = {
-            k: v["ngrams"] for k, v in ngrams_frequences.items() if not v["error"]
-        }
-
-        sha1s = ngrams_frequences.keys()
-        samples_len = len(sha1s)
-
-        print(
-            f"Opcode extraction was successful for {samples_len} samples in training dataset. This is your N"
-        )
-
-        print("Computing document frequency")
-        ngram_whole_dataset = Counter()
-        for sha1Counter in tqdm(ngrams_frequences.values()):
-            ngram_whole_dataset.update(Counter({k: 1 for k in sha1Counter.keys()}))
-
-        print("Only considering opcodes...")
-        ngram_whole_dataset = Counter(
-            {k: v for k, v in ngram_whole_dataset.items() if k in top_opcodes}
-        )
-        filepath = os.path.join(
-            experiment, config.top_features_directory, "opcodes.pickle"
-        )
-        with open(filepath, "wb") as w_file:
-            pickle.dump(ngram_whole_dataset, w_file)

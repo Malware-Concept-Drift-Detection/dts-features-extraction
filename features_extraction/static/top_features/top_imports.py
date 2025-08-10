@@ -12,6 +12,7 @@ from features_extraction.static.top_features.top_feature_extractor import (
 )
 from features_extraction.config.config import config
 from features_extraction.static.imports import ImportsExtractor
+from features_extraction.utils import dump_data
 
 
 class TopImports(TopFeatureExtractor):
@@ -50,48 +51,57 @@ class TopImports(TopFeatureExtractor):
             [k for k, v in top_apis.items() if lower_bound < v < upper_bound]
         )
 
-        print("Computing Information Gain")
-        partial_df_ig = partial(self.__df_ig, top_dlls=top_dlls, top_apis=top_apis)
-        chunks = [chunk for chunk in self.__create_chunks(all_samples_imports, 500)]
-        results = p_map(partial_df_ig, chunks)
+        dump_data(
+            os.path.join(experiment, config.top_features_directory, "top_dlls.pkl"),
+            top_dlls,
+        )
+        dump_data(
+            os.path.join(experiment, config.top_features_directory, "top_apis.pkl"),
+            top_apis,
+        )
 
-        df_dlls_ig = []
-        df_apis_ig = []
-        for partial_df_dlls_ig, partial_df_apis_ig in results:
-            df_dlls_ig.append(partial_df_dlls_ig)
-            df_apis_ig.append(partial_df_apis_ig)
+        # print("Computing Information Gain")
+        # partial_df_ig = partial(self.__df_ig, top_dlls=top_dlls, top_apis=top_apis)
+        # chunks = [chunk for chunk in self.__create_chunks(all_samples_imports, 500)]
+        # results = p_map(partial_df_ig, chunks)
 
-        df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
-        df_apis_ig = pd.concat(df_apis_ig, axis=1)
+        # df_dlls_ig = []
+        # df_apis_ig = []
+        # for partial_df_dlls_ig, partial_df_apis_ig in results:
+        #     df_dlls_ig.append(partial_df_dlls_ig)
+        #     df_apis_ig.append(partial_df_apis_ig)
 
-        df = malware_dataset.training_dataset
-        df_dlls_ig.loc["benign", df_dlls_ig.columns] = df[
-            df["sha256"].isin(list(df_dlls_ig.columns))
-        ]["family"]
-        df_apis_ig.loc["benign", df_apis_ig.columns] = df[
-            df["sha256"].isin(list(df_apis_ig.columns))
-        ]["family"]
+        # df_dlls_ig = pd.concat(df_dlls_ig, axis=1)
+        # df_apis_ig = pd.concat(df_apis_ig, axis=1)
 
-        ig_dlls = self.__compute_information_gain(df_dlls_ig)
-        ig_apis = self.__compute_information_gain(df_apis_ig)
-        ig_dlls = ig_dlls.index
+        # df = malware_dataset.training_dataset
+        # df_dlls_ig.loc["family", df_dlls_ig.columns] = df[
+        #     df["sha256"].isin(list(df_dlls_ig.columns))
+        # ]["family"]
+        # df_apis_ig.loc["family", df_apis_ig.columns] = df[
+        #     df["sha256"].isin(list(df_apis_ig.columns))
+        # ]["family"]
 
-        filepath = os.path.join(experiment, config.top_features_directory, "dlls.list")
-        with open(filepath, "w") as w_file:
-            w_file.write("\n".join(ig_dlls))
+        # ig_dlls = self.__compute_information_gain(df_dlls_ig)
+        # ig_apis = self.__compute_information_gain(df_apis_ig)
+        # ig_dlls = ig_dlls.index
 
-        ig_apis = ig_apis.sort_values(by="IG", ascending=False)
-        ig_apis = ig_apis.head(4500)
-        ig_apis = ig_apis.index
+        # filepath = os.path.join(experiment, config.top_features_directory, "dlls.list")
+        # with open(filepath, "w") as w_file:
+        #     w_file.write("\n".join(ig_dlls))
 
-        filepath = os.path.join(experiment, config.top_features_directory, "apis.list")
-        with open(filepath, "w") as w_file:
-            w_file.write("\n".join(ig_apis))
+        # ig_apis = ig_apis.sort_values(by="IG", ascending=False)
+        # ig_apis = ig_apis.head(4500)
+        # ig_apis = ig_apis.index
+
+        # filepath = os.path.join(experiment, config.top_features_directory, "apis.list")
+        # with open(filepath, "w") as w_file:
+        #     w_file.write("\n".join(ig_apis))
 
     @staticmethod
     def __compute_information_gain(imports):
-        labels = imports.loc["benign"]
-        imports = imports.drop("benign")
+        labels = imports.loc["family"]
+        imports = imports.drop("family")
         ret_dict = pd.DataFrame(0.0, index=imports.index, columns=["IG"])
         for imp, row in imports.iterrows():
             ret_dict.at[imp, "IG"] = info_gain.info_gain(labels, row)

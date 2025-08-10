@@ -4,3 +4,6 @@ class TopFeatureExtractor:
         Base top method, to be overridden by subclasses
         """
         raise NotImplementedError("Subclasses must implement this method")
+
+    def post_feature_selection(self, malware_dataset, experiment):
+        pass

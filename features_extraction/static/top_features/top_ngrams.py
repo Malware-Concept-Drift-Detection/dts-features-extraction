@@ -16,15 +16,26 @@ from features_extraction.static.top_features.top_feature_extractor import (
 from sklearn.feature_selection import mutual_info_classif
 from features_extraction.config.config import config
 from features_extraction.static.ngrams import NGramsExtractor
+from features_extraction.utils import dump_data, load_data
 
 
 class TopNGrams(TopFeatureExtractor):
+    def __init__(self, ig_filename):
+        super().__init__()
+        self.ig_filename = ig_filename
+
     def top(self, malware_dataset, experiment):
         self.__filter_out_very_unlikely(malware_dataset, experiment)
         self.__compute_ig_for_likely_ones(malware_dataset, experiment)
 
     def __filter_out_very_unlikely(self, malware_dataset, experiment):
-        sha1s = list(malware_dataset.training_dataset[["sha256", "family"]].to_numpy())
+        ngrams_extractor = NGramsExtractor()
+
+        sha_family = malware_dataset.training_dataset[["sha256", "family"]]
+        # sha_family_small = ngrams_extractor.shas_list_max_size(sha_family, mb_size=20).to_numpy()
+        sha_family_small = sha_family.to_numpy()
+        sha1s = list(sha_family_small)
+
         n_subsample = 1000
         sha1s_sample = random.sample(sha1s, n_subsample)
 
@@ -35,7 +46,6 @@ class TopNGrams(TopFeatureExtractor):
             f"mkdir -p {config.temp_results_dir} && cd {config.temp_results_dir} && rm -rf *",
             shell=True,
         )
-        ngrams_extractor = NGramsExtractor()
         p_map(
             ngrams_extractor.extract_and_save, sha1s_sample, num_cpus=config.n_processes
         )
@@ -54,7 +64,7 @@ class TopNGrams(TopFeatureExtractor):
 
         print("Unifying counters")
         top_n_grams = Counter()
-        for counter in tqdm(range(0, len(chunks))):
+        for counter in tqdm(range(len(chunks))):
             filepath = os.path.join(
                 config.temp_results_dir, f"nGrams_partial_{counter}"
             )
@@ -71,8 +81,7 @@ class TopNGrams(TopFeatureExtractor):
         top_ngrams_filename = os.path.join(
             config.temp_results_dir, "top_n_grams.pickle"
         )
-        with open(top_ngrams_filename, "wb") as w_file:
-            pickle.dump(top_n_grams, w_file)
+        dump_data(top_ngrams_filename, top_n_grams)
 
         subsamples_sha_filename = os.path.join(config.temp_results_dir, "sha1s")
         with open(subsamples_sha_filename, "w") as w_file:
@@ -84,7 +93,7 @@ class TopNGrams(TopFeatureExtractor):
         )
 
     def __compute_ig_for_likely_ones(self, malware_dataset, experiment):
-        with open(f"./{config.temp_results_dir}/sha1s", "r") as r_file:
+        with open(os.path.join(config.temp_results_dir, "sha1s"), "r") as r_file:
             sha1s = r_file.read().splitlines()
 
         print("Computing and merging relevant n-grams for sample files")
@@ -98,7 +107,6 @@ class TopNGrams(TopFeatureExtractor):
         df_ig.loc["family", df_ig.columns] = df_train.loc[df_ig.columns]["family"]
 
         print("Chunks for information gain")
-        keys = df_ig.keys()
         to_add = df_ig.loc["family"]
         df_ig = df_ig.drop("family")
         chunks = np.array_split(df_ig, config.n_processes)
@@ -110,53 +118,49 @@ class TopNGrams(TopFeatureExtractor):
             self.__compute_information_gain, chunks, num_cpus=config.n_processes
         )
         ig = pd.concat(results)
+        dump_data(self.ig_filename, ig)
 
-        ig = ig.sort_values(by="IG", ascending=False)
+        # igThresh = input("Which IG value do you want to cut Binary Ngrams?")
+        # ig  = ig[ig["IG"] >= float(igThresh)]
 
-        with open("data/ngrams_ig.pkl", "wb") as f:
-            pickle.dump(ig, f)
+        # ig = ig.head(13000)
+        # IGs = ig.index
 
-        ig = ig.head(13000)
-        IGs = ig.index
-
-        filepath = os.path.join(
-            experiment, config.top_features_directory, "ngrams.list"
-        )
-        with open(filepath, "wb") as w_file:
-            for ngram in IGs:
-                w_file.write(ngram + b"\n")
+        # filepath = os.path.join(
+        #     experiment, config.top_features_directory, "ngrams.list"
+        # )
+        # with open(filepath, "wb") as w_file:
+        #     for ngram in IGs:
+        #         w_file.write(ngram + b"\n")
 
         # Cleaning
         subprocess.call(f"cd {config.temp_results_dir} && rm -rf *", shell=True)
 
     @staticmethod
     def __partial_counter(i_sha1s):
-        i = i_sha1s[0]
-        sha1s = i_sha1s[1]
+        i, sha1s = i_sha1s
         top_n_grams = Counter()
         for sha1 in sha1s:
             filepath = os.path.join(config.temp_results_dir, sha1)
             current = pd.read_pickle(filepath)
             top_n_grams.update(current)
         # Save to pickle
-        filepath = os.path.join(config.temp_results_dir, "nGrams_partial_{}".format(i))
-        with open(filepath, "wb") as wFile:
-            pickle.dump(top_n_grams, wFile)
+        filepath = os.path.join(config.temp_results_dir, f"nGrams_partial_{i}")
+        dump_data(filepath, top_n_grams)
 
     @staticmethod
     def __partial_df_ig(sha1s):
-        with open(f"./{config.temp_results_dir}/top_n_grams.pickle", "rb") as rFile:
-            top_n_grams = pickle.load(rFile)
+        top_n_grams = load_data(
+            os.path.join(config.temp_results_dir, "top_n_grams.pickle")
+        )
         top_n_grams = top_n_grams.keys()
         df_IG = pd.DataFrame(True, index=top_n_grams, columns=[])
         for sha1 in sha1s:
-            with open(f"./{config.temp_results_dir}/{sha1}", "rb") as rFile:
-                n_grams = pickle.load(rFile)
+            n_grams = load_data(os.path.join(config.temp_results_dir, sha1))
 
             n_grams = set(n_grams.keys())
             # Take only those that are in the top N_grams
             considered_n_grams = n_grams & top_n_grams
-
             # Put all n_grams to false and mark true only those intersected
             extracted_n_grams = pd.Series(False, index=top_n_grams)
             for consideredNgram in considered_n_grams:

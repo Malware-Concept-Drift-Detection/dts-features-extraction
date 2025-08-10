@@ -9,6 +9,7 @@ from features_extraction.static.strings import StringsExtractor
 from features_extraction.static.top_features.top_feature_extractor import (
     TopFeatureExtractor,
 )
+from features_extraction.utils import dump_data
 
 
 class TopStrings(TopFeatureExtractor):
@@ -63,7 +64,7 @@ class TopStrings(TopFeatureExtractor):
 
         # Save top_strings
         filepath = os.path.join(
-            experiment, config.top_features_directory, "strings.list"
+            experiment, config.top_features_directory, "top_strings.pkl"
         )
-        with open(filepath, "w") as w_file:
-            w_file.write("\n".join(["str_" + s for s, _ in top_strings_reduced]))
+        top_strings = ["str_" + s for s, _ in top_strings_reduced]
+        dump_data(filepath, top_strings)
