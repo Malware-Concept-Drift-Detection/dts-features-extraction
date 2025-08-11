@@ -28,8 +28,8 @@ class TopFeaturesExtractor:
         )
 
         self.top_feature_extractors: List[TopFeatureExtractor] = [
-            TopStrings(),
-            TopImports(),
+            # TopStrings(),
+            # TopImports(),
             TopNGrams(ig_filename=self.ig_byte_ngrams),
             TopOpCodes(ig_filename=self.ig_opcode_ngrams),
         ]
@@ -84,8 +84,8 @@ class TopFeaturesExtractor:
         dump_data(top_opcode_ngrams_filename, top_opcode_ngrams)
 
     def extract_top_static_features(self, malware_dataset):
-        # for top_feature_extractor in self.top_feature_extractors:
-        #     top_feature_extractor.top(malware_dataset, self.experiment_path)
+        for top_feature_extractor in self.top_feature_extractors:
+            top_feature_extractor.top(malware_dataset, self.experiment_path)
         self.apply_ig_feature_selection()
         for top_feature_extractor in self.top_feature_extractors:
             top_feature_extractor.post_feature_selection(

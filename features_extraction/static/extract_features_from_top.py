@@ -16,7 +16,7 @@ from features_extraction.static.sections import SectionsExtractor
 from features_extraction.static.strings import StringsExtractor
 from p_tqdm import p_map
 
-from features_extraction.utils import load_data
+from features_extraction.utils import dump_data, load_data
 
 
 def extract_features(
@@ -31,11 +31,11 @@ def extract_features(
     top_ngrams=None,
     top_opcodes=None,
 ):
-    sha1, family = sha1_family
-    filepath = os.path.join(config.malware_directory_path, family, sha1)
+    sha256, family = sha1_family
+    filepath = os.path.join(config.malware_directory_path, family, sha256)
     # Row is a dictionary with sample hash and then all the features as key:value
     row = dict()
-    row["sample_hash"] = sha1
+    row["sha256"] = sha256
 
     # Generic features
     if generics_flag:
@@ -77,7 +77,7 @@ def extract_features(
         )
         row.update(extracted_opcodes)
 
-    # print(f"Done {sha1}", flush=True)
+    print(f"Done {sha256}", flush=True)
     return row
 
 
@@ -99,15 +99,18 @@ class DatasetBuilder:
         )
 
         t_start = time.time()
-        results = p_map(partial_extract_features, sha1s, num_cpus=config.n_processes)
-        dataset = pd.DataFrame(results).set_index("sample_hash")
+        results = p_map(partial_extract_features, sha1s, num_cpus=20)
+        dataset = pd.DataFrame(results).set_index("sha256")
         dataset = self.__enrich_features(dataset)
         print(f"Total time: {(time.time() - t_start) / 60} min")
-        dataset.to_pickle(
+        print("Saving dataset to disk...")
+        dump_data(
             os.path.join(
                 experiment, config.final_dataset_directory, "dataset_final.pickle"
-            )
+            ),
+            dataset,
         )
+        print("Done.")
 
     @staticmethod
     def __enrich_features(df):
@@ -139,6 +142,7 @@ class DatasetBuilder:
     def __top_features_from_files(experiment):
         top_features = {}
         top_feat_path = os.path.join(experiment, config.top_features_directory)
+        print("Loading top features...")
         # Read all Section Features for padding
         with open(
             os.path.join(top_feat_path, "all_sections.list"), "r"
@@ -185,4 +189,5 @@ class DatasetBuilder:
                 )
             }
         )
+        print("Done.")
         return top_features
