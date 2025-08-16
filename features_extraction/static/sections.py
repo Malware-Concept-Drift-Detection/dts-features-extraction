@@ -12,8 +12,8 @@ class SectionsExtractor(StaticFeatureExtractor):
     def extract(self, args):
         filepath, all_sections = args
         pe = pefile.PE(filepath)
-        if pe.FILE_HEADER.Machine != 332:
-            raise ValueError("File header machine != 332")
+        # if pe.FILE_HEADER.Machine != 332:
+        #     raise ValueError("File header machine != 332")
 
         secs = {}
         num = 1

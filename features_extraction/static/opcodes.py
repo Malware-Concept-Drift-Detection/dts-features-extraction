@@ -18,9 +18,33 @@ class OpCodesExtractor(StaticFeatureExtractor):
             pe = pefile.PE(filepath)
             eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
             code_section = pe.get_section_by_rva(eop)
+
+            # code_section = None
+            # for section in pe.sections:
+            #     start = section.VirtualAddress
+            #     end = start + section.Misc_VirtualSize
+            #     if start <= eop < end:
+            #         code_section = section
+            #         break
+
             code_dump = code_section.get_data()
             code_addr = pe.OPTIONAL_HEADER.ImageBase + code_section.VirtualAddress
-            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+            # Select architecture mode based on PE machine type
+            machine = pe.FILE_HEADER.Machine
+            if machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_I386"]:
+                md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+            elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_AMD64"]:
+                md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+            elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_ARM64"]:
+                md = capstone.Cs(capstone.CS_ARCH_ARM64, capstone.CS_MODE_ARM)
+            elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_POWERPC"]:
+                md = capstone.Cs(capstone.CS_ARCH_PPC, capstone.CS_MODE_32)
+            elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_UNKNOWN"]:
+                raise ValueError("PE has unknown machine type 0x0")
+            else:
+                raise ValueError(
+                    f"Unsupported architecture: {pefile.MACHINE_TYPE[machine]}"
+                )
             opcodes = [str(i.mnemonic) for i in md.disasm(code_dump, code_addr)]
             ngrams = Counter()
             for i in range(1, config.opcodes_max_size + 1):
@@ -38,9 +62,33 @@ class OpCodesExtractor(StaticFeatureExtractor):
         pe = pefile.PE(filepath)
         eop = pe.OPTIONAL_HEADER.AddressOfEntryPoint
         code_section = pe.get_section_by_rva(eop)
+
+        # code_section = None
+        # for section in pe.sections:
+        #     start = section.VirtualAddress
+        #     end = start + section.Misc_VirtualSize
+        #     if start <= eop < end:
+        #         code_section = section
+        #         break
+
         code_dump = code_section.get_data()
         code_addr = pe.OPTIONAL_HEADER.ImageBase + code_section.VirtualAddress
-        md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+        # Select architecture mode based on PE machine type
+        machine = pe.FILE_HEADER.Machine
+        if machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_I386"]:
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+        elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_AMD64"]:
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
+        elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_ARM64"]:
+            md = capstone.Cs(capstone.CS_ARCH_ARM64, capstone.CS_MODE_ARM)
+        elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_POWERPC"]:
+            md = capstone.Cs(capstone.CS_ARCH_PPC, capstone.CS_MODE_32)
+        elif machine == pefile.MACHINE_TYPE["IMAGE_FILE_MACHINE_UNKNOWN"]:
+            raise ValueError("PE has unknown machine type 0x0")
+        else:
+            raise ValueError(
+                f"Unsupported architecture: {pefile.MACHINE_TYPE[machine]}"
+            )
         opcodes = [str(i.mnemonic) for i in md.disasm(code_dump, code_addr)]
         ngrams = Counter()
         for i in range(1, config.opcodes_max_size + 1):

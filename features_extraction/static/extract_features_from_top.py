@@ -147,47 +147,31 @@ class DatasetBuilder:
         with open(
             os.path.join(top_feat_path, "all_sections.list"), "r"
         ) as section_file:
-            top_features.update(
-                {
-                    "all_sections": {
-                        k: v
-                        for k, v in (
-                            l.split("\t") for l in section_file.read().splitlines()
-                        )
-                    }
-                }
-            )
+            sections = {
+                k: v
+                for k, v in (l.split("\t") for l in section_file.read().splitlines())
+            }
+            print(f"Number of top sections features: {len(sections)}")
+            top_features.update({"all_sections": sections})
         # Read most top DLLs
-        top_features.update(
-            {"top_dlls": load_data(os.path.join(top_feat_path, "top_dlls.pkl"))}
-        )
+        dlls = load_data(os.path.join(top_feat_path, "top_dlls.pkl"))
+        print(f"Number of top DLL features: {len(dlls)}")
+        top_features.update({"top_dlls": dlls})
         # Read most top Imports
-        top_features.update(
-            {"top_imports": load_data(os.path.join(top_feat_path, "top_apis.pkl"))}
-        )
+        imports = load_data(os.path.join(top_feat_path, "top_apis.pkl"))
+        print(f"Number of top API features: {len(imports)}")
+        top_features.update({"top_imports": imports})
         # Read most top Strings
-        top_features.update(
-            {
-                "top_strings": set(
-                    load_data(os.path.join(top_feat_path, "top_strings.pkl"))
-                )
-            }
-        )
+        strings = set(load_data(os.path.join(top_feat_path, "top_strings.pkl")))
+        print(f"Number of top strings features: {len(strings)}")
+        top_features.update({"top_strings": strings})
         # Read most top N_grams
-        top_features.update(
-            {
-                "top_n_grams": set(
-                    load_data(os.path.join(top_feat_path, "top_byte_ngrams.pkl"))
-                )
-            }
-        )
+        byte_ngrams = set(load_data(os.path.join(top_feat_path, "top_byte_ngrams.pkl")))
+        print(f"Number of top byte n-grams features {len(byte_ngrams)}")
+        top_features.update({"top_n_grams": byte_ngrams})
         # Read most top Opcodes
-        top_features.update(
-            {
-                "top_opcodes": load_data(
-                    os.path.join(top_feat_path, "top_opcode_ngrams.pkl")
-                )
-            }
-        )
+        opcode_ngrams = load_data(os.path.join(top_feat_path, "top_opcode_ngrams.pkl"))
+        print(f"Number of top opcode n-grams features {len(opcode_ngrams)}")
+        top_features.update({"top_opcodes": opcode_ngrams})
         print("Done.")
         return top_features

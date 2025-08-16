@@ -29,8 +29,8 @@ class TopFeaturesExtractor:
 
         self.top_feature_extractors: List[TopFeatureExtractor] = [
             # TopStrings(),
-            # TopImports(),
-            TopNGrams(ig_filename=self.ig_byte_ngrams),
+            TopImports(),
+            # TopNGrams(ig_filename=self.ig_byte_ngrams),
             TopOpCodes(ig_filename=self.ig_opcode_ngrams),
         ]
 
@@ -51,7 +51,7 @@ class TopFeaturesExtractor:
             return sorted_data, ccdf_vals
 
         sorted_ig, ccdf_byte = ccdf(igs)
-        ig_elbow = 0.45
+        ig_elbow = 0.36
         ccdf_elbow = ccdf_byte[sorted_ig >= ig_elbow][0]
         top_ngrams = sorted_ig[sorted_ig > ig_elbow].index
 

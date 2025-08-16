@@ -8,12 +8,10 @@ from features_extraction.static.static_feature_extractor import (
 class HeadersExtractor(StaticFeatureExtractor):
     def extract(self, filepath):
         pe = pefile.PE(filepath)
-        if pe.FILE_HEADER.Machine != 332:
-            raise ValueError("File header machine != 332")
-
         headers = {}
-        opt_header = pe.OPTIONAL_HEADER
 
+        # Optional header fields
+        opt_header = pe.OPTIONAL_HEADER
         fields = [
             "SizeOfHeaders",
             "AddressOfEntryPoint",
@@ -23,24 +21,24 @@ class HeadersExtractor(StaticFeatureExtractor):
             "SizeOfInitializedData",
             "SizeOfUninitializedData",
             "BaseOfCode",
-            "BaseOfData",
+            "BaseOfData",  # only in PE32, check existence
             "SectionAlignment",
             "FileAlignment",
         ]
         for f in fields:
-            headers["header_{}".format(f)] = getattr(opt_header, f)
+            headers["header_{}".format(f)] = getattr(opt_header, f, 0)
 
+        # COFF header fields
         coff_header = pe.FILE_HEADER
-        fields = ["NumberOfSections", "SizeOfOptionalHeader"]
-        for f in fields:
+        for f in ["NumberOfSections", "SizeOfOptionalHeader"]:
             headers["header_{}".format(f)] = getattr(coff_header, f)
 
+        # Characteristics bits
         characteristics = coff_header.Characteristics
-        characteristics = bin(characteristics)[2:]
-        characteristics = "0" * (16 - len(characteristics)) + characteristics
+        characteristics_bin = bin(characteristics)[2:].zfill(16)
         for i in range(16):
-            headers["header_characteristics_bit{}".format(i)] = (
-                characteristics[15 - i] == "1"
+            headers[f"header_characteristics_bit{i}"] = (
+                characteristics_bin[15 - i] == "1"
             )
 
         return headers

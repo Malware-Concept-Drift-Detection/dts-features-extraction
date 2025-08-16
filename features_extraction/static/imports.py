@@ -12,9 +12,6 @@ class ImportsExtractor(StaticFeatureExtractor):
         filepath = os.path.join(config.malware_directory_path, family, sha1)
         try:
             pe = pefile.PE(filepath)
-            if pe.FILE_HEADER.Machine != 332:
-                # No file header error so far
-                return {sha1: {"dlls": [], "imps": [], "error": "File Header != 332"}}
             dlls = []
             imps = []
             if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
@@ -38,8 +35,6 @@ class ImportsExtractor(StaticFeatureExtractor):
     def extract_and_pad(self, args):
         filepath, top_dlls, top_imports = args
         pe = pefile.PE(filepath)
-        if pe.FILE_HEADER.Machine != 332:
-            raise ValueError("File header machine != 332")
         dlls = []
         imps = []
         if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):

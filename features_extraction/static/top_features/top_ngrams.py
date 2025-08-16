@@ -32,7 +32,6 @@ class TopNGrams(TopFeatureExtractor):
         ngrams_extractor = NGramsExtractor()
 
         sha_family = malware_dataset.training_dataset[["sha256", "family"]]
-        # sha_family_small = ngrams_extractor.shas_list_max_size(sha_family, mb_size=20).to_numpy()
         sha_family_small = sha_family.to_numpy()
         sha1s = list(sha_family_small)
 
@@ -77,6 +76,11 @@ class TopNGrams(TopFeatureExtractor):
         lb, ub = round(n_subsample / 100), round(n_subsample * 99 / 100)
         top_n_grams = Counter({k: v for k, v in top_n_grams.items() if lb < v < ub})
 
+        items = list(top_n_grams.items())
+        sample_size = min(5_000_000, len(items))
+        random_sample = random.sample(items, sample_size)
+        top_n_grams = Counter(dict(random_sample))
+
         # Saving the list of nGrams and randomSha1s considered for the next step
         top_ngrams_filename = os.path.join(
             config.temp_results_dir, "top_n_grams.pickle"
@@ -102,6 +106,7 @@ class TopNGrams(TopFeatureExtractor):
         df_ig = pd.concat(results, axis=1)
 
         # Read labels and creating last row
+        print("Copying training dataset")
         df_train = malware_dataset.training_dataset.copy()
         df_train.set_index("sha256", inplace=True)
         df_ig.loc["family", df_ig.columns] = df_train.loc[df_ig.columns]["family"]
