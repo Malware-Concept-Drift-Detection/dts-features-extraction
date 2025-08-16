@@ -3,7 +3,7 @@ name = "DTS-CDD__Wdis"
 packages = [
     { include = "features_extraction" },
 ]
-version = "1.3.0"
+version = "1.4.0"
 description = "Static Features Extraction Engine"
 authors = ["Luca Fabri <luca.fabri1999@gmail.com>"]
 readme = "README.md"

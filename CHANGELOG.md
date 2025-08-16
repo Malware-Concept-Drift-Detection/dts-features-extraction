@@ -1,3 +1,14 @@
+## [1.4.0](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.3.0...1.4.0) (2025-08-16)
+
+### Features
+
+* support for x86-64, PowerPC, ARM64 architectures ([9bf9c9e](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/9bf9c9efee349240924b7ce00fe76d589d414de1))
+
+### General maintenance
+
+* change num processes in extract from top to fit ram ([300aacc](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/300aaccb18ccd09b56635c2a5f354c245e7fddca))
+* update lock file ([5ef635b](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/commit/5ef635b7ffd37ec7603fa8b9057d7b32f1a9e270))
+
 ## [1.3.0](https://github.com/Malware-Concept-Drift-Detection/dts-features-extraction/compare/1.2.2...1.3.0) (2025-08-10)
 
 ### Features
